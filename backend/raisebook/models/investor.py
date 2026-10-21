@@ -9,7 +9,15 @@ from __future__ import annotations
 
 import uuid
 
-from sqlalchemy import BigInteger, ForeignKey, ForeignKeyConstraint, Text, UniqueConstraint, text
+from sqlalchemy import (
+    BigInteger,
+    ForeignKey,
+    ForeignKeyConstraint,
+    Index,
+    Text,
+    UniqueConstraint,
+    text,
+)
 from sqlalchemy.dialects.postgresql import ARRAY, CITEXT, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -27,6 +35,14 @@ class Investor(TimestampMixin, Base):
             ["workspace_id", "group_id"],
             ["investor_groups.workspace_id", "investor_groups.id"],
             name="fk_investors_workspace_group",
+            # Deleting a group clears only group_id (never workspace_id); migration 0009.
+            ondelete="SET NULL (group_id)",
+        ),
+        Index(
+            "ix_investors_ws_group",
+            "workspace_id",
+            "group_id",
+            postgresql_where=text("group_id IS NOT NULL"),
         ),
     )
 

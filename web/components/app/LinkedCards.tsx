@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { Button, Combobox, Dialog, Field, LinkIcon, SectionLabel, useToast, type ComboboxOption } from "@/components/ui";
 import { errorMessage, type ApiClient } from "@/lib/api/client";
@@ -141,10 +141,36 @@ function LinkCardsDialog({
   onLinked: (patch: LinkPatch, count: number) => void;
 }) {
   const [picked, setPicked] = useState<LinkedInvestorBrief[]>([]);
-  const [found, setFound] = useState<Record<string, LinkedInvestorBrief>>({});
+  // Briefs of every row the search has shown, for onChange (a ref: the loader must not
+  // re-render the dialog, or the Combobox would reload on every new loadOptions identity).
+  const found = useRef<Record<string, LinkedInvestorBrief>>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const already = new Set([investor.id, ...(investor.linked ?? []).map((m) => m.id)]);
+  const linked = investor.linked;
+  const pickedKey = picked.map((p) => p.id).join(",");
+  const loadOptions = useCallback(
+    async (q: string): Promise<ComboboxOption<string>[]> => {
+      const already = new Set([investor.id, ...(linked ?? []).map((m) => m.id)]);
+      const chosen = new Set(pickedKey ? pickedKey.split(",") : []);
+      const page = await listInvestors(client, { q: q || undefined, limit: 30, sort: q ? undefined : "updated", order: q ? undefined : "desc" });
+      const rows = page.data.filter((i) => !already.has(i.id));
+      for (const i of rows) found.current[i.id] = briefOf(i);
+      return rows.map((i): ComboboxOption<string> => {
+        const team = i.linked?.length ? i.linked.length + 1 : 0;
+        return {
+          value: i.id,
+          label: i.name,
+          // In the text, not only the icon: linking this card brings its whole team along.
+          description: [i.title, i.firm, team ? `on a team of ${team}` : null].filter(Boolean).join(" · ") || undefined,
+          hint: team ? <LinkIcon className="text-muted" /> : undefined,
+          disabled: chosen.has(i.id),
+        };
+      });
+    },
+    // pickedKey: a picked row is disabled from the next load on (the popover closes on pick
+    // and reloads when reopened anyway).
+    [client, investor.id, linked, pickedKey],
+  );
 
   const close = () => {
     setPicked([]);
@@ -199,23 +225,10 @@ function LinkCardsDialog({
             value={null}
             placeholder="Search your contacts…"
             searchPlaceholder="Name, firm or email"
-            loadOptions={async (q) => {
-              const page = await listInvestors(client, { q: q || undefined, limit: 30, sort: q ? undefined : "updated", order: q ? undefined : "desc" });
-              const rows = page.data.filter((i) => !already.has(i.id));
-              setFound((f) => ({ ...f, ...Object.fromEntries(rows.map((i) => [i.id, briefOf(i)])) }));
-              return rows.map(
-                (i): ComboboxOption<string> => ({
-                  value: i.id,
-                  label: i.name,
-                  description: [i.title, i.firm].filter(Boolean).join(" · ") || undefined,
-                  hint: i.linked?.length ? <LinkIcon className="text-muted" /> : undefined,
-                  disabled: picked.some((p) => p.id === i.id),
-                }),
-              );
-            }}
+            loadOptions={loadOptions}
             emptyText={(q) => (q ? `No other contact matches “${q}”.` : "No other contacts yet.")}
             onChange={(id) => {
-              const m = id ? found[id] : null;
+              const m = id ? found.current[id] : null;
               if (m && !picked.some((p) => p.id === m.id)) setPicked((l) => [...l, m]);
             }}
           />
@@ -232,7 +245,7 @@ function LinkCardsDialog({
                   aria-label={`Remove ${m.name}`}
                   onClick={() => setPicked((l) => l.filter((x) => x.id !== m.id))}
                 >
-                  ×
+                  <span aria-hidden>✕</span>
                 </button>
               </li>
             ))}

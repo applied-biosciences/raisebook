@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 import { Button, Combobox, Dialog, EmptyState, Field, PageHeader, SectionLabel, useToast, type ComboboxOption } from "@/components/ui";
 import { listInvestors } from "@/lib/api/investors";
@@ -202,7 +202,17 @@ export function MeetingsView({ initial }: { initial: Meeting[] }) {
 /** "Who is the meeting with?": a contact search (name, firm, email). */
 function PickInvestorDialog({ open, onClose, onPick }: { open: boolean; onClose: () => void; onPick: (inv: Investor) => void }) {
   const { client } = useWorkspace();
-  const [found, setFound] = useState<Record<string, Investor>>({});
+  // A ref, not state: setting state in the loader re-rendered the dialog, which gave the
+  // Combobox a new loadOptions and so another fetch, in a loop.
+  const found = useRef<Record<string, Investor>>({});
+  const loadOptions = useCallback(
+    async (q: string): Promise<ComboboxOption<string>[]> => {
+      const page = await listInvestors(client, { q: q || undefined, limit: 30, sort: q ? undefined : "updated", order: q ? undefined : "desc" });
+      for (const i of page.data) found.current[i.id] = i;
+      return page.data.map((i): ComboboxOption<string> => ({ value: i.id, label: i.name, description: i.firm ?? undefined }));
+    },
+    [client],
+  );
   return (
     <Dialog open={open} onClose={onClose} title="Schedule a meeting" description="Who is it with?">
       <div className="mt-14">
@@ -211,14 +221,10 @@ function PickInvestorDialog({ open, onClose, onPick }: { open: boolean; onClose:
             value={null}
             placeholder="Search your contacts…"
             searchPlaceholder="Name, firm or email"
-            loadOptions={async (q) => {
-              const page = await listInvestors(client, { q: q || undefined, limit: 30, sort: q ? undefined : "updated", order: q ? undefined : "desc" });
-              setFound((f) => ({ ...f, ...Object.fromEntries(page.data.map((i) => [i.id, i])) }));
-              return page.data.map((i): ComboboxOption<string> => ({ value: i.id, label: i.name, description: i.firm ?? undefined }));
-            }}
+            loadOptions={loadOptions}
             emptyText={(q) => (q ? `No contact matches “${q}”.` : "No contacts yet.")}
             onChange={(id) => {
-              const inv = id ? found[id] : null;
+              const inv = id ? found.current[id] : null;
               if (inv) onPick(inv);
             }}
           />

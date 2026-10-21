@@ -5,20 +5,28 @@ from __future__ import annotations
 
 import asyncio
 import secrets as pysecrets
-from collections.abc import Iterator
+from collections.abc import AsyncIterator, Iterator
 from contextlib import contextmanager
 from typing import Any
+from uuid import UUID
 
 import asyncpg
 import pytest
-from sqlalchemy import event, select, update
+import pytest_asyncio
+from sqlalchemy import delete, event, func, select, update
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
+from raisebook.auth.principal import worker_context
+from raisebook.core.clock import get_now
 from raisebook.models.investor import Investor, InvestorGroup
+from raisebook.models.user import User
+from raisebook.models.workspace import Workspace
+from raisebook.services import investor_links as links_svc
+from raisebook.services import investors as investors_svc
 from tests.api.helpers import activities_of, world
 from tests.conftest import TEST_DB_URL
-from tests.factories import make_investor, make_participant, make_workspace
+from tests.factories import make_investor, make_participant, make_workspace, owner_of
 from tests.research.test_research_schema import _alembic
 
 AGENT = {"X-Agent-Name": "claude-code", "X-Agent-Model": "claude-opus-5-5"}
@@ -164,10 +172,14 @@ async def test_delete_investor_dissolves_small_team(
     gid = await _group_of(db, a)
     assert (await c.delete(f"/v1/investors/{c_.id}")).status_code == 204
     assert await _group_of(db, a) == gid  # two left: still a team
+    change = (await activities_of(db, a, "investor_updated"))[-1].data["changes"]["linked_cards"]
+    assert change == {"from": sorted([str(b.id), str(c_.id)]), "to": [str(b.id)]}
     r = await c.get(f"/v1/investors/{a.id}")
     assert [m["name"] for m in r.json()["linked"]] == ["Ben Two"]
     assert (await c.delete(f"/v1/investors/{b.id}")).status_code == 204
     assert await _group_of(db, a) is None
+    change = (await activities_of(db, a, "investor_updated"))[-1].data["changes"]["linked_cards"]
+    assert change == {"from": [str(b.id)], "to": []}
     assert await _groups(db, w.ws) == []
 
 
@@ -354,3 +366,110 @@ async def test_group_must_be_in_the_same_workspace(db: AsyncSession) -> None:
                 update(Investor).where(Investor.id == inv.id).values(group_id=group.id)
             )
         await sp.rollback()
+
+
+# --- concurrency (real commits, separate connections) ------------------------------------
+
+
+@pytest_asyncio.fixture(loop_scope="session")
+async def race_ws(
+    committing_sessionmaker: async_sessionmaker[AsyncSession],
+) -> AsyncIterator[tuple[UUID, UUID]]:
+    async with committing_sessionmaker() as s:
+        ws = await make_workspace(s, name="Linked Race Labs")
+        owner = await owner_of(s, ws)
+        ids = (ws.id, owner.id)
+        await s.commit()
+    yield ids
+    async with committing_sessionmaker() as s:
+        await s.execute(delete(Workspace).where(Workspace.id == ids[0]))  # cascades everything
+        await s.execute(delete(User).where(User.id == ids[1]))
+        await s.commit()
+
+
+async def test_concurrent_link_unlink_delete_stay_consistent(
+    committing_sessionmaker: async_sessionmaker[AsyncSession], race_ws: tuple[UUID, UUID]
+) -> None:
+    """Opposite-order links do not deadlock, a merge does not drop a member a concurrent link
+    adds, and a delete racing an unlink never leaves a one-member team."""
+    sm = committing_sessionmaker
+    ws_id, owner_id = race_ws
+
+    async def ctx(s: AsyncSession) -> Any:
+        ws = await worker_context(
+            s,
+            workspace_id=ws_id,
+            actor_type="user",
+            via="web",
+            actor_user_id=owner_id,
+            api_key_id=None,
+            actor_label=None,
+            agent_model=None,
+            now=get_now(),
+        )
+        assert ws is not None
+        return ws
+
+    async with sm() as s:
+        ws_row = await s.get(Workspace, ws_id)
+        assert ws_row is not None
+        people = [await make_investor(s, ws_row, name=f"Racer {i}", email=None) for i in range(9)]
+        ids = [p.id for p in people]
+        await s.commit()
+
+    async def do_link(a: UUID, others: list[UUID]) -> None:
+        async with sm() as s:
+            ws = await ctx(s)
+            inv = await s.get(Investor, a)
+            assert inv is not None
+            await links_svc.link(s, ws, inv, others, now=get_now())
+            await s.commit()
+
+    async def do_unlink(a: UUID) -> None:
+        async with sm() as s:
+            ws = await ctx(s)
+            inv = await s.get(Investor, a)
+            assert inv is not None
+            await links_svc.unlink(s, ws, inv, now=get_now())
+            await s.commit()
+
+    async def do_delete(a: UUID) -> None:
+        async with sm() as s:
+            ws = await ctx(s)
+            inv = await s.get(Investor, a)
+            assert inv is not None
+            await investors_svc.delete_investor(s, ws, inv, now=get_now())
+            await s.commit()
+
+    async def groups_of(wanted: list[UUID]) -> dict[UUID, UUID | None]:
+        async with sm() as s:
+            rows = await s.execute(
+                select(Investor.id, Investor.group_id).where(Investor.id.in_(wanted))
+            )
+            return dict(rows.tuples().all())
+
+    # Opposite lock orders: both succeed, one team.
+    await asyncio.gather(do_link(ids[0], [ids[1]]), do_link(ids[1], [ids[0]]))
+    g = await groups_of(ids[:2])
+    assert g[ids[0]] is not None and g[ids[0]] == g[ids[1]]
+
+    # Teams {2,3} and {4,5}; merge them while 6 joins {4,5}: everyone ends on one team.
+    await do_link(ids[2], [ids[3]])
+    await do_link(ids[4], [ids[5]])
+    await asyncio.gather(do_link(ids[2], [ids[4]]), do_link(ids[6], [ids[5]]))
+    g = await groups_of(ids[2:7])
+    assert len(set(g.values())) == 1 and None not in g.values()
+
+    # Team {0,1,7,8} minus 1 leaves three; delete one while unlinking another: 8 is alone.
+    await do_link(ids[7], [ids[8], ids[0]])  # merges with {0,1}: team {0,1,7,8}
+    await do_unlink(ids[1])
+    await asyncio.gather(do_delete(ids[0]), do_unlink(ids[7]))
+    g = await groups_of([ids[8]])
+    assert g[ids[8]] is None
+    async with sm() as s:
+        left = await s.scalar(
+            select(func.count())
+            .select_from(InvestorGroup)
+            .where(InvestorGroup.workspace_id == ws_id)
+        )
+    assert left == 1  # only the {2..6} team remains

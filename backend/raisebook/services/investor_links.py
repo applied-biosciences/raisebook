@@ -17,6 +17,13 @@ Rules:
   (``data.fields = ["linked_cards"]``, ``data.changes.linked_cards = {from, to}`` as
   investor ids) and a new ``updated_at``. A no-op writes nothing.
 - Ids from another workspace are 404 (``not_found``), never 403.
+
+Concurrency: every writer of group membership (:func:`link`, :func:`unlink`,
+:func:`dissolve_if_small` via ``services.investors.delete_investor``) first takes
+:func:`lock_workspace`, a transaction-scoped advisory lock per workspace, so membership
+changes in one workspace run one at a time (a merge can never miss a member a concurrent
+link is adding). Row locks are then taken in ``Investor.id`` order, in one statement where
+possible, so they cannot deadlock either.
 """
 
 from __future__ import annotations
@@ -28,7 +35,7 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import delete, func, select, update
+from sqlalchemy import delete, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from raisebook.auth.principal import WorkspaceContext
@@ -47,6 +54,15 @@ class LinkResult:
     group_id: UUID
     members: list[Investor]  # every member, sorted by name
     changed: bool
+
+
+async def lock_workspace(db: AsyncSession, ws: WorkspaceContext) -> None:
+    """Serialize linked-card membership writes within one workspace (released at commit or
+    rollback). Taken before any investor or group row lock."""
+    await db.execute(
+        text("SELECT pg_advisory_xact_lock(hashtextextended(:key, 0))"),
+        {"key": f"investor_links:{ws.workspace_id}"},
+    )
 
 
 def brief(inv: Investor) -> LinkedInvestorBrief:
@@ -73,7 +89,7 @@ async def _members(
         Investor.workspace_id == ws.workspace_id, Investor.group_id.in_(ids)
     )
     if lock:
-        stmt = stmt.with_for_update()
+        stmt = stmt.order_by(Investor.id).with_for_update()
     return list(await db.scalars(stmt.execution_options(populate_existing=True)))
 
 
@@ -127,18 +143,21 @@ async def link(
         raise ValidationFailed(
             "investor_ids", "An investor cannot be linked to themselves; pass other investors."
         )
-    rows = list(
+    await lock_workspace(db, ws)
+    locked = list(
         await db.scalars(
             select(Investor)
-            .where(Investor.workspace_id == ws.workspace_id, Investor.id.in_(wanted))
+            .where(
+                Investor.workspace_id == ws.workspace_id, Investor.id.in_([investor.id, *wanted])
+            )
+            .order_by(Investor.id)
             .with_for_update()
             .execution_options(populate_existing=True)
         )
     )
-    if len(rows) != len(wanted):
+    if len(locked) != len(wanted) + 1:
         raise not_found("Investor")
-    await db.refresh(investor, with_for_update=True)
-    direct = [investor, *rows]
+    direct = [investor, *(i for i in locked if i.id != investor.id)]
     groups = {i.group_id for i in direct if i.group_id is not None}
     existing = await _members(db, ws, groups, lock=True)
     everyone: dict[UUID, Investor] = {i.id: i for i in existing}
@@ -162,11 +181,9 @@ async def link(
         )
         assert oldest is not None
         gid = oldest
-        await db.execute(
-            update(InvestorGroup)
-            .where(InvestorGroup.workspace_id == ws.workspace_id, InvestorGroup.id == gid)
-            .values(updated_at=now)
-        )
+        kept = await db.get(InvestorGroup, gid)
+        assert kept is not None
+        kept.updated_at = now
     else:
         group = InvestorGroup(workspace_id=ws.workspace_id, created_at=now, updated_at=now)
         db.add(group)
@@ -200,6 +217,7 @@ async def unlink(
 ) -> bool:
     """Take ``investor`` out of its group (dissolving a group left with one member).
     Returns False when the investor was not linked (nothing written)."""
+    await lock_workspace(db, ws)
     await db.refresh(investor, with_for_update=True)
     gid = investor.group_id
     if gid is None:
@@ -231,33 +249,33 @@ async def _delete_group(db: AsyncSession, ws: WorkspaceContext, gid: UUID) -> No
 
 
 async def dissolve_if_small(
-    db: AsyncSession, ws: WorkspaceContext, gid: UUID | None, *, now: datetime
+    db: AsyncSession,
+    ws: WorkspaceContext,
+    gid: UUID | None,
+    *,
+    now: datetime,
+    deleted_id: UUID,
+    actor: Actor | None = None,
 ) -> None:
-    """After a member was deleted: a group with fewer than two members left is removed (and the
-    last member's ``group_id`` cleared), and the remaining members' cards change
-    (``updated_at``). The deleted investor's timeline is gone with them, so nothing is
-    logged."""
+    """After member ``deleted_id`` of group ``gid`` was deleted: a group with fewer than two
+    members left is removed (and the last member's ``group_id`` cleared). Every remaining
+    member's linked set loses the deleted investor, so each gets a new ``updated_at`` and an
+    ``investor_updated`` activity; the deleted investor's own timeline is gone with them.
+    The caller holds :func:`lock_workspace`."""
     if gid is None:
         return
-    left = await db.scalar(
-        select(func.count())
-        .select_from(Investor)
-        .where(Investor.workspace_id == ws.workspace_id, Investor.group_id == gid)
-    )
-    await db.execute(
-        update(Investor)
-        .where(Investor.workspace_id == ws.workspace_id, Investor.group_id == gid)
-        .values(updated_at=now)
-        .execution_options(synchronize_session="fetch")
-    )
-    if int(left or 0) < 2:
-        await db.execute(
-            update(Investor)
-            .where(Investor.workspace_id == ws.workspace_id, Investor.group_id == gid)
-            .values(group_id=None)
-            .execution_options(synchronize_session="fetch")
-        )
+    rest = await _members(db, ws, [gid], lock=True)
+    after = _others(rest) if len(rest) >= 2 else {}
+    ids = {m.id for m in rest}
+    before = {m.id: (ids - {m.id}) | {deleted_id} for m in rest}
+    if len(rest) < 2:
+        for m in rest:
+            m.group_id = None
+        await db.flush()
         await _delete_group(db, ws, gid)
+    await _log_changes(
+        db, ws, before, after, {m.id: m for m in rest}, now=now, actor=actor, group_id=gid
+    )
     await db.flush()
 
 
