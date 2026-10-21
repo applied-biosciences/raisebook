@@ -27,6 +27,16 @@ class InvestorCompact(BaseModel):
     tags: list[str] = []
 
 
+class LinkedInvestorBrief(BaseModel):
+    """Another investor on the same linked card team (``group_id``)."""
+
+    id: UUID
+    name: str
+    firm: str | None = None
+    title: str | None = None
+    email: str | None = None
+
+
 class ParticipationBrief(BaseModel):
     round_id: UUID
     round_slug: str
@@ -50,6 +60,9 @@ class InvestorOut(InvestorCompact):
     source: str | None = None
     warm_intro_by: str | None = None
     rounds: list[ParticipationBrief] = []
+    # Linked cards: the team this investor belongs to and its other members (by name).
+    group_id: UUID | None = None
+    linked: list[LinkedInvestorBrief] = []
     # Unreleased investor research (RAISEBOOK_RESEARCH_ENABLED): a ``ResearchSummaryOut``
     # dump when the feature is on. It is left out of the OpenAPI schema, and out of the body
     # when unset, so with the flag off (the default) nothing about research is published.
@@ -137,3 +150,19 @@ class InvestorPage(BaseModel):
 
 class InvestorRef(BaseModel):
     investor: InvestorOut
+
+
+class LinkCreate(StrictInput):
+    investor_ids: list[UUID] = Field(
+        ...,
+        min_length=1,
+        max_length=49,
+        description="Investors to link with this one. Groups they already belong to merge.",
+    )
+
+
+class LinksOut(BaseModel):
+    group_id: UUID
+    investors: list[LinkedInvestorBrief] = Field(
+        description="Every member of the group, this investor included, sorted by name."
+    )

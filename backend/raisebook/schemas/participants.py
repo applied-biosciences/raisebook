@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field
 
 from raisebook.schemas.activities import ActivityOut
 from raisebook.schemas.common import StrictInput, Timestamp
-from raisebook.schemas.investors import InvestorCompact
+from raisebook.schemas.investors import InvestorCompact, LinkedInvestorBrief
 from raisebook.schemas.rounds import RoundOut, StageOut
 
 Priority = Literal["hot", "warm", "maybe", "low"]
@@ -36,10 +36,17 @@ class MeetingBrief(BaseModel):
     investor_name: str | None = None
 
 
+class ParticipantInvestor(InvestorCompact):
+    """The participant's investor, with its linked cards (the other members of its team)."""
+
+    group_id: UUID | None = None
+    linked: list[LinkedInvestorBrief] = []
+
+
 class ParticipantOut(BaseModel):
     round_id: UUID
     round_slug: str
-    investor: InvestorCompact
+    investor: ParticipantInvestor
     stage: StageOut
     fit: int
     priority: Priority

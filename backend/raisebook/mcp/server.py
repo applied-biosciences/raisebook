@@ -52,7 +52,9 @@ SERVER_INSTRUCTIONS = (
     "calendar (and moves the investor to the Meeting stage), list_meetings shows what is "
     "coming up and which past meetings still need an outcome, update_meeting reschedules or "
     "cancels, and complete_meeting records how it went with the next step. Times without an "
-    "offset are in the workspace timezone."
+    "offset are in the workspace timezone. Linked cards: link_investors links investors who "
+    "work a deal as one team (for example two partners at the same fund), and unlink_investor "
+    "takes one out; get_investor shows each member's linked cards."
 )
 RESEARCH_INSTRUCTIONS = (
     " Research: get_dossier reads an investor's cited dossier; research_investor runs research "

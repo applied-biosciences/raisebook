@@ -1,4 +1,5 @@
-"""Investor contacts at workspace level, reusable across rounds (SPEC §3.4).
+"""Investor contacts at workspace level, reusable across rounds (SPEC §3.4), and the
+linked-card groups they can belong to (migration 0009).
 
 ``linkedin_key``, ``name_key`` and ``search_text`` are maintained by
 ``services/normalize.py`` on every write and never set from input.
@@ -8,7 +9,7 @@ from __future__ import annotations
 
 import uuid
 
-from sqlalchemy import BigInteger, ForeignKey, Text, UniqueConstraint, text
+from sqlalchemy import BigInteger, ForeignKey, ForeignKeyConstraint, Text, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import ARRAY, CITEXT, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -22,6 +23,11 @@ class Investor(TimestampMixin, Base):
     __table_args__ = (
         check_in("type", InvestorType),
         UniqueConstraint("workspace_id", "id", name="uq_investors_workspace_id_id"),
+        ForeignKeyConstraint(
+            ["workspace_id", "group_id"],
+            ["investor_groups.workspace_id", "investor_groups.id"],
+            name="fk_investors_workspace_group",
+        ),
     )
 
     id: Mapped[uuid.UUID] = pk()
@@ -55,3 +61,21 @@ class Investor(TimestampMixin, Base):
     linkedin_key: Mapped[str | None] = mapped_column(Text)
     name_key: Mapped[str] = mapped_column(Text, nullable=False)
     search_text: Mapped[str] = mapped_column(Text, nullable=False, server_default=text("''"))
+    # Linked cards (migration 0009): the team this investor belongs to, maintained only by
+    # ``services/investor_links.py``. NULL when not linked.
+    group_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True))
+
+
+class InvestorGroup(TimestampMixin, Base):
+    """Two or more investors linked as one team (for example partners at the same fund
+    working the deal together). A group with fewer than two members is dissolved."""
+
+    __tablename__ = "investor_groups"
+    __table_args__ = (
+        UniqueConstraint("workspace_id", "id", name="uq_investor_groups_workspace_id_id"),
+    )
+
+    id: Mapped[uuid.UUID] = pk()
+    workspace_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("workspaces.id", ondelete="CASCADE"), nullable=False
+    )

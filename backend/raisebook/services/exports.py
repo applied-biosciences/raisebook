@@ -104,6 +104,7 @@ INVESTORS_CSV_COLUMNS: tuple[str, ...] = (
     *CONTACT_COLUMNS,
     "rounds",
     "notes",
+    "group_id",
     "created_at",
     "updated_at",
 )
@@ -161,6 +162,7 @@ def _investor_dict(inv: Investor) -> dict[str, Any]:
     for f in INVESTOR_FIELDS:
         v = getattr(inv, f)
         out[f] = list(v) if isinstance(v, list) else (str(v) if f == "email" and v else v)
+    out["group_id"] = str(inv.group_id) if inv.group_id else None  # linked cards
     out["created_at"] = _ts(inv.created_at)
     out["updated_at"] = _ts(inv.updated_at)
     return out
@@ -507,6 +509,7 @@ async def export_investors_csv(
                 *(getattr(inv, c) for c in CONTACT_COLUMNS),
                 rounds_of.get(inv.id, []),
                 inv.notes,
+                inv.group_id,
                 _ts(inv.created_at),
                 _ts(inv.updated_at),
             ]

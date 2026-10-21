@@ -40,6 +40,7 @@ from raisebook.models.round import Round, RoundParticipant, RoundStage
 from raisebook.schemas.investors import InvestorCompact, InvestorOut, ParticipationBrief
 from raisebook.schemas.research import ResearchSummaryOut
 from raisebook.services import activities
+from raisebook.services.investor_links import dissolve_if_small, linked_map
 from raisebook.services.normalize import (
     ARRAY_LIMITS,
     INVESTOR_FIELDS,
@@ -449,12 +450,17 @@ async def add(
     return AddResult(existing, False, match.matched_on, None, _not_applied(_state(existing), sent))
 
 
-async def delete_investor(db: AsyncSession, ws: WorkspaceContext, investor: Investor) -> None:
-    """Hard delete (cascades participants and activities)."""
+async def delete_investor(
+    db: AsyncSession, ws: WorkspaceContext, investor: Investor, *, now: datetime | None = None
+) -> None:
+    """Hard delete (cascades participants and activities). A linked-card group left with
+    fewer than two members is dissolved."""
+    group_id = investor.group_id
     await db.execute(
         delete(Investor).where(Investor.workspace_id == ws.workspace_id, Investor.id == investor.id)
     )
     await db.flush()
+    await dissolve_if_small(db, ws, group_id, now=now or get_now())
 
 
 # --- presentation ------------------------------------------------------------------------
@@ -517,6 +523,7 @@ async def present(
     with_rounds: bool = True,
 ) -> list[InvestorOut]:
     parts = await participations(db, ws, [i.id for i in investors]) if with_rounds else {}
+    linked = await linked_map(db, ws, investors)
     research = (
         await _research(db, ws, investors)
         if with_rounds and get_settings().research_enabled
@@ -540,6 +547,8 @@ async def present(
                 source=inv.source,
                 warm_intro_by=inv.warm_intro_by,
                 rounds=parts.get(inv.id, []),
+                group_id=inv.group_id,
+                linked=linked.get(inv.id, []),
                 research=r.model_dump(mode="json") if (r := research.get(inv.id)) else None,
                 created_at=inv.created_at,
                 updated_at=inv.updated_at,

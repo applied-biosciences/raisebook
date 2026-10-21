@@ -41,6 +41,8 @@ ALL_TOOLS = {
     "list_meetings",
     "update_meeting",
     "complete_meeting",
+    "link_investors",
+    "unlink_investor",
 }
 READ_ONLY = {
     "get_workspace",
@@ -67,6 +69,8 @@ WRITE_IDEMPOTENT = {
     "schedule_meeting",
     "update_meeting",
     "complete_meeting",
+    "link_investors",
+    "unlink_investor",
 }
 WRITE_NOT_IDEMPOTENT = {"update_investor", "log_activity", "import_investors_csv", "save_dossier"}
 AGENT = {"X-Agent-Name": "claude-code", "X-Agent-Model": "claude-opus-5-5"}

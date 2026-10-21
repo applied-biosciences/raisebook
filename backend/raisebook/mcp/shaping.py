@@ -7,7 +7,8 @@ UI alone uses. Results are never silently truncated:
 - stages are ``{key, label}`` (``kind`` only where money/funnel logic needs it); stage
   colors and positions, ``created_at``/``updated_at``/``stage_changed_at`` are dropped;
 - an investor that is already the subject of the response is not repeated inside its
-  participant, and ``type`` is omitted when it is ``other`` (unknown);
+  participant, and ``type`` is omitted when it is ``other`` (unknown); linked cards are
+  ``linked: [{id, name, firm}]`` (the other members of the investor's team);
 - activities are ``{id, kind, at, body?, data?, round?, investor?, by}`` where ``by``
   reads ``"claude-code · claude-opus-5-5 (agent via mcp)"``;
 - money is plain integers, with ``currency`` next to it where it matters;
@@ -91,6 +92,15 @@ def _investor_dict(out: dict[str, Any]) -> dict[str, Any]:
         out.pop("type")
     for k in _UI_ONLY:
         out.pop(k, None)
+    # Linked cards: the other members of the investor's team, as {id, name, firm}.
+    out.pop("group_id", None)
+    linked = out.get("linked")
+    if isinstance(linked, list):
+        out["linked"] = [
+            prune({"id": m.get("id"), "name": m.get("name"), "firm": m.get("firm")})
+            for m in linked
+            if isinstance(m, dict)
+        ]
     return out
 
 

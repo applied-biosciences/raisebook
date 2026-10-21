@@ -33,9 +33,10 @@ from raisebook.models.round import Round, RoundParticipant, RoundStage
 from raisebook.models.user import User
 from raisebook.models.workspace import Membership
 from raisebook.schemas.common import decode_cursor, encode_cursor
-from raisebook.schemas.participants import OwnerOut, ParticipantOut
+from raisebook.schemas.participants import OwnerOut, ParticipantInvestor, ParticipantOut
 from raisebook.services import activities
 from raisebook.services.followups import follow_up_state, priority
+from raisebook.services.investor_links import linked_map
 from raisebook.services.investors import compact
 from raisebook.services.normalize import clean_text
 from raisebook.services.stages import first_stage, stage_of_kind, stage_out, stage_ref, stages_for
@@ -989,6 +990,7 @@ async def present(
     from raisebook.services.investors import get_many
 
     invs = await get_many(db, ws, [p.investor_id for p in parts])
+    linked = await linked_map(db, ws, invs.values())
     stage_rows = await db.scalars(
         select(RoundStage).where(
             RoundStage.workspace_id == ws.workspace_id,
@@ -1020,7 +1022,11 @@ async def present(
         ParticipantOut(
             round_id=p.round_id,
             round_slug=rounds.get(p.round_id, ""),
-            investor=compact(invs[p.investor_id]),
+            investor=ParticipantInvestor(
+                **compact(invs[p.investor_id]).model_dump(),
+                group_id=invs[p.investor_id].group_id,
+                linked=linked.get(p.investor_id, []),
+            ),
             stage=stage_out(stages[p.stage_id]),
             fit=p.fit,
             priority=priority(p.fit),

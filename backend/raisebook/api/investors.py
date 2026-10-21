@@ -31,7 +31,10 @@ from raisebook.schemas.investors import (
     InvestorPage,
     InvestorRef,
     InvestorUpdate,
+    LinkCreate,
+    LinksOut,
 )
+from raisebook.services import investor_links as links_svc
 from raisebook.services import investors as investors_svc
 from raisebook.services.search import list_investors
 
@@ -156,9 +159,43 @@ async def delete_investor(
     investor_id: UUID,
     ws: WorkspaceContext = Depends(get_write_ctx),
     db: AsyncSession = Depends(get_session),
+    now: datetime = Depends(get_now),
 ) -> Response:
-    """Delete the investor permanently, with their participations and timeline."""
+    """Delete the investor permanently, with their participations and timeline. A linked
+    team left with one member is dissolved."""
     inv = await investors_svc.get(db, ws, investor_id)
-    await investors_svc.delete_investor(db, ws, inv)
+    await investors_svc.delete_investor(db, ws, inv, now=now)
+    await db.commit()
+    return Response(status_code=204)
+
+
+@router.post("/{investor_id}/links", response_model=LinksOut)
+async def link_investors(
+    investor_id: UUID,
+    body: LinkCreate,
+    ws: WorkspaceContext = Depends(get_write_ctx),
+    db: AsyncSession = Depends(get_session),
+    now: datetime = Depends(get_now),
+) -> LinksOut:
+    """Link this investor's card with others as one team (for example two partners at the
+    same fund). Teams they already belong to merge into one. Repeating it changes nothing.
+    Returns every member, this investor included, sorted by name."""
+    inv = await investors_svc.get(db, ws, investor_id)
+    res = await links_svc.link(db, ws, inv, body.investor_ids, now=now)
+    await db.commit()
+    return LinksOut(group_id=res.group_id, investors=[links_svc.brief(m) for m in res.members])
+
+
+@router.delete("/{investor_id}/links", status_code=204, response_class=Response)
+async def unlink_investor(
+    investor_id: UUID,
+    ws: WorkspaceContext = Depends(get_write_ctx),
+    db: AsyncSession = Depends(get_session),
+    now: datetime = Depends(get_now),
+) -> Response:
+    """Take this investor out of their linked team (204 also when they were not linked). A
+    team left with one member is dissolved."""
+    inv = await investors_svc.get(db, ws, investor_id)
+    await links_svc.unlink(db, ws, inv, now=now)
     await db.commit()
     return Response(status_code=204)

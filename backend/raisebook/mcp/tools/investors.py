@@ -1,5 +1,6 @@
 # mypy: disable-error-code="type-arg"
-"""MCP tools: search_investors, get_investor, add_investor, update_investor (SPEC §6.4).
+"""MCP tools: search_investors, get_investor, add_investor, update_investor (SPEC §6.4),
+and the linked-card tools link_investors and unlink_investor.
 
 Owner: API+MCP (AM). Handlers call the same services as REST (``services.investors``,
 ``services.search``, ``services.participants``); references go through ``core.refs``.
@@ -34,6 +35,7 @@ from raisebook.mcp.tools._args import (
 )
 from raisebook.mcp.tools._common import Clock, parse_date, tool_call
 from raisebook.services import activities as act_svc
+from raisebook.services import investor_links as links_svc
 from raisebook.services import investors as investors_svc
 from raisebook.services import participants as parts_svc
 from raisebook.services.investors import compact
@@ -297,9 +299,15 @@ def register(server: FastMCP) -> None:
                     sort=sort_map.get(sort or "name", "name"),
                 )
                 briefs = await investors_svc.participations(db, ws, [r.id for r in rows])
+                linked = await links_svc.linked_map(db, ws, rows)
                 results = []
                 for inv in rows:
-                    row = shaping.investor(compact(inv))
+                    row = shaping.investor(
+                        {
+                            **compact(inv).model_dump(mode="json"),
+                            "linked": [b.model_dump(mode="json") for b in linked.get(inv.id, [])],
+                        }
+                    )
                     rounds = [
                         {"round_slug": b.round_slug, "stage_key": b.stage.key, "fit": b.fit}
                         for b in briefs.get(inv.id, [])
@@ -560,3 +568,57 @@ def register(server: FastMCP) -> None:
             out = shaping.investor(await investors_svc.present_one(db, ws, inv))
             out.pop("rounds", None)
             return {"investor": out, "changed_fields": res.changed_fields}
+
+    @server.tool(
+        annotations=ToolAnnotations(
+            title="Link investors",
+            readOnlyHint=False,
+            destructiveHint=False,
+            idempotentHint=True,
+            openWorldHint=False,
+        )
+    )
+    async def link_investors(
+        investor: InvestorArg,
+        investors: Annotated[
+            list[str],
+            Field(
+                min_length=1,
+                max_length=49,
+                description="The other investors to link with them (id, email, LinkedIn URL, "
+                "name, or 'Name @ Firm').",
+            ),
+        ],
+        ctx: Context | None = None,
+    ) -> dict[str, Any]:
+        """Link investor cards as one team, for example two partners at the same fund working the deal together. Teams they already belong to merge into one. Linking people who are already linked changes nothing, so retries are safe. Returns the whole team; get_investor and search_investors show each member's `linked` cards."""  # noqa: E501
+        async with tool_call(ctx, SCOPE_WRITE) as (db, ws):
+            inv = await resolve_investor(db, ws, investor)
+            others = [await resolve_investor(db, ws, ref) for ref in investors]
+            res = await links_svc.link(db, ws, inv, [o.id for o in others], now=Clock.now())
+            return {
+                "team": [
+                    shaping.prune({"id": str(m.id), "name": m.name, "firm": m.firm})
+                    for m in res.members
+                ],
+                "changed": res.changed,
+            }
+
+    @server.tool(
+        annotations=ToolAnnotations(
+            title="Unlink investor",
+            readOnlyHint=False,
+            destructiveHint=False,
+            idempotentHint=True,
+            openWorldHint=False,
+        )
+    )
+    async def unlink_investor(
+        investor: InvestorArg,
+        ctx: Context | None = None,
+    ) -> dict[str, Any]:
+        """Take one investor out of their linked team; the others stay linked (a team left with one person is dissolved). Nothing is deleted. Unlinking someone who is not linked changes nothing."""  # noqa: E501
+        async with tool_call(ctx, SCOPE_WRITE) as (db, ws):
+            inv = await resolve_investor(db, ws, investor)
+            changed = await links_svc.unlink(db, ws, inv, now=Clock.now())
+            return {"investor": {"id": str(inv.id), "name": inv.name}, "changed": changed}

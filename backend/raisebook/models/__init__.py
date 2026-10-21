@@ -3,7 +3,7 @@
 from raisebook.models.activity import Activity
 from raisebook.models.ai import AiUsageMonth, CompanyProfile, WorkspaceAiSettings
 from raisebook.models.imports import ImportRun
-from raisebook.models.investor import Investor
+from raisebook.models.investor import Investor, InvestorGroup
 from raisebook.models.jobs import Job
 from raisebook.models.meeting import CalendarFeed, Meeting, MeetingGuest
 from raisebook.models.ratelimit import RateLimitCounter
@@ -37,6 +37,7 @@ __all__ = [
     "FieldSuggestion",
     "ImportRun",
     "Investor",
+    "InvestorGroup",
     "InvestorIdentity",
     "InvestorIdentityCandidate",
     "Invite",

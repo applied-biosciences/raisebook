@@ -151,6 +151,15 @@ ROWS = [
         setup=pipeline,
     ),
     Row("delete investor", "DELETE", p("/v1/investors/{spare}"), WRITERS, setup=pipeline),
+    Row(
+        "link investors",
+        "POST",
+        p("/v1/investors/{inv}/links"),
+        WRITERS,
+        body=lambda c, _p: {"investor_ids": [str(c.extra["spare"].id)]},
+        setup=pipeline,
+    ),
+    Row("unlink investor", "DELETE", p("/v1/investors/{inv}/links"), WRITERS, setup=pipeline),
     Row("list activities", "GET", "/v1/activities", ALL, setup=pipeline),
     Row(
         "log activity",

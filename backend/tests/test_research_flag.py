@@ -1,8 +1,8 @@
 """Investor research is unfinished and off by default (``RAISEBOOK_RESEARCH_ENABLED``).
 
 With the flag off, nothing about it is served: no REST routes, no MCP tools, and no research
-line in the MCP instructions. The public pages promise exactly 21 MCP tools (17 + the four
-meeting tools).
+line in the MCP instructions. The public pages promise exactly 23 MCP tools (17 + the four
+meeting tools + the two linked-card tools).
 """
 
 from __future__ import annotations
@@ -36,6 +36,8 @@ CORE_TOOLS = {
     "list_meetings",
     "update_meeting",
     "complete_meeting",
+    "link_investors",
+    "unlink_investor",
 }
 RESEARCH_TOOLS = {
     "get_dossier",
@@ -62,7 +64,7 @@ async def _tool_names() -> set[str]:
     return {t.name for t in await server.list_tools()}
 
 
-async def test_research_off_serves_21_core_tools(research_off: None) -> None:
+async def test_research_off_serves_23_core_tools(research_off: None) -> None:
     from raisebook.mcp.server import create_mcp_server
 
     names = await _tool_names()

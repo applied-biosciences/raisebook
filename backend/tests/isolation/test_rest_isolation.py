@@ -346,6 +346,7 @@ async def snapshot_b(db: AsyncSession, t: Two) -> dict[str, Any]:
                 Investor.email,
                 Investor.tags,
                 Investor.notes,
+                Investor.group_id,
                 Investor.updated_at,
             )
             .where(Investor.workspace_id == wid)
@@ -804,6 +805,22 @@ async def _investor_patch(c: Any, t: Two, who: str) -> None:
 @case("DELETE", "/v1/investors/{investor_id}")
 async def _investor_delete(c: Any, t: Two, who: str) -> None:
     is_404(await c.delete(f"/v1/investors/{t.b_inv.id}"))
+
+
+@case("POST", "/v1/investors/{investor_id}/links")
+async def _investor_link(c: Any, t: Two, who: str) -> None:
+    # B's investor as the subject, or as the one to link with A's: both 404, nothing linked.
+    is_404(
+        await c.post(f"/v1/investors/{t.b_inv.id}/links", json={"investor_ids": [str(t.a_inv.id)]})
+    )
+    r = await c.post(f"/v1/investors/{t.a_inv.id}/links", json={"investor_ids": [str(t.b_inv.id)]})
+    is_404(r)
+    no_b(r.text, t)
+
+
+@case("DELETE", "/v1/investors/{investor_id}/links")
+async def _investor_unlink(c: Any, t: Two, who: str) -> None:
+    is_404(await c.delete(f"/v1/investors/{t.b_inv.id}/links"))
 
 
 @case("GET", "/v1/investors/export")

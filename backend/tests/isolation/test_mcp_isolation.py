@@ -302,6 +302,19 @@ async def _complete_meeting(call: Call, t: Two) -> None:
     not_found(await call("complete_meeting", {"meeting_id": str(t.b_meeting.id), "outcome": "x"}))
 
 
+@case("link_investors")
+async def _link_investors(call: Call, t: Two) -> None:
+    for ref in b_investor_refs(t):
+        not_found(await call("link_investors", {"investor": ref, "investors": [str(t.a_inv.id)]}))
+        not_found(await call("link_investors", {"investor": str(t.a_inv.id), "investors": [ref]}))
+
+
+@case("unlink_investor")
+async def _unlink_investor(call: Call, t: Two) -> None:
+    for ref in b_investor_refs(t):
+        not_found(await call("unlink_investor", {"investor": ref}))
+
+
 async def test_every_tool_is_covered(db: AsyncSession, mcp_rpc: Any) -> None:
     t = await two_workspaces(db)
     r = await mcp_rpc(t.a_key, "tools/list", {})
