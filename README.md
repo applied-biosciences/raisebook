@@ -73,6 +73,8 @@ The details are on [raisebook.org/privacy](https://raisebook.org/privacy).
 - **Meetings**: schedule them from an investor's file (it moves them to Meeting), see today's
   on Today and on board cards, record the outcome and next step when they are done, and
   subscribe to all of them from Google, Apple or Outlook Calendar with a private feed URL.
+- **Linked cards**: link two or more investors who work the deal as one team (partners at
+  the same fund), and see the team on their cards and files.
 - **A sample workspace** with fictional investors, to try everything before your own data.
 - **CSV import** with column mapping, preview and dedupe. **CSV and JSON export** of a round,
   all investors or the whole workspace. Hard delete of anything, at any time.
@@ -81,7 +83,7 @@ The details are on [raisebook.org/privacy](https://raisebook.org/privacy).
   source, with a monthly spend limit per workspace and no markup. Agents can save their own
   research with `save_dossier`.
 - **A phone layout** for the pipeline, board and triage.
-- **A REST API** under `/v1` and **an MCP server** at `/mcp` with 21 tools, 26 with research
+- **A REST API** under `/v1` and **an MCP server** at `/mcp` with 23 tools, 28 with research
   enabled (no deletes).
 
 Limits per workspace, the same for everyone: 50 rounds, 20,000 investors, 20 members,

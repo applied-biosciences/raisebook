@@ -22,9 +22,9 @@ export const LIMITS = {
   apiKeys: 20,
 };
 
-/** MCP tools: 21 core (SPEC §6.4 + the meeting tools of §6.8), 26 when research is enabled. */
-export const MCP_CORE_TOOLS = 21;
-export const MCP_TOOLS_WITH_RESEARCH = 26;
+/** MCP tools: 23 core (SPEC §6.4 + the meeting tools of §6.8 + the linked-card tools of §6.9), 28 when research is enabled. */
+export const MCP_CORE_TOOLS = 23;
+export const MCP_TOOLS_WITH_RESEARCH = 28;
 
 /** Default stages of a new round (backend/raisebook/models/round.py DEFAULT_STAGES). */
 export const DEFAULT_STAGES = [

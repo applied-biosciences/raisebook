@@ -204,7 +204,7 @@ spends the token on load. Use a throwaway database (for example `raisebook_shots
 ## Investor research, Part 1 foundation (spec `docs/RESEARCH-SPEC.md`, plan `docs/RESEARCH-PLAN.md`)
 - **Unreleased and off by default.** Only `RAISEBOOK_RESEARCH_ENABLED=true` serves its REST
   modules (`api/router.RESEARCH_API_MODULES`), its MCP tools (`mcp/tools.RESEARCH_TOOL_MODULES`)
-  and the research line of the MCP instructions. With it off the MCP surface is the 17 tools
+  and the research line of the MCP instructions. With it off the MCP surface is the 23 core tools
   every public page promises (`tests/test_research_flag.py`). Never mention research on a
   public page, the README or the changelog until it ships. Tests run with the flag on.
 - Migration `0003_research` holds every research table. Public facts (`research_sources`,
@@ -306,7 +306,7 @@ spends the token on load. Use a throwaway database (for example `raisebook_shots
 ## Meetings (SPEC §3.9, §5.9, §6.8; keep these)
 - `services/meetings.py` is the only writer of `meetings`/`meeting_guests`; REST
   (`api/meetings.py`) and MCP (`mcp/tools/meetings.py`: schedule_meeting, list_meetings,
-  update_meeting, complete_meeting; core tools, 21 without research) call it. Every change writes
+  update_meeting, complete_meeting; core tools; 23 core with the linked-card tools) call it. Every change writes
   `meeting_scheduled` / `meeting_updated` (`data.change`, `data.seq`) or, when done, a `meeting`
   activity with `data.meeting_id`; that timeline is the meeting's history. Same investor + same
   start = the same meeting (`created: false`). `done` is final (409 `meeting_done`).
@@ -326,3 +326,15 @@ spends the token on load. Use a throwaway database (for example `raisebook_shots
   sheet, the investor page and Meetings; `g m` goes to Meetings. Components live in
   `web/components/app/meetings/`.
 - Screenshots (1440 light and dark, 390): `design/meetings/*.jpg` (fixtures: `design/meetings/fixtures/seed.py`).
+
+## Linked cards (SPEC §3.10, §5.10, §6.9; keep these)
+- `services/investor_links.py` is the only writer of `investor_groups` and `investors.group_id`
+  (migration 0009; composite `(workspace_id, group_id)` FK, `ON DELETE SET NULL (group_id)`).
+  REST `POST`/`DELETE /v1/investors/{id}/links` and MCP `link_investors` / `unlink_investor`
+  call it. Linking merges every involved group; a group never has fewer than two members
+  (unlink and investor delete dissolve it). Repeats are no-ops that write nothing.
+- Each investor whose linked set changes gets one `investor_updated` activity
+  (`data.fields = ["linked_cards"]`, `changes.linked_cards = {from, to}` as ids).
+- `Investor` and the participant's `investor` carry `group_id` and `linked` (other members,
+  by name); `linked_map` loads them for a whole page in one query (no N+1, tested by query
+  count in `tests/test_linked_cards.py`). MCP shows `linked: [{id, name, firm}]`.

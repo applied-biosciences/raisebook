@@ -76,7 +76,7 @@ test("FAQ structured data matches the visible questions", () => {
 test("llms.txt states the facts and links every listed page", () => {
   const txt = llmsTxt();
   assert.match(txt, /^# Raisebook\n\n> /);
-  for (const fact of ["$0", "20,000 investors", "50 rounds", "AGPL-3.0", "OpenRouter", "Google Calendar", "/v1", "21 tools"]) {
+  for (const fact of ["$0", "20,000 investors", "50 rounds", "AGPL-3.0", "OpenRouter", "Google Calendar", "/v1", "23 tools"]) {
     assert.ok(txt.includes(fact), `llms.txt is missing ${fact}`);
   }
   for (const p of PAGES.filter((x) => x.llms)) assert.ok(txt.includes(`(https://raisebook.org${p.path === "/" ? "" : p.path})`), p.path);

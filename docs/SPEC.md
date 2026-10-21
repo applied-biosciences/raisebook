@@ -70,7 +70,7 @@ check the promise in the code.
   and keyboard), Table (sort, filter), Investor sheet. Round overview page. Investors directory
   and investor page.
 - Workspace API keys with scopes, a REST API under `/v1` with OpenAPI, and an MCP server at
-  `/mcp` with the 17 tools in §6 and the 4 meeting tools of §6.8 (plus the 5 research tools of §6.7, unreleased and served
+  `/mcp` with the 17 tools in §6 and the 4 meeting tools of §6.8 and the 2 linked-card tools of §6.9 (plus the 5 research tools of §6.7, unreleased and served
   only with `RAISEBOOK_RESEARCH_ENABLED`). Rate limits per key.
 - CSV import (mapping, preview, dedupe), CSV and JSON export, prototype JSON import (should
   have, built after CSV).
@@ -634,6 +634,29 @@ Rules (`services/meetings.py`):
   This is the only per-user read across workspaces besides research reuse, and it never
   reads a workspace the user is not a member of.
 
+### 3.10 Linked cards (migration 0009)
+Two or more investors in a workspace can be linked as one **team** (for example two partners
+at the same fund working the deal together).
+
+```
+investor_groups: id uuid pk, workspace_id → workspaces (cascade), created_at, updated_at,
+                 UNIQUE (workspace_id, id)
+investors.group_id uuid NULL, FK (workspace_id, group_id) → investor_groups (workspace_id, id)
+                 ON DELETE SET NULL (group_id); index (workspace_id, group_id) WHERE group_id
+                 IS NOT NULL
+```
+- `services/investor_links.py` is the only writer. **Link** puts an investor and the others in
+  one group; when some already belong to different groups, those groups merge (every member
+  of every involved group joins; the oldest group's id is kept). Linking investors that are
+  already together changes nothing. A team has at most 50 members.
+- **Unlink** takes one investor out; a group left with fewer than two members is deleted and
+  the last member's `group_id` cleared. **Deleting** an investor dissolves its group the
+  same way.
+- Every investor whose linked set changes gets one `investor_updated` activity with
+  `data.fields = ["linked_cards"]` and `data.changes.linked_cards = {from, to}` (investor ids);
+  no-ops write nothing. Linking yourself or nothing is 422; an id from another workspace is
+  404.
+
 ---
 
 ## 4. Authentication and authorization
@@ -1050,6 +1073,17 @@ type Meeting = { id; investor: InvestorCompact; guests: InvestorCompact[]; round
 with the investor in that round or in no round) and `RoundSummary` gains
 `meetings: {today, upcoming, needs_outcome, next: MeetingBrief[≤5]}`.
 
+### 5.10 Linked cards (§3.10)
+| method | path | scope | body | result |
+|---|---|---|---|---|
+| POST | `/v1/investors/{id}/links` | write | `{investor_ids: uuid[1..49]}` | 200 `{group_id, investors: LinkedInvestorBrief[]}` (every member, this one included, by name) |
+| DELETE | `/v1/investors/{id}/links` | write | | 204 (also when not linked) |
+
+`LinkedInvestorBrief = {id, name, firm?, title?, email?}`. `Investor` gains `group_id?` and
+`linked: LinkedInvestorBrief[]` (the other members, by name; `[]` when not linked), and so does
+the investor inside `Participant`. Lists load every page's members in one query. The investors
+CSV and the workspace JSON export carry `group_id`.
+
 ---
 
 ## 6. MCP server
@@ -1355,7 +1389,7 @@ key. The REST twin is `POST /v1/investors/{id}/dossier`.
 
 ### 6.8 Meeting tools (binding)
 Four tools in `mcp/tools/meetings.py` (core: served with or without research, so 21 tools,
-26 with research), calling `services.meetings` like REST:
+26 with research, before the linked-card tools of §6.9), calling `services.meetings` like REST:
 
 | tool | annotation | args | returns |
 |---|---|---|---|
@@ -1369,6 +1403,20 @@ the calendar (and moves the investor to the Meeting stage), list_meetings shows 
 up and which past meetings still need an outcome, update_meeting reschedules or cancels, and
 complete_meeting records how it went with the next step. Times without an offset are in the
 workspace timezone."
+
+### 6.9 Linked-card tools (binding)
+Two core tools in `mcp/tools/investors.py` (23 core tools, 28 with research), calling
+`services.investor_links` like REST:
+
+| tool | annotation | args | returns |
+|---|---|---|---|
+| `link_investors` | write, idempotent | `investor`, `investors` (1-49 references) | `{team: [{id, name, firm}], changed}` |
+| `unlink_investor` | write, idempotent | `investor` | `{investor: {id, name}, changed}` |
+
+`get_investor`, `search_investors` and participants show `linked: [{id, name, firm}]`. The
+server instructions end with: "Linked cards: link_investors links investors who work a deal as
+one team (for example two partners at the same fund), and unlink_investor takes one out;
+get_investor shows each member's linked cards."
 
 ---
 

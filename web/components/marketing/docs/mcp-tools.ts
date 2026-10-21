@@ -1,5 +1,5 @@
 /**
- * The 26 MCP tools (SPEC §6.4, the four meeting tools of §6.8, and the five research tools from RESEARCH-PLAN §7, served only with
+ * The 28 MCP tools (SPEC §6.4, the four meeting tools of §6.8, the two linked-card tools of §6.9, and the five research tools from RESEARCH-PLAN §7, served only with
  * RAISEBOOK_RESEARCH_ENABLED). Descriptions are the binding tool description text, word for
  * word. Parameters follow the spec's input schemas. If the spec changes, change this file.
  */
@@ -192,6 +192,29 @@ export const MCP_TOOLS: McpTool[] = [
       { name: "append_notes", type: "string", description: 'Adds "[YYYY-MM-DD, agent name] text" as a new paragraph.' },
     ],
     output: "{investor, changed_fields} (an empty list means nothing changed and nothing was logged)",
+  },
+  {
+    name: "link_investors",
+    title: "Link investors",
+    access: "write",
+    idempotent: true,
+    description:
+      "Link investor cards as one team, for example two partners at the same fund working the deal together. Teams they already belong to merge into one. Linking people who are already linked changes nothing, so retries are safe. Returns the whole team; get_investor and search_investors show each member's `linked` cards.",
+    params: [
+      INVESTOR_REF,
+      { name: "investors", type: "string[]", required: true, description: "The other investors to link with them (1-49 references)." },
+    ],
+    output: "{team: [{id, name, firm}], changed}",
+  },
+  {
+    name: "unlink_investor",
+    title: "Unlink investor",
+    access: "write",
+    idempotent: true,
+    description:
+      "Take one investor out of their linked team; the others stay linked (a team left with one person is dissolved). Nothing is deleted. Unlinking someone who is not linked changes nothing.",
+    params: [INVESTOR_REF],
+    output: "{investor: {id, name}, changed}",
   },
   {
     name: "add_to_round",

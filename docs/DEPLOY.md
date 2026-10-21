@@ -289,6 +289,6 @@ $dc up -d
 - [ ] An MCP client connects with a key (section 3).
 - [ ] Backups run, an off-site copy expires after 14 days, and a restore was tested.
 - [x] The GitHub repository is public (AGPL source offer).
-- [ ] `tools/list` on production returns 21 tools (26 with AI research on) (section 3).
+- [ ] `tools/list` on production returns 23 tools (28 with AI research on) (section 3).
 - [ ] External uptime checks on `https://raisebook.org/` and `https://api.raisebook.org/healthz/ready`
       alert the owner; droplet alerts for CPU, memory and disk are set.

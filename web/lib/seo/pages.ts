@@ -236,7 +236,7 @@ export const PAGES: PublicPage[] = [
     path: "/docs/mcp-tools",
     title: "MCP tools reference",
     description:
-      "The 21 core Raisebook MCP tools and the 5 research tools: what each one does, its parameters, what it returns, and which ones are safe to repeat.",
+      "The 23 core Raisebook MCP tools and the 5 research tools: what each one does, its parameters, what it returns, and which ones are safe to repeat.",
     section: "docs",
     updated: "2026-10-14",
     og: { eyebrow: "Docs · MCP", title: "MCP tools reference.", subtitle: "Every tool, its parameters and what it returns." },
