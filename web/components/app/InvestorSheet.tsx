@@ -33,9 +33,11 @@ import { sortedStages } from "@/lib/api/rounds";
 import type { Activity, Investor, Member, Participant, Round } from "@/lib/api/types";
 import { INVESTOR_TYPE_LABEL } from "@/lib/api/types";
 import { money, moneyCompact, stageFocusLabel } from "@/lib/format";
+import type { LinkPatch } from "@/lib/links";
 import { visibleIndustries } from "@/lib/pipeline";
 import { useOptionalSession, useWorkspace } from "@/lib/session";
 
+import { LinkedCards } from "./LinkedCards";
 import { LogComposer } from "./LogComposer";
 import { NextMeeting } from "./meetings/NextMeeting";
 import { DossierPanel } from "./research/DossierPanel";
@@ -152,6 +154,7 @@ export function InvestorSheet({
   onChanged,
   onStageMove,
   onResearchChange,
+  onLinksChange,
 }: {
   open: boolean;
   investorId: string | null;
@@ -180,6 +183,8 @@ export function InvestorSheet({
   onStageMove: (investorId: string, stageKey: string) => Promise<boolean>;
   /** Research changed something (a dossier, an identity, accepted suggestions). */
   onResearchChange?: () => void;
+  /** Linked cards changed: each affected card's new team (this investor's included). */
+  onLinksChange?: (patch: LinkPatch) => void;
 }) {
   const [investor, setInvestor] = useState<Investor | null>(null);
   const [timeline, setTimeline] = useState<Activity[]>([]);
@@ -458,6 +463,20 @@ export function InvestorSheet({
           ]}
         />
       </section>
+      <LinkedCards
+        key={`links-${investor.id}`}
+        client={client}
+        investor={investor}
+        wsSlug={wsSlug}
+        canWrite={canWrite}
+        onOpen={onNavigate}
+        onChange={(patch) => {
+          const mine = patch.get(investor.id);
+          if (mine) setInvestor((cur) => (cur && cur.id === investor.id ? { ...cur, ...mine } : cur));
+          onLinksChange?.(patch);
+          void loadTimeline(investor.id).catch(() => {});
+        }}
+      />
     </>
   ) : loading ? (
     <section aria-label="Loading contact and facts" className="flex flex-col gap-10">

@@ -4,7 +4,7 @@
  */
 
 import { seg, type ApiClient } from "./client";
-import type { Investor, InvestorType, Page, UUID } from "./types";
+import type { Investor, InvestorType, LinkedInvestorBrief, Page, UUID } from "./types";
 
 /** Contact fields accepted on create and update (SPEC §5.7). */
 export interface InvestorInput {
@@ -83,6 +83,24 @@ export const updateInvestor = (c: ApiClient, id: UUID, body: InvestorUpdate) =>
 
 /** Hard delete: removes them from every round and deletes their timeline. */
 export const deleteInvestor = (c: ApiClient, id: UUID) => c.del<void>(`/v1/investors/${seg(id)}`);
+
+/* ---------- linked cards (SPEC §5.10) ---------- */
+
+export interface LinksResult {
+  group_id: UUID;
+  /** Every member of the team, this investor included, sorted by name. */
+  investors: LinkedInvestorBrief[];
+}
+
+/**
+ * Link this investor with others as one team. Teams the others are already on merge into one;
+ * linking cards that are already linked changes nothing. 422 for an empty list or itself.
+ */
+export const linkInvestors = (c: ApiClient, id: UUID, investorIds: UUID[]) =>
+  c.post<LinksResult>(`/v1/investors/${seg(id)}/links`, { investor_ids: investorIds });
+
+/** Take this investor off its team (204, also when it was not linked). A team left with one card dissolves. */
+export const unlinkInvestor = (c: ApiClient, id: UUID) => c.del<void>(`/v1/investors/${seg(id)}/links`);
 
 /** Every investor (follows cursors, up to `max`). */
 export async function listAllInvestors(

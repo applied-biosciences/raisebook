@@ -2046,6 +2046,15 @@ export function Pipeline(props: PipelineProps) {
         }}
         onStageMove={doMove}
         onResearchChange={() => void research.refresh()}
+        onLinksChange={(patch) => {
+          dirty.current = true;
+          setParticipants((list) =>
+            list.map((p) => {
+              const next = patch.get(p.investor.id);
+              return next ? { ...p, investor: { ...p.investor, ...next } } : p;
+            }),
+          );
+        }}
       />
 
       <EstimateDialog

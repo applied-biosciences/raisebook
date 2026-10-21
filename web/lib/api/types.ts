@@ -271,6 +271,23 @@ export interface InvestorCompact {
   tags: string[];
 }
 
+/** Another member of an investor's linked-card team (two or more cards linked as one team). */
+export interface LinkedInvestorBrief {
+  id: UUID;
+  name: string;
+  firm?: string | null;
+  title?: string | null;
+  email?: string | null;
+}
+
+/** Linked cards on an investor (SPEC §3.10): the team id and the other members, sorted by name. */
+export interface InvestorLinks {
+  /** null when not linked. */
+  group_id?: UUID | null;
+  /** The other members of the team (never this investor); [] when not linked. */
+  linked?: LinkedInvestorBrief[];
+}
+
 export interface ParticipationBrief {
   round_id: UUID;
   round_slug: string;
@@ -281,7 +298,7 @@ export interface ParticipationBrief {
   amount_committed?: number | null;
 }
 
-export interface Investor extends InvestorCompact {
+export interface Investor extends InvestorCompact, InvestorLinks {
   website_url?: string | null;
   x_url?: string | null;
   location?: string | null;
@@ -309,7 +326,7 @@ export interface ParticipantOwner {
 export interface Participant {
   round_id: UUID;
   round_slug: string;
-  investor: InvestorCompact;
+  investor: InvestorCompact & InvestorLinks;
   stage: Stage;
   fit: number;
   priority: Priority;

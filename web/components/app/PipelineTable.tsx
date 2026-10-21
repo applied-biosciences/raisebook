@@ -11,7 +11,7 @@ import {
   type MouseEvent,
 } from "react";
 
-import { AgentMarker, FitMeter, FollowUpChip, StagePill, Table, TableScroll, TBody, Td, Th, THead, Tr } from "@/components/ui";
+import { AgentMarker, FitMeter, FollowUpChip, LinkedChip, StagePill, Table, TableScroll, TBody, Td, Th, THead, Tr } from "@/components/ui";
 import { Avatar, shortPersonName } from "@/components/ui/Avatar";
 import { useVirtualRows } from "@/components/ui/useVirtualRows";
 import type { PipelineExtra } from "@/lib/api/rounds";
@@ -450,6 +450,7 @@ export function PipelineTable({
                 {p.investor.title}
               </span>
             ) : null}
+            <LinkedChip linked={p.investor.linked} align="start" />
             {mark ? <AgentMarker label={mark.tip} /> : null}
           </span>
         );
@@ -740,6 +741,7 @@ function PhoneList({
               <span className="flex min-w-0 flex-1 flex-col gap-2">
                 <span className="flex items-center gap-6 font-semibold">
                   <span className="truncate">{p.investor.name}</span>
+                  <LinkedChip linked={p.investor.linked} align="start" />
                   {mark ? <AgentMarker label={mark.tip} /> : null}
                 </span>
                 {who ? <span className="t-body-s truncate text-muted">{who}</span> : null}

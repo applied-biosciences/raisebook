@@ -41,6 +41,7 @@ import { useSession, useWorkspace } from "@/lib/session";
 
 import { NotesEditor } from "./InvestorSheet";
 import { InvestorProfile } from "./InvestorProfile";
+import { LinkedCards } from "./LinkedCards";
 import { LogComposer } from "./LogComposer";
 import { NextMeeting } from "./meetings/NextMeeting";
 import { CommitmentDialog, useParticipantSave } from "./ParticipantFields";
@@ -411,6 +412,21 @@ export function InvestorPage({
           </header>
           <div className="rounded-md border border-line bg-surface px-16 pt-16 pb-8 phone:order-5">
             <InvestorProfile client={client} investor={inv} currency={currency} canWrite={canWrite} onSaved={setInv} />
+          </div>
+          <div className="rounded-md border border-line bg-surface p-16 phone:order-5">
+            <LinkedCards
+              client={client}
+              investor={inv}
+              wsSlug={workspace.slug}
+              canWrite={canWrite}
+              onChange={(patch) => {
+                setInv((cur) => {
+                  const mine = patch.get(cur.id);
+                  return mine ? { ...cur, ...mine } : cur;
+                });
+                void reloadTimeline();
+              }}
+            />
           </div>
           <div className="rounded-md border border-line bg-surface p-16 phone:order-6">
             <NotesEditor client={client} investor={inv} canWrite={canWrite} onSaved={setInv} />

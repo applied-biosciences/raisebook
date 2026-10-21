@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode, Ref } from "react";
 
-import type { FollowUpState, Priority, StageColor } from "@/lib/api/types";
+import type { FollowUpState, LinkedInvestorBrief, Priority, StageColor } from "@/lib/api/types";
 import { PRIORITY_LABEL } from "@/lib/api/types";
 import { cn } from "@/lib/cn";
 import { moneyCompact, num } from "@/lib/format";
@@ -8,6 +8,7 @@ import { cardSlot, type CardSlot } from "@/lib/pipeline";
 
 import { Chip } from "./Chip";
 import { FitMeter } from "./FitMeter";
+import { LinkedChip } from "./LinkedChip";
 import { StageDot } from "./Stage";
 import { Tooltip } from "./Tooltip";
 
@@ -354,6 +355,8 @@ export interface DealCardProps extends Omit<ComponentProps<"button">, "title" | 
   nextStep?: string | null;
   showNextStep?: boolean;
   agentMark?: { tip: string } | null;
+  /** Linked cards (the other members of this investor's team): a link chip beside the name. */
+  linked?: readonly LinkedInvestorBrief[] | null;
   dragging?: boolean;
   hint?: string;
   current?: boolean;
@@ -386,6 +389,7 @@ export function DealCard({
   nextStep,
   showNextStep,
   agentMark,
+  linked,
   dragging,
   hint,
   current,
@@ -428,6 +432,7 @@ export function DealCard({
         style={{ height: DEAL.head }}
       >
         <span className="min-w-0 truncate text-[15.5px] leading-[22px] font-semibold tracking-[-0.005em] text-fg">{name}</span>
+        <LinkedChip linked={linked} align="start" />
         {agentMark ? (
           <Tooltip tip={agentMark.tip} align="end">
             <span className="agent-diamond self-center" aria-label={agentMark.tip} role="img" />

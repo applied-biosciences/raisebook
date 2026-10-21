@@ -38,6 +38,7 @@ export { Kbd } from "./Kbd";
 export { Ledger, ledgerFromSummary } from "./Ledger";
 export type { LedgerDue, LedgerProps } from "./Ledger";
 export { LinkButtons } from "./LinkButtons";
+export { LinkedChip, LinkIcon } from "./LinkedChip";
 export { Menu } from "./Menu";
 export type { MenuEntry } from "./Menu";
 export { Meter } from "./Meter";

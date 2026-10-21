@@ -23,6 +23,7 @@ import { PRIORITY_LABEL } from "@/lib/api/types";
 import { cardMeta, cardPriority, checkRange, closeLikelihood, fitMeta, lastTouch } from "@/lib/boardCard";
 import { cn } from "@/lib/cn";
 import { formatDateTime, moneyCompact, num } from "@/lib/format";
+import { linkedTip } from "@/lib/links";
 import { boardTrack, cardSlot, defaultColumnSort, triageTargets } from "@/lib/pipeline";
 
 import { useViewerTimeZone } from "./meetings/useViewerTimeZone";
@@ -902,11 +903,12 @@ function StageColumn({
               checkbox={anySelected ? "shown" : selectable ? "hover" : null}
               tabIndex={tabStop === id ? 0 : -1}
               agentMark={agentMarks[id] ? { tip: agentMarks[id].tip } : null}
+              linked={p.investor.linked}
               dragging={dragIds?.includes(id)}
               draggable={draggable}
               hint={canWrite ? undefined : "View only"}
               aria-current={openId === id || undefined}
-              aria-label={`${p.investor.name}${p.investor.firm ? `, ${p.investor.firm}` : ""}. ${s.label}. ${(() => { const pr = cardPriority(p.fit); return pr ? PRIORITY_LABEL[pr] : "Not rated"; })()}.${view.odds ? ` Likelihood ${view.odds.value}%.` : ""}${isSel ? " Selected." : ""}`}
+              aria-label={`${p.investor.name}${p.investor.firm ? `, ${p.investor.firm}` : ""}. ${s.label}. ${(() => { const pr = cardPriority(p.fit); return pr ? PRIORITY_LABEL[pr] : "Not rated"; })()}.${view.odds ? ` Likelihood ${view.odds.value}%.` : ""}${p.investor.linked?.length ? ` ${linkedTip(p.investor.linked)}.` : ""}${isSel ? " Selected." : ""}`}
               onFocus={() => onCardFocus(id)}
               onClick={(e) => {
                 if (press.current.fired) {

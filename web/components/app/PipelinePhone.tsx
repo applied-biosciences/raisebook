@@ -2,7 +2,7 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
-import { Button, Chip, SearchInput, StageDot, useToastLift } from "@/components/ui";
+import { Button, Chip, LinkedChip, SearchInput, StageDot, useToastLift } from "@/components/ui";
 import type { Participant, Priority, Round, Stage } from "@/lib/api/types";
 import { INSTRUMENT_LABEL, PRIORITY_LABEL } from "@/lib/api/types";
 import { cn } from "@/lib/cn";
@@ -609,6 +609,7 @@ export function PipelinePhone({
                 >
                   <span className="flex min-w-0 items-center gap-8">
                     <span className="min-w-0 flex-1 truncate text-[15.5px] font-semibold">{p.investor.name}</span>
+                    <LinkedChip linked={p.investor.linked} />
                     {prio ? (
                       <Chip tone={prio} className="shrink-0">
                         {PRIORITY_LABEL[prio]}
