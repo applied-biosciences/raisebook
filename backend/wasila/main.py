@@ -98,6 +98,9 @@ def create_app(
             WORKSPACE_HEADER,
             AGENT_NAME_HEADER,
             AGENT_MODEL_HEADER,
+            # Raw-body uploads (Funding Room versions, Excel/Word import) name the file here.
+            "X-Filename",
+            "X-Note",
         ],
         expose_headers=[
             "X-Request-ID",

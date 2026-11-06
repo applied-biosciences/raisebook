@@ -84,6 +84,23 @@ async def test_cors_preflight_for_web_app(client: httpx.AsyncClient) -> None:
     assert "access-control-allow-origin" not in r.headers
 
 
+async def test_cors_preflight_allows_raw_upload_headers(client: httpx.AsyncClient) -> None:
+    """Excel/Word import and Funding Room uploads send the file name in X-Filename."""
+    for path in ("/v1/imports/convert", "/v1/funding-room/documents/x/versions"):
+        r = await client.options(
+            path,
+            headers={
+                "Origin": "http://localhost:3000",
+                "Access-Control-Request-Method": "POST",
+                "Access-Control-Request-Headers": (
+                    "x-csrf-token, x-workspace, content-type, x-filename, x-note"
+                ),
+            },
+        )
+        assert r.status_code == 200, path
+        assert r.headers["access-control-allow-origin"] == "http://localhost:3000"
+
+
 def test_redaction() -> None:
     event = redact_secrets(
         None,

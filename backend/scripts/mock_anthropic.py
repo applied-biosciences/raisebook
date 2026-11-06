@@ -29,14 +29,24 @@ def answer(body: dict[str, Any]) -> str:
         f: dict[str, Any] = {}
         countries = [
             c
-            for k, c in (("uk", "United Kingdom"), ("british", "United Kingdom"), ("us ", "United States"),
-                         ("america", "United States"), ("saudi", "Saudi Arabia"), ("ksa", "Saudi Arabia"),
-                         ("gcc", "GCC"))
+            for k, c in (
+                ("uk", "United Kingdom"),
+                ("british", "United Kingdom"),
+                ("us ", "United States"),
+                ("america", "United States"),
+                ("saudi", "Saudi Arabia"),
+                ("ksa", "Saudi Arabia"),
+                ("gcc", "GCC"),
+            )
             if k in q
         ]
         if countries:
             f["countries"] = sorted(set(countries))
-        tags = [t for k, t in (("health", "Health"), (" ai", "AI"), ("mental", "Mental health")) if k in f" {q}"]
+        tags = [
+            t
+            for k, t in (("health", "Health"), (" ai", "AI"), ("mental", "Mental health"))
+            if k in f" {q}"
+        ]
         if tags:
             f["tags_any"] = tags
         if "angel" in q:
@@ -46,7 +56,11 @@ def answer(body: dict[str, Any]) -> str:
         if "not contacted" in q or "haven't contacted" in q or "not yet contacted" in q:
             f["not_contacted"] = True
         f["explanation"] = "Searched " + ", ".join(
-            [*(f.get("countries") or ["all markets"]), *(f.get("tags_any") or []), *(f.get("types") or [])]
+            [
+                *(f.get("countries") or ["all markets"]),
+                *(f.get("tags_any") or []),
+                *(f.get("types") or []),
+            ]
         )
         return json.dumps(f)
     if "investor emails" in system:
@@ -72,16 +86,27 @@ def answer(body: dict[str, Any]) -> str:
         s = data["slides"][0]
         shape = s["shapes"][0] if s["shapes"] else {"shape": 0}
         return json.dumps(
-            {"suggestions": [{"slide": s["slide"], "shape": shape["shape"], "text": "Applied Biosciences", "why": "shorter title"}]}
+            {
+                "suggestions": [
+                    {
+                        "slide": s["slide"],
+                        "shape": shape["shape"],
+                        "text": "Applied Biosciences",
+                        "why": "shorter title",
+                    }
+                ]
+            }
         )
     return "OK"
 
 
 class Handler(BaseHTTPRequestHandler):
-    def do_POST(self) -> None:  # noqa: N802
+    def do_POST(self) -> None:
         n = int(self.headers.get("content-length") or 0)
         body = json.loads(self.rfile.read(n) or b"{}")
-        out = json.dumps({"type": "message", "content": [{"type": "text", "text": answer(body)}]}).encode()
+        out = json.dumps(
+            {"type": "message", "content": [{"type": "text", "text": answer(body)}]}
+        ).encode()
         self.send_response(200)
         self.send_header("content-type", "application/json")
         self.send_header("content-length", str(len(out)))
