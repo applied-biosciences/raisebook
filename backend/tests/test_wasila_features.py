@@ -684,3 +684,20 @@ async def test_funding_costs_import_edit_and_kpis(
         "/v1/funding-costs", json={"kind": "cost", "grp": "X", "name": "Y", "tranche": "loan"}
     )
     assert r.status_code == 422
+
+
+async def test_phone_and_country_edit_and_show(db: AsyncSession, key_client: Any) -> None:
+    w = await world(db)
+    c = key_client(w.key)
+    r = await c.post("/v1/investors", json={"name": "Lina Faris", "firm": "Example Angels"})
+    assert r.status_code == 201, r.text
+    inv_id = r.json()["investor"]["id"]
+    r = await c.patch(
+        f"/v1/investors/{inv_id}", json={"phone": "+44 7700 900123", "country": "United Kingdom"}
+    )
+    assert r.status_code == 200, r.text
+    assert (r.json()["phone"], r.json()["country"]) == ("+44 7700 900123", "United Kingdom")
+    r = await c.get(f"/v1/investors/{inv_id}")
+    assert (r.json()["phone"], r.json()["country"]) == ("+44 7700 900123", "United Kingdom")
+    r = await c.patch(f"/v1/investors/{inv_id}", json={"phone": None})
+    assert r.json()["phone"] is None

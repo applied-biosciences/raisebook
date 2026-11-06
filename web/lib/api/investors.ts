@@ -17,6 +17,8 @@ export interface InvestorInput {
   website_url?: string | null;
   x_url?: string | null;
   location?: string | null;
+  country?: string | null;
+  phone?: string | null;
   check_min?: number | null;
   check_max?: number | null;
   check_note?: string | null;

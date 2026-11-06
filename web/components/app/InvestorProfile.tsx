@@ -22,6 +22,8 @@ type TextKey =
   | "website_url"
   | "x_url"
   | "location"
+  | "country"
+  | "phone"
   | "check_note"
   | "source"
   | "warm_intro_by";
@@ -92,7 +94,7 @@ function Fact({
   error?: string;
   placeholder?: string;
   mono?: boolean;
-  inputMode?: "decimal" | "email" | "url" | "text";
+  inputMode?: "decimal" | "email" | "url" | "text" | "tel";
   type?: string;
   link?: string | null;
   hint?: string;
@@ -334,6 +336,19 @@ export function InvestorProfile({
           readOnly={ro}
           error={errors.email}
         />
+        <Fact
+          label="Phone"
+          type="tel"
+          inputMode="tel"
+          value={s(inv.phone)}
+          display={inv.phone ? <span dir="ltr">{inv.phone}</span> : null}
+          link={inv.phone ? `tel:${inv.phone.replace(/[^\d+]/g, "")}` : null}
+          placeholder="+44 7700 900123"
+          onCommit={text("phone")}
+          readOnly={ro}
+          error={errors.phone}
+        />
+        <Fact label="Country" value={s(inv.country)} onCommit={text("country")} readOnly={ro} error={errors.country} />
         <Fact label="Location" value={s(inv.location)} display={mark(["location"], inv.location)} onCommit={text("location")} readOnly={ro} error={errors.location} />
         <Fact
           label="LinkedIn"

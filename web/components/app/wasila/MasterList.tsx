@@ -310,7 +310,18 @@ export function MasterList() {
                           <Link href={`${base}/investors/${r.id}`} className="font-medium hover:underline">
                             {r.name}
                           </Link>
-                          {!r.email ? <span className="block text-2xs text-faint">no email</span> : null}
+                          {r.email ? (
+                            <a href={`mailto:${r.email}`} className="block max-w-[220px] truncate text-sm text-muted hover:underline" title={r.email}>
+                              {r.email}
+                            </a>
+                          ) : (
+                            <span className="block text-2xs text-faint">no email</span>
+                          )}
+                          {r.phone ? (
+                            <a href={`tel:${r.phone.replace(/[^\d+]/g, "")}`} dir="ltr" className="block text-sm text-muted hover:underline">
+                              {r.phone}
+                            </a>
+                          ) : null}
                         </Td>
                         <Td>
                           {r.firm ?? "—"}
