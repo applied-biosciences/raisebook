@@ -30,6 +30,9 @@ First Wasila release, built on the upstream investor CRM (see NOTICE).
 - Fix: Excel/Word imports and Funding Room uploads from the browser were blocked by CORS
   (`X-Filename` was not an allowed header).
 - Investor profiles show and edit phone and country; the master list shows email and phone.
+- Every app panel carries a sky-blue top rule; selected filters and tabs are Wasila blue; secondary
+  buttons are blue outlines.
+- The Dossier section, tab and R key are hidden while research is switched off (no error).
 
 ### US, UK and Saudi raising
 - Rounds gain `jurisdiction` (us, uk, ksa, other), `tax_relief` (none, seis, eis, seis_eis; UK

@@ -868,3 +868,13 @@ dialog::backdrop {
   --accent: var(--page-accent);
   color: var(--page-fg);
 }
+
+
+/* Wasila colour on every panel in the app: a sky rule along the top of each section card
+   (Profile, Rounds, Next meeting, Log, settings panels…). Gold stays for the few "you are
+   here" marks; blue for what you can act on. */
+#main section.rounded-md.border.bg-surface,
+#main section.rounded-lg.border.bg-surface,
+#main .wsl-panel {
+  border-top: 3px solid var(--brand-sky);
+}

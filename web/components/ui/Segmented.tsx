@@ -52,7 +52,7 @@ export function Segmented<T extends string>({
               "shrink-0 whitespace-nowrap border-0 transition-colors duration-[120ms] disabled:opacity-50",
               size === "sm" ? "h-26 px-10 text-sm" : "h-30 px-12 text-base",
               "touch:h-42",
-              active ? "bg-fg text-canvas" : "bg-transparent text-muted hover:text-fg",
+              active ? "bg-brand text-on-brand" : "bg-transparent text-muted hover:text-accent",
             )}
           >
             {o.label}

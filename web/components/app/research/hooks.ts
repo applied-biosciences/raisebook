@@ -42,6 +42,38 @@ export function aiSettingsCached(c: ApiClient): Promise<AiSettings | null> {
   return p;
 }
 
+const onCache = new WeakMap<ApiClient, Promise<boolean>>();
+
+/**
+ * Whether this server serves research at all (WASILA_RESEARCH_ENABLED). With it off the
+ * research routes are 404, so the dossier section, tab and R key stay hidden instead of
+ * showing an error. Undefined while checking; any other failure counts as "on" so a
+ * passing network blip never hides a real feature.
+ */
+export function researchOn(c: ApiClient): Promise<boolean> {
+  let p = onCache.get(c);
+  if (!p) {
+    p = getAiSettings(c).then(
+      () => true,
+      (e: unknown) => !(e instanceof ApiError && e.status === 404),
+    );
+    onCache.set(c, p);
+  }
+  return p;
+}
+
+export function useResearchOn(c: ApiClient): boolean | undefined {
+  const [on, setOn] = useState<boolean | undefined>(undefined);
+  useEffect(() => {
+    let live = true;
+    void researchOn(c).then((v) => live && setOn(v));
+    return () => {
+      live = false;
+    };
+  }, [c]);
+  return on;
+}
+
 export function companyProfileCached(c: ApiClient): Promise<CompanyProfile | null> {
   const hit = profileCache.get(c);
   if (hit && Date.now() - hit.at < 30_000) return hit.p;

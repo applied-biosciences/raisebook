@@ -48,6 +48,7 @@ import { CommitmentDialog, useParticipantSave } from "./ParticipantFields";
 import { ReachOut } from "./ReachOut";
 import { InvestorExtras } from "./wasila/InvestorExtras";
 import { DossierPanel } from "./research/DossierPanel";
+import { useResearchOn } from "./research/hooks";
 import { moneyInput, parseMoney, personName } from "./util";
 
 /** One ruled row per participation (SYSTEM §4.8 "Rounds"). */
@@ -287,6 +288,8 @@ export function InvestorPage({
   today: string;
 }) {
   const { workspace, client, canWrite, isOwner } = useWorkspace();
+  // Research switched off on this server: no Dossier section (not an error).
+  const researchShown = useResearchOn(client) !== false;
   const session = useSession();
   const router = useRouter();
   const toast = useToast();
@@ -411,10 +414,10 @@ export function InvestorPage({
               </a>
             ) : null}
           </header>
-          <div className="rounded-md border border-line bg-surface px-16 pt-16 pb-8 phone:order-5">
+          <div className="wsl-panel rounded-md border border-line bg-surface px-16 pt-16 pb-8 phone:order-5">
             <InvestorProfile client={client} investor={inv} currency={currency} canWrite={canWrite} onSaved={setInv} />
           </div>
-          <div className="rounded-md border border-line bg-surface p-16 phone:order-5">
+          <div className="wsl-panel rounded-md border border-line bg-surface p-16 phone:order-5">
             <LinkedCards
               client={client}
               investor={inv}
@@ -429,7 +432,7 @@ export function InvestorPage({
               }}
             />
           </div>
-          <div className="rounded-md border border-line bg-surface p-16 phone:order-5">
+          <div className="wsl-panel rounded-md border border-line bg-surface p-16 phone:order-5">
             <InvestorExtras
               client={client}
               investorId={inv.id}
@@ -439,7 +442,7 @@ export function InvestorPage({
               phone={inv.phone}
             />
           </div>
-          <div className="rounded-md border border-line bg-surface p-16 phone:order-6">
+          <div className="wsl-panel rounded-md border border-line bg-surface p-16 phone:order-6">
             <NotesEditor client={client} investor={inv} canWrite={canWrite} onSaved={setInv} />
           </div>
         </div>
@@ -491,7 +494,7 @@ export function InvestorPage({
             )}
           </section>
 
-          <div className="rounded-md border border-line bg-surface p-16 phone:order-3">
+          <div className="wsl-panel rounded-md border border-line bg-surface p-16 phone:order-3">
             <NextMeeting
               client={client}
               wsSlug={workspace.slug}
@@ -507,6 +510,7 @@ export function InvestorPage({
             />
           </div>
 
+          {researchShown ? (
           <section id="dossier" aria-label="Dossier" className="scroll-mt-80 rounded-md border border-line bg-surface p-16 phone:order-7">
             <SectionLabel>Dossier</SectionLabel>
             <DossierPanel
@@ -530,6 +534,7 @@ export function InvestorPage({
               }}
             />
           </section>
+          ) : null}
 
           <section id="timeline" aria-label="Timeline" className="scroll-mt-80 rounded-md border border-line bg-surface p-16 phone:order-4">
             <SectionLabel>Log</SectionLabel>
