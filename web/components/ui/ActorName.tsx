@@ -13,7 +13,7 @@ export function AgentMarker({ className, label }: { className?: string; label?: 
 /**
  * Who did it (SYSTEM §2.5). Agent: diamond + name in orchid 500 + model in orchid mono (full
  * strength: the mono face is the difference, so it stays readable on the agent tint). User: name
- * in fg 500. System: always "Raisebook" in muted. Always the actor, never "the AI".
+ * in fg 500. System: always "Wasila" in muted. Always the actor, never "the AI".
  */
 export function ActorName({
   actor,
@@ -36,7 +36,7 @@ export function ActorName({
     );
   }
   if (actor.type === "system") {
-    return <span className={cn("text-muted", className)}>Raisebook</span>;
+    return <span className={cn("text-muted", className)}>Wasila</span>;
   }
   return <span className={cn("font-medium text-fg", className)}>{actor.label}</span>;
 }

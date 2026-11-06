@@ -12,7 +12,7 @@ const OPTIONS: { value: ThemePref; label: string }[] = [
 ];
 
 /**
- * "Light · Dark · System" in micro mono (SYSTEM 3.27). Stores localStorage["rb-theme"] and sets
+ * "Light · Dark · System" in micro mono (SYSTEM 3.27). Stores localStorage["wsl-theme"] and sets
  * data-theme on <html>; the pre-paint script in app/layout.tsx prevents a flash.
  */
 export function ThemeToggle({ className }: { className?: string }) {

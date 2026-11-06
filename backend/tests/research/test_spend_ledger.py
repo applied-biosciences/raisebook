@@ -13,9 +13,9 @@ import pytest_asyncio
 from sqlalchemy import delete, text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from raisebook.models.workspace import Workspace
-from raisebook.services import spend
 from tests.factories import make_investor, make_workspace, owner_of
+from wasila.models.workspace import Workspace
+from wasila.services import spend
 
 OCT = date(2026, 10, 1)
 

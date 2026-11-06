@@ -10,18 +10,18 @@ import pytest
 from sqlalchemy import func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.models.activity import Activity
-from raisebook.models.research import (
+from tests.research.helpers import ledger, research_world, run_jobs, run_of, set_key
+from tests.research.openrouter_mock import FAKE_KEY
+from tests.research.pipeline_mock import AMBIGUOUS, COST, LINKEDIN, SITE, Script
+from wasila.models.activity import Activity
+from wasila.models.research import (
     Dossier,
     DossierFacts,
     InvestorIdentity,
     ResearchRun,
     ResearchSource,
 )
-from raisebook.models.round import RoundParticipant
-from tests.research.helpers import ledger, research_world, run_jobs, run_of, set_key
-from tests.research.openrouter_mock import FAKE_KEY
-from tests.research.pipeline_mock import AMBIGUOUS, COST, LINKEDIN, SITE, Script
+from wasila.models.round import RoundParticipant
 
 DOSSIER_COST = COST["identity"] + 3 * COST["search"] + COST["write"]
 
@@ -182,7 +182,7 @@ async def test_dossier_happy_path(
     assert "B's" not in prompt and (w.inv.notes or "zz") not in prompt
     for call in openrouter_mock.calls:
         assert call.headers["authorization"] == f"Bearer {FAKE_KEY}"
-        assert call.headers["x-title"] == "Raisebook"
+        assert call.headers["x-title"] == "Wasila"
 
     run = (await c.get(f"/v1/research/runs/{run_id}")).json()
     assert run["status"] == "succeeded"
@@ -363,7 +363,7 @@ async def test_a_run_that_cannot_hold_its_upper_bound_never_starts_paying(
     nothing."""
     w = await research_world(db, linkedin_url=LINKEDIN, website_url=SITE, cap_usd=0.33)
     script = Script().install(openrouter_mock)
-    from raisebook.services import spend
+    from wasila.services import spend
 
     await spend.reserve(
         db,

@@ -8,7 +8,7 @@
  * - `(app)/w/[ws]/layout.tsx` adds `<WorkspaceProvider>`; `useWorkspace()` returns the
  *   current workspace, the caller's role, the rounds list and a scoped API client
  *   (`client` sends `X-Workspace: <slug>`).
- * - `rememberWorkspace` / `readLastWorkspace` keep `localStorage["rb-last-ws"]` (SYSTEM §4),
+ * - `rememberWorkspace` / `readLastWorkspace` keep `localStorage["wsl-last-ws"]` (SYSTEM §4),
  *   wrapped in try/catch so a blocked storage never breaks a page.
  */
 
@@ -17,7 +17,7 @@ import { createContext, createElement, useContext, useEffect, useMemo, type Reac
 import { api, setCsrfToken, type ApiClient } from "./api/client";
 import type { Role, Round, SessionInfo, Workspace } from "./api/types";
 
-export const LAST_WORKSPACE_KEY = "rb-last-ws";
+export const LAST_WORKSPACE_KEY = "wsl-last-ws";
 
 export function rememberWorkspace(slug: string): void {
   try {
@@ -46,7 +46,7 @@ export function SessionProvider({
   session: SessionInfo;
   children: ReactNode;
 }) {
-  // The browser client sends this on unsafe requests when the rb_csrf cookie is not readable
+  // The browser client sends this on unsafe requests when the wsl_csrf cookie is not readable
   // (for example when the API sets it on another host in production).
   setCsrfToken(session.csrf_token);
   return createElement(SessionContext.Provider, { value: session }, children);

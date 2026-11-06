@@ -108,13 +108,13 @@ import {
 type View = PipelineView;
 type FollowFilter = "" | "due" | "week" | "none" | "quiet";
 
-const VIEW_KEY = (ws: string, roundId: string) => `rb-view:${ws}:${roundId}`;
-const STEP_KEY = "rb-card-next-step";
+const VIEW_KEY = (ws: string, roundId: string) => `wsl-view:${ws}:${roundId}`;
+const STEP_KEY = "wsl-card-next-step";
 /** The investor sheet's width (Sheet's default). */
 const SHEET_W = 520;
-const COLS_KEY = (ws: string, roundId: string) => `rb-table-cols:${ws}:${roundId}`;
-const DENSITY_KEY = (view: "board" | "table") => `rb-density:${view}`;
-const BOARD_SORT_KEY = (roundId: string) => `rb-board-sort:${roundId}`;
+const COLS_KEY = (ws: string, roundId: string) => `wsl-table-cols:${ws}:${roundId}`;
+const DENSITY_KEY = (view: "board" | "table") => `wsl-density:${view}`;
+const BOARD_SORT_KEY = (roundId: string) => `wsl-board-sort:${roundId}`;
 /** Columns hidden until the founder turns them on. */
 const DEFAULT_HIDDEN: TableCol[] = ["title"];
 const FILTER_KEYS = ["stage", "prio", "type", "industry", "follow", "owner", "tag", "kind", "research"] as const;
@@ -388,7 +388,7 @@ export function Pipeline(props: PipelineProps) {
   });
   // Phones: the list unless the board (or the Triage takeover) is asked for. The phone's own
   // choice is kept apart from the desktop's.
-  const PHONE_VIEW_KEY = `rb-view-phone:${workspace.slug}:${round.id}`;
+  const PHONE_VIEW_KEY = `wsl-view-phone:${workspace.slug}:${round.id}`;
   const [phoneStored, setPhoneStored] = useState<string | null>(null);
   useLayoutEffect(() => setPhoneStored(readStore(PHONE_VIEW_KEY)), [PHONE_VIEW_KEY]);
   const view: View = phone
@@ -403,7 +403,7 @@ export function Pipeline(props: PipelineProps) {
   const autoTriage = !phone && resolved.auto && view === "triage";
   // "All 411 are New, so the round opens in Triage." explains the auto pick once per round
   // and browser, then gives the title row back.
-  const NOTE_KEY = `rb-triage-note:${workspace.slug}:${round.id}`;
+  const NOTE_KEY = `wsl-triage-note:${workspace.slug}:${round.id}`;
   const [triageNote, setTriageNote] = useState(false);
   useEffect(() => {
     if (!autoTriage || readStore(NOTE_KEY) === "1") return;
@@ -830,7 +830,7 @@ export function Pipeline(props: PipelineProps) {
 
   /* ---------- saved views (P2-1): built-ins plus the founder's own, per round ---------- */
   const me = props.members.find((m) => m.is_you);
-  const VIEWS_KEY = `rb-views:${workspace.slug}:${round.id}`;
+  const VIEWS_KEY = `wsl-views:${workspace.slug}:${round.id}`;
   const [saved, setSaved] = useState<SavedView[]>([]);
   useEffect(() => setSaved(readJson<SavedView[]>(VIEWS_KEY, [])), [VIEWS_KEY]);
   const storeSaved = (next: SavedView[]) => {
@@ -1007,7 +1007,7 @@ export function Pipeline(props: PipelineProps) {
   }, [sheetOrder, order, participants, view, openId, triageWalk]);
 
   /* ---------- "Get set up" (P2-4) ---------- */
-  const SETUP_KEY = `rb-setup-dismissed:${workspace.slug}`;
+  const SETUP_KEY = `wsl-setup-dismissed:${workspace.slug}`;
   const [setupDismissed, setSetupDismissed] = useState(true);
   useEffect(() => setSetupDismissed(readStore(SETUP_KEY) === "1"), [SETUP_KEY]);
   const setupSteps = useMemo(() => {
@@ -2596,12 +2596,12 @@ function TagDialog({
           autoFocus
           value={text}
           maxLength={40}
-          list="rb-bulk-tags"
+          list="wsl-bulk-tags"
           placeholder="e.g. lead-capable"
           onChange={(e) => setText(e.target.value)}
         />
       </Field>
-      <datalist id="rb-bulk-tags">
+      <datalist id="wsl-bulk-tags">
         {suggestions.slice(0, 50).map((s) => (
           <option key={s} value={s} />
         ))}

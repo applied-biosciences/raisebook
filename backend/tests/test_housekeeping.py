@@ -1,4 +1,4 @@
-"""``rbctl housekeeping`` retention rules (privacy page: what Raisebook stores)."""
+"""``wasilactl housekeeping`` retention rules (privacy page: what Wasila stores)."""
 
 from __future__ import annotations
 
@@ -6,10 +6,10 @@ from datetime import timedelta
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.core.clock import get_now
-from raisebook.models.workspace import Invite
-from raisebook.services.housekeeping import purge
 from tests.factories import make_invite, make_workspace
+from wasila.core.clock import get_now
+from wasila.models.workspace import Invite
+from wasila.services.housekeeping import purge
 
 
 async def test_purge_drops_dead_invites_only(db: AsyncSession) -> None:

@@ -7,7 +7,7 @@ import { ApiError, api, errorMessage } from "@/lib/api/client";
 import { requestRemoval } from "@/lib/api/research";
 
 /**
- * The removal request (R13): anyone can ask Raisebook to delete the research it stores about
+ * The removal request (R13): anyone can ask Wasila to delete the research it stores about
  * them and to stop researching them. The answer is always the same, so it never says whether
  * anything is stored; the request counts only once the emailed link is opened.
  */

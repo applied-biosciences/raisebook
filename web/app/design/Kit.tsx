@@ -428,11 +428,11 @@ export function Kit() {
                 </p>
                 <p className="t-display-s">Dana Whitfield</p>
                 <p className="t-display-xs">No investors in Seed yet</p>
-                <p className="t-body-l measure">Raisebook tracks every investor through every round: stages, follow-ups, notes and commitments.</p>
+                <p className="t-body-l measure">Wasila tracks every investor through every round: stages, follow-ups, notes and commitments.</p>
                 <p>Body 14: Dana asked for the data room after the demo.</p>
                 <p className="t-body-s text-muted">Body-s 12.5: Partner · Harbor Light Ventures</p>
                 <p className="t-label">Label · Stage for Seed</p>
-                <p className="t-data">Data 12.5 · 2026-10-14 · rb_live_Ab3x · $1,250,000</p>
+                <p className="t-data">Data 12.5 · 2026-10-14 · wsl_live_Ab3x · $1,250,000</p>
                 <p className="t-micro text-muted">Micro 11.5 · 48 of 212 investors</p>
               </div>
             )}
@@ -743,14 +743,14 @@ export function Kit() {
           </div>
         </Section>
 
-        <Section id="timeline" title="Timeline and actors" note="Agent entries get the orchid rule and tint, with the agent name and model. Users show their name; Raisebook system actions are muted.">
+        <Section id="timeline" title="Timeline and actors" note="Agent entries get the orchid rule and tint, with the agent name and model. Users show their name; Wasila system actions are muted.">
           <Specimen>
             {() => (
               <>
                 <Row label="ActorName">
                   <ActorName actor={{ type: "agent", label: "claude-code", agent_model: "claude-opus-4-5" }} />
                   <ActorName actor={{ type: "user", label: "Sam Rivera" }} />
-                  <ActorName actor={{ type: "system", label: "Raisebook" }} />
+                  <ActorName actor={{ type: "system", label: "Wasila" }} />
                   <AgentMarker label="Agent action" />
                 </Row>
                 <Timeline items={ACTIVITIES} timeZone={TZ} now={NOW} filterable />
@@ -841,8 +841,8 @@ export function Kit() {
             {() => (
               <div className="flex flex-col gap-12">
                 <CodeBlock tabs={MCP_SNIPPETS} />
-                <CodeBlock title="Terminal" lang="shell" code={`git clone https://github.com/gumruyanzh/raisebook && cd raisebook\ndocker compose -f deploy/docker-compose.yml up`} />
-                <SecretReveal secret="rb_live_EXAMPLE_not_a_real_key_000000" />
+                <CodeBlock title="Terminal" lang="shell" code={`git clone https://github.com/applied-biosciences/wasila && cd wasila\ndocker compose -f deploy/docker-compose.yml up`} />
+                <SecretReveal secret="wsl_live_EXAMPLE_not_a_real_key_000000" />
               </div>
             )}
           </Specimen>

@@ -1,11 +1,11 @@
 /**
- * Fetch wrapper for the Raisebook API (`/v1`). Every `/v1` call in the web app goes through a
+ * Fetch wrapper for the Wasila API (`/v1`). Every `/v1` call in the web app goes through a
  * client made here (SPEC §2, §4.2, §5.1):
  *
  * - Base URL: `NEXT_PUBLIC_API_URL` (default http://localhost:8000). On the server,
  *   `API_URL_INTERNAL` wins when set (see `lib/api/server.ts`).
  * - Browser requests send cookies (`credentials: "include"`). Unsafe methods carry
- *   `X-CSRF-Token`, read from the `rb_csrf` cookie or from the token the session/verify
+ *   `X-CSRF-Token`, read from the `wsl_csrf` cookie or from the token the session/verify
  *   response returned (`setCsrfToken`).
  * - Workspace-scoped calls carry `X-Workspace: <slug>`; get a scoped client with
  *   `client.ws(slug)`. Org-less calls (auth, me, workspace list) need no header.
@@ -25,9 +25,9 @@ export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:800
 );
 
 /** HttpOnly session cookie set by the API (SPEC §4.2). */
-export const SESSION_COOKIE = "rb_session";
+export const SESSION_COOKIE = "wsl_session";
 /** Readable CSRF cookie set beside the session. */
-export const CSRF_COOKIE = "rb_csrf";
+export const CSRF_COOKIE = "wsl_csrf";
 export const CSRF_HEADER = "X-CSRF-Token";
 /** Selects the workspace for a session request (SPEC §4.3). */
 export const WORKSPACE_HEADER = "X-Workspace";
@@ -222,7 +222,7 @@ export function createApiClient(config: ClientConfig = {}): ApiClient {
       throw new ApiError(
         0,
         "network_unreachable",
-        `Could not reach the Raisebook API at ${base}. Check that it is running and try again.`,
+        `Could not reach the Wasila API at ${base}. Check that it is running and try again.`,
         undefined,
       );
     }

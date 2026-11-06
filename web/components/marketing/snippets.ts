@@ -11,13 +11,13 @@ import { MCP_URL } from "./site";
  * - stdio-only clients: mcp-remote with `--header` (no spaces in args; the value comes from env)
  */
 
-export const KEY_PLACEHOLDER = "rb_live_XXXX";
+export const KEY_PLACEHOLDER = "wsl_live_XXXX";
 
 export function claudeCodeSnippet(key = KEY_PLACEHOLDER): string {
   // Short lines on purpose: the landing terminal fits a 340px phone without scrolling.
   return [
     `claude mcp add --transport http \\`,
-    `  raisebook ${MCP_URL} \\`,
+    `  wasila ${MCP_URL} \\`,
     `  --header \\`,
     `  "Authorization: Bearer ${key}" \\`,
     `  --header "X-Agent-Name: claude-code"`,
@@ -27,23 +27,23 @@ export function claudeCodeSnippet(key = KEY_PLACEHOLDER): string {
 /** Shared caption text, so the docs, the landing page and Settings say the same thing. */
 export const SNIPPET_NOTES = {
   claudeCode:
-    "Run in a terminal. Keep the default (local) scope or use --scope user; never --scope project with a literal key, since that writes it to a shared .mcp.json. For a shared .mcp.json, write \"Authorization\": \"Bearer ${RAISEBOOK_API_KEY}\" and Claude Code expands it from your environment.",
+    "Run in a terminal. Keep the default (local) scope or use --scope user; never --scope project with a literal key, since that writes it to a shared .mcp.json. For a shared .mcp.json, write \"Authorization\": \"Bearer ${WASILA_API_KEY}\" and Claude Code expands it from your environment.",
   codex:
-    "Codex reads the key from RAISEBOOK_API_KEY, so the secret stays out of config.toml. Needs a Codex build with streamable-HTTP MCP support; older builds also need experimental_use_rmcp_client = true at the top of the file.",
+    "Codex reads the key from WASILA_API_KEY, so the secret stays out of config.toml. Needs a Codex build with streamable-HTTP MCP support; older builds also need experimental_use_rmcp_client = true at the top of the file.",
   cursor:
-    "Put it in ~/.cursor/mcp.json (never a project's .cursor/mcp.json with a literal key). Cursor opened from the Dock does not see shell variables: start it from a terminal (cursor .) so ${env:RAISEBOOK_API_KEY} resolves, or the header is empty and you get a 401.",
+    "Put it in ~/.cursor/mcp.json (never a project's .cursor/mcp.json with a literal key). Cursor opened from the Dock does not see shell variables: start it from a terminal (cursor .) so ${env:WASILA_API_KEY} resolves, or the header is empty and you get a 401.",
   model:
     "Optional: add an X-Agent-Model header (for example claude-opus-4-5) to show the model next to the agent's name on the timeline. It is fixed in the config, so update it when you switch models.",
 } as const;
 
-export const CODEX_EXPORT = `export RAISEBOOK_API_KEY=${KEY_PLACEHOLDER}`;
+export const CODEX_EXPORT = `export WASILA_API_KEY=${KEY_PLACEHOLDER}`;
 
 export function codexSnippet(): string {
   return [
     "# ~/.codex/config.toml",
-    "[mcp_servers.raisebook]",
+    "[mcp_servers.wasila]",
     `url = "${MCP_URL}"`,
-    `bearer_token_env_var = "RAISEBOOK_API_KEY"`,
+    `bearer_token_env_var = "WASILA_API_KEY"`,
     `http_headers = { "X-Agent-Name" = "codex" }`,
   ].join("\n");
 }
@@ -52,10 +52,10 @@ export function cursorSnippet(): string {
   return JSON.stringify(
     {
       mcpServers: {
-        raisebook: {
+        wasila: {
           url: MCP_URL,
           headers: {
-            Authorization: "Bearer ${env:RAISEBOOK_API_KEY}",
+            Authorization: "Bearer ${env:WASILA_API_KEY}",
             "X-Agent-Name": "cursor",
           },
         },
@@ -70,10 +70,10 @@ export function otherSnippet(key = KEY_PLACEHOLDER): string {
   return JSON.stringify(
     {
       mcpServers: {
-        raisebook: {
+        wasila: {
           command: "npx",
-          args: ["-y", "mcp-remote", MCP_URL, "--header", "Authorization:${RAISEBOOK_AUTH}"],
-          env: { RAISEBOOK_AUTH: `Bearer ${key}` },
+          args: ["-y", "mcp-remote", MCP_URL, "--header", "Authorization:${WASILA_AUTH}"],
+          env: { WASILA_AUTH: `Bearer ${key}` },
         },
       },
     },

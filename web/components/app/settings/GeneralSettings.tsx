@@ -163,7 +163,7 @@ export function GeneralSettings({ detail, rounds: initialRounds }: { detail: Wor
               <span className="text-[12px] text-muted">Mode</span>
               <span className="flex h-32 items-center gap-8">
                 {workspace.is_sandbox ? <Chip tone="mode">Sandbox</Chip> : <Chip tone="mode">Live</Chip>}
-                <span className="t-body-s text-muted">{workspace.is_sandbox ? "Fictional sample data. Use rb_test_ keys." : "Your real raise. Use rb_live_ keys."}</span>
+                <span className="t-body-s text-muted">{workspace.is_sandbox ? "Fictional sample data. Use wsl_test_ keys." : "Your real raise. Use wsl_live_ keys."}</span>
               </span>
             </div>
           </div>

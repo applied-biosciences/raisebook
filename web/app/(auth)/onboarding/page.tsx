@@ -16,7 +16,7 @@ export default async function OnboardingPage() {
   if (s.status === "error") {
     return (
       <div className="mx-auto w-full max-w-flow pt-48">
-        <ApiErrorState error={s.error} title="Raisebook can't reach its API right now" retryHref="/onboarding" />
+        <ApiErrorState error={s.error} title="Wasila can't reach its API right now" retryHref="/onboarding" />
       </div>
     );
   }

@@ -1,4 +1,4 @@
-# Raisebook web
+# Wasila web
 
 Next.js 15 (App Router) + React 19 + Tailwind v4, TypeScript strict, no component library.
 Binding specs: `../docs/SPEC.md`, `../design/SYSTEM.md`, `../docs/OWNERSHIP.md`.
@@ -9,7 +9,7 @@ npm run dev                  # http://localhost:3000, needs the API on :8000
 npm run lint && npm run typecheck && npm run build
 ```
 
-Without a running API, `RAISEBOOK_WEB_AUTH_BYPASS=1 npm run dev` renders the signed-in shell
+Without a running API, `WASILA_WEB_AUTH_BYPASS=1 npm run dev` renders the signed-in shell
 with a fictional session (dev only; ignored in production). The component inventory is at
 `/design` (alias `/kit`), always on in dev and in a production build only with
 `NEXT_PUBLIC_ENABLE_DESIGN=1`. Environment variables: `.env.example`.
@@ -25,7 +25,7 @@ with a fictional session (dev only; ignored in production). The component invent
 | `lib/api/server.ts` | `serverApi(ws?)` (forwards cookies), `getSession()` (cached per request), `authBypass()`. Server only. |
 | `lib/api/types.ts` | SPEC §5.3 shapes and the §3.8 label maps. |
 | `lib/api/core.ts` | Auth, session, me, workspaces, invite lookup/accept, `listRounds`. Re-exports the types. |
-| `lib/session.ts` | `SessionProvider`/`useSession`, `WorkspaceProvider`/`useWorkspace`, `rb-last-ws`. |
+| `lib/session.ts` | `SessionProvider`/`useSession`, `WorkspaceProvider`/`useWorkspace`, `wsl-last-ws`. |
 | `lib/format.ts` | `money`, `moneyCompact`, dates, relative time, follow-up state, priority. |
 | `middleware.ts` | Sends signed-out visitors on `/w/*`, `/app`, `/account`, `/onboarding` to `/signin?next=`. |
 | `app/(app)/_shell/*` | Route-aware `WorkspaceTopBar`, the `/app` last-workspace redirect. |

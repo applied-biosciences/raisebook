@@ -10,20 +10,20 @@ from urllib.parse import parse_qs, urlsplit
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.core import ratelimit
-from raisebook.models.activity import Activity
-from raisebook.models.investor import Investor
-from raisebook.models.research import (
+from tests.research.helpers import AGENT, agent_doc, research_world, run_jobs
+from tests.research.pipeline_mock import LINKEDIN, NAME
+from wasila.core import ratelimit
+from wasila.models.activity import Activity
+from wasila.models.investor import Investor
+from wasila.models.research import (
     Dossier,
     InvestorIdentity,
     ResearchRemovalRequest,
     ResearchSource,
     ResearchSuppression,
 )
-from raisebook.services import housekeeping, research_removal
-from raisebook.services import jobs as jobs_svc
-from tests.research.helpers import AGENT, agent_doc, research_world, run_jobs
-from tests.research.pipeline_mock import LINKEDIN, NAME
+from wasila.services import housekeeping, research_removal
+from wasila.services import jobs as jobs_svc
 
 REQUEST = {
     "name": NAME,
@@ -93,7 +93,7 @@ async def test_request_verify_apply_and_suppress(
     inv_b = await db.get(Investor, b.inv.id, populate_existing=True)
     assert inv_a is not None and inv_a.name == NAME and inv_a.location is None
     assert inv_b is not None and inv_b.location == "Berkeley"
-    assert outbox[-1].subject == "Your Raisebook research removal is done"
+    assert outbox[-1].subject == "Your Wasila research removal is done"
     assert await db.scalar(select(func.count()).select_from(ResearchSuppression)) == 1
 
     # From now on research refuses this person: model and agent alike.

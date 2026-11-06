@@ -8,7 +8,7 @@ only. Browser checks use `playwright-core` with the system Chrome, from a scratc
 
 ## Polish pass (2026-10-12)
 
-Setup: database `raisebook_polish`, API on :8150, web on :3150 (dev while fixing, then the
+Setup: database `wasila_polish`, API on :8150, web on :3150 (dev while fixing, then the
 production build for the screenshots), the 420-row fictional CSV imported into "Seed" with an
 API key, then 30 look-alike agent edits. Screenshots: `POLISH-*--{light,dark,mobile}.jpg`.
 
@@ -35,8 +35,8 @@ Checked: 1440, 1024 (dark) and 390px; no sideways scroll; no console errors.
 
 ## Integration run (2026-10-12)
 
-Setup: database `raisebook_int`, API on :8140, web production build on :3140
-(`NEXT_PUBLIC_ENABLE_DESIGN=1` for `/design`), `RAISEBOOK_RATE_LIMIT_BACKEND=off`. A generated
+Setup: database `wasila_int`, API on :8140, web production build on :3140
+(`NEXT_PUBLIC_ENABLE_DESIGN=1` for `/design`), `WASILA_RATE_LIMIT_BACKEND=off`. A generated
 450-row fictional CSV (example.com emails, made-up names and firms) was imported through the
 UI into a new "Halcyon Robotics" workspace created through onboarding.
 
@@ -76,15 +76,15 @@ Fixed during integration:
 ## WS-B setup
 
 ```bash
-createdb raisebook_uxb && psql raisebook_uxb -c 'create extension citext; create extension pg_trgm;'
+createdb wasila_uxb && psql wasila_uxb -c 'create extension citext; create extension pg_trgm;'
 cd backend
-export RAISEBOOK_DATABASE_URL=postgresql://localhost/raisebook_uxb RAISEBOOK_ENV=dev
+export WASILA_DATABASE_URL=postgresql://localhost/wasila_uxb WASILA_ENV=dev
 uv run alembic upgrade head
-uv run rbctl workspace create --name "Halcyon Robotics" --owner-email founder.b@example.com
-uv run rbctl apikey create --workspace <slug> --name seed --scopes read,write,admin
-RAISEBOOK_PUBLIC_BASE_URL=http://localhost:8120 RAISEBOOK_APP_URL=http://localhost:3120 \
-  RAISEBOOK_SESSION_COOKIE_SECURE=false RAISEBOOK_RATE_LIMIT_BACKEND=off \
-  uv run uvicorn --factory raisebook.main:create_app --port 8120
+uv run wasilactl workspace create --name "Halcyon Robotics" --owner-email founder.b@example.com
+uv run wasilactl apikey create --workspace <slug> --name seed --scopes read,write,admin
+WASILA_PUBLIC_BASE_URL=http://localhost:8120 WASILA_APP_URL=http://localhost:3120 \
+  WASILA_SESSION_COOKIE_SECURE=false WASILA_RATE_LIMIT_BACKEND=off \
+  uv run uvicorn --factory wasila.main:create_app --port 8120
 # Round "Seed" + the 420-row fictional CSV (UX-PASS-1 §0) through POST /v1/imports with round=seed.
 cd ../web && NEXT_PUBLIC_API_URL=http://localhost:8120 NEXT_PUBLIC_SITE_URL=http://localhost:3120 \
   npx next build && npx next start -p 3120

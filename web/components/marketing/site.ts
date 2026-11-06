@@ -9,17 +9,17 @@ import { ogPath, page } from "@/lib/seo/pages";
 
 const strip = (u: string) => u.replace(/\/+$/, "");
 
-export const SITE_URL = strip(process.env.NEXT_PUBLIC_SITE_URL ?? "https://raisebook.org");
+export const SITE_URL = strip(process.env.NEXT_PUBLIC_SITE_URL ?? "https://wasila.app");
 export const PUBLIC_API_URL = strip(
-  process.env.NEXT_PUBLIC_PUBLIC_API_URL ?? "https://api.raisebook.org",
+  process.env.NEXT_PUBLIC_PUBLIC_API_URL ?? "https://api.wasila.app",
 );
 export const MCP_URL = `${PUBLIC_API_URL}/mcp`;
 export const REPO_URL = strip(
-  process.env.NEXT_PUBLIC_REPO_URL ?? "https://github.com/gumruyanzh/raisebook",
+  process.env.NEXT_PUBLIC_REPO_URL ?? "https://github.com/applied-biosciences/wasila",
 );
 /**
  * Where donations go. Empty (the default) until a sponsor page is live: every "Support
- * Raisebook" button is then hidden and /support says donations are not open yet. Donations
+ * Wasila" button is then hidden and /support says donations are not open yet. Donations
  * never buy features.
  */
 export const SPONSOR_URL = (process.env.NEXT_PUBLIC_SPONSOR_URL ?? "").trim();
@@ -28,7 +28,7 @@ export const SPONSOR_URL = (process.env.NEXT_PUBLIC_SPONSOR_URL ?? "").trim();
 export const SNIPPETS_CHECKED_ON = "2026-10-10";
 
 /** Number of MCP tools every server serves (SPEC §6.4 and the meeting tools of §6.8). */
-export const MCP_TOOL_COUNT = 21;
+export const MCP_TOOL_COUNT = 26;
 
 /**
  * Metadata for a public page from the registry in lib/seo/pages.ts: title, description,
@@ -37,12 +37,12 @@ export const MCP_TOOL_COUNT = 21;
  */
 export function pageMeta(path: string): Metadata {
   const p = page(path);
-  const fullTitle = p.absoluteTitle ?? `${p.title} · Raisebook`;
+  const fullTitle = p.absoluteTitle ?? `${p.title} · Wasila`;
   const image = {
     url: ogPath(path),
     width: 1200,
     height: 630,
-    alt: `Raisebook share card: ${p.og.title} ${p.og.subtitle}`,
+    alt: `Wasila share card: ${p.og.title} ${p.og.subtitle}`,
   };
   return {
     title: p.absoluteTitle ? { absolute: p.absoluteTitle } : p.title,
@@ -50,7 +50,7 @@ export function pageMeta(path: string): Metadata {
     alternates: { canonical: path },
     openGraph: {
       type: "website",
-      siteName: "Raisebook",
+      siteName: "Wasila",
       locale: "en_US",
       url: path,
       title: fullTitle,

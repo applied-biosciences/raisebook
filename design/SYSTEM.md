@@ -1,4 +1,4 @@
-# Raisebook design system: "The Desk"
+# Wasila design system: "The Desk"
 
 This is the binding visual spec for every screen in `web/`. It is derived from
 `prototype.html` (repo root), which is the reference for density, color and type. If a screen
@@ -9,7 +9,7 @@ and the rules below. Do not invent a new visual idea, and do not import a compon
 
 ## 0. The idea in one paragraph
 
-Raisebook is a **fundraising desk**. A ledger strip at the top says where the round stands
+Wasila is a **fundraising desk**. A ledger strip at the top says where the round stands
 (money committed against the target, the funnel, who to follow up with today). Below it sits
 the working surface: a pipeline board or a dense table. Each investor's file opens in a side
 sheet. The look is a well-made instrument: cool slate neutrals, one cobalt accent for
@@ -206,7 +206,7 @@ header, Triage, phone); they stay as filter values labelled "Other".
 |---|---|
 | agent | Agent marker glyph (a 7px orchid diamond, CSS-drawn) + name in `agent` 500 + model in `agent` at full strength in mono ("claude-code · claude-opus-4-5"); the mono face is the difference, so it stays 4.5:1 on the agent tint |
 | user | Name in `fg` 500 (the role appears only in member lists) |
-| system | "Raisebook" in `muted` |
+| system | "Wasila" in `muted` |
 
 Timeline entries by agents get a 2px `agent` left rule and an `agent-soft` tint at 50%. Board
 cards changed by an agent in the last 24 hours show the diamond marker in the top-right
@@ -257,8 +257,8 @@ tokens, and works with the keyboard. The live inventory is `/design` (dev only, 
 | 3.24 | `Kbd` | Mono 10.5px, a 1px line box, radius 4, muted. |
 | 3.25 | `Skeleton` | Static `sunk` bars with no shimmer. Use it only when a layout would jump. Otherwise show "Loading…" text. |
 | 3.26 | `Pagination` | Cursor based: "Load more" button at the end of a table, plus mono "200 of 1,240". |
-| 3.27 | `ThemeToggle` | A text control "Light · Dark · System" in micro mono. It stores `localStorage["rb-theme"]` (try/catch), sets `data-theme` on `<html>`, and a pre-paint inline script prevents a flash. It lives in the marketing and auth footers; inside the app the same choice is a Theme submenu in the account menu (Light / Dark / System, `aria-checked`). |
-| 3.28 | `Wordmark` | "Raisebook" in Bricolage 700 with -0.02em tracking. Sizes 20 (app top bar), 28 (sign-in), 22 (marketing nav). No logo glyph in MVP. The favicon is a cobalt "R" set in Bricolage on a 6px-radius square (`app/icon.svg`). |
+| 3.27 | `ThemeToggle` | A text control "Light · Dark · System" in micro mono. It stores `localStorage["wsl-theme"]` (try/catch), sets `data-theme` on `<html>`, and a pre-paint inline script prevents a flash. It lives in the marketing and auth footers; inside the app the same choice is a Theme submenu in the account menu (Light / Dark / System, `aria-checked`). |
+| 3.28 | `Wordmark` | "Wasila" in Bricolage 700 with -0.02em tracking. Sizes 20 (app top bar), 28 (sign-in), 22 (marketing nav). No logo glyph in MVP. The favicon is a cobalt "R" set in Bricolage on a 6px-radius square (`app/icon.svg`). |
 | 3.29 | `TopBar`, `AppShell`, `PageHeader` | §4.1. |
 | 3.30 | `FileDrop` | A dashed `line` box on canvas: "Drop a CSV here, or paste below" + a "Choose file" button. The accent dashed border on dragover. It reads the file client-side as text (≤5 MB) and does no upload until the user confirms. |
 | 3.31 | `DefList` | The prototype `.facts`: a 112px muted term column and a value column, 6/10 gap, 13px. |
@@ -282,7 +282,7 @@ emoji.**
 URLs: marketing at `/`, `/docs/*`, `/privacy`, `/terms`. Auth at `/signin`, `/signin/check`,
 `/auth/verify`, `/invite/[token]`, `/onboarding`. App at `/w/[ws]/…` (the workspace slug is
 always in the URL; the web client sends it as `X-Workspace`), plus `/account`. `/app`
-redirects to the last-used workspace (`localStorage["rb-last-ws"]`, else the first) and its
+redirects to the last-used workspace (`localStorage["wsl-last-ws"]`, else the first) and its
 first open round.
 
 ### 4.1 App shell (`TopBar`)
@@ -290,7 +290,7 @@ A top bar rather than a sidebar, so the board gets the full width. 56px high, `c
 background, 1px line under it, sticky.
 
 ```
-[Raisebook]  [Kestrel Robotics ▾] [SANDBOX]   [ Seed | Pre-seed 2025 | + Round ]     Pipeline  Overview  Investors  Settings  [Search ⌘K] [ZG ▾]
+[Wasila]  [Kestrel Robotics ▾] [SANDBOX]   [ Seed | Pre-seed 2025 | + Round ]     Pipeline  Overview  Investors  Settings  [Search ⌘K] [ZG ▾]
 ```
 - Left: Wordmark (links to the first open round), the workspace switcher (a Menu: workspaces
   with due counts and the role when not Owner, "New workspace…" opening a short dialog with
@@ -316,7 +316,7 @@ background, 1px line under it, sticky.
 This is the prototype page, made real, with the pipeline redo on top
 (design/pipeline-redo/DECISION.md is the detailed spec and wins where they differ):
 - Three views in the title row: **Triage | Board | Table** (`?view=`). The view that opens: the
-  URL, else this viewer's choice for the round (`rb-view:<ws>:<round>`, written only by a
+  URL, else this viewer's choice for the round (`wsl-view:<ws>:<round>`, written only by a
   click), else **Triage** when New is the dominant stage and the viewer can write, else Board.
   An auto pick says so ("All 411 are New, so the round opens in Triage."). Viewers never get
   Triage. `T` switches to it.
@@ -389,7 +389,7 @@ Seed SAFE  [All | Due now | My investors | Hot | …saved views] ⋯            
 - The Table view uses the columns Investor (name 600 + title muted; sticky), Firm, Stage, Fit
   (the meter only), Type (`other` renders "—"), Follow-up, Soft, Committed, Owner (Avatar),
   Last activity, Next step. Every column is sortable; column visibility is saved per round
-  (`rb-table-cols:<ws>:<round>`). Default sort: fit desc. Rows are windowed; Compact shows
+  (`wsl-table-cols:<ws>:<round>`). Default sort: fit desc. Rows are windowed; Compact shows
   ≥ 22 rows at 1440×900.
 - The page loads trimmed participant shapes once. Filter, sort, search and view changes are
   client-only (0 requests; the URL updates with `replaceState`). Rows live in a client store
@@ -542,7 +542,7 @@ an agent · AI research · Company profile · Data.
   connected, 4s ago", from the key's `last_used`), then three numbered steps (mono `01 02 03`, not icons). 01 Create a key
   (inline, prefilled name "Claude Code"). 02 Add it to your agent (Tabs Claude Code / Codex /
   Cursor / Other, a CodeBlock with the secret filled in if it was just created, else
-  `rb_live_…` with a note). 03 Try it: suggested prompts in a CodeBlock ("What follow-ups are
+  `wsl_live_…` with a note). 03 Try it: suggested prompts in a CodeBlock ("What follow-ups are
   due this week in Seed?", "Import investors.csv into Seed as Researching, dry run first.").
   Below: the 17 tools as a Table (tool name in mono, what it does, read/write).
 - **AI research** (`/settings/ai`): a plain statement of what is sent to OpenRouter and who pays
@@ -633,7 +633,7 @@ Marketing max-width 1120px, canvas background, body-l. Real components with fict
    [Start free] (primary).
 2. **Hero** (two columns, 5/7; stacked under 900px): a mono eyebrow `FREE FOREVER · OPEN
    SOURCE · AGPL-3.0`; `display-xl` headline "Run your raise from one ledger."; a body-l lede
-   "Raisebook tracks every investor through every round: stages, follow-ups, notes and
+   "Wasila tracks every investor through every round: stages, follow-ups, notes and
    commitments. It's free forever, and your coding agent can work the pipeline with you over
    MCP."; [Start your raise] (primary lg) and "Connect Claude Code →" (link). Right: a live
    **product vignette** built from the real `Ledger` + 4 `BoardColumn`s (Contacted, Meeting,
@@ -653,20 +653,20 @@ Marketing max-width 1120px, canvas background, body-l. Real components with fict
    component (a BoardCard, three Table rows, a Sheet header with a stage selector) and a
    2-sentence caption.
 6. **"Bring the spreadsheet you already have."** A column-mapping vignette (CSV headers →
-   Raisebook fields as a Table with a mono "→"), plus the line "Dedupes by email, LinkedIn and
+   Wasila fields as a Table with a mono "→"), plus the line "Dedupes by email, LinkedIn and
    name + firm. Preview before anything is written."
 7. **"The privacy promise."** The six promises from SPEC §8.4, as a numbered ruled list (`01`
    to `06` in mono muted, bold first sentence, then the rest). Link: "Read the full privacy
    page →".
 8. **"Free forever. Here's how."** A short essay block (body-l, 2 paragraphs): no investors to
    answer to, no paid plan, AGPL so hosted forks stay open, costs kept low, donations
-   optional and never unlocking anything. [Support Raisebook] (secondary, links to
+   optional and never unlocking anything. [Support Wasila] (secondary, links to
    `NEXT_PUBLIC_SPONSOR_URL`) and "Self-host it →".
 9. **Open source**: one line with the repo link, plus a CodeBlock `git clone … && docker
    compose -f deploy/docker-compose.yml up`.
 10. **Footer**: Wordmark, "Free, private, open source fundraising CRM.", links (Docs, MCP
     setup, REST API, CSV format, Privacy, Terms, GitHub, Support), and a mono line
-    `raisebook.org · AGPL-3.0`.
+    `wasila.app · AGPL-3.0`.
 
 ### 4.15 Docs (`/docs/*`)
 A left nav (220px, sticky; it becomes a select on phones) and content at a 680px measure in

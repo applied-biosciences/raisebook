@@ -7,8 +7,8 @@ from typing import Any
 import pytest
 from pydantic import ValidationError
 
-from raisebook.schemas.dossier import DossierDoc, WriterDoc, response_format
-from raisebook.services.research_validate import (
+from wasila.schemas.dossier import DossierDoc, WriterDoc, response_format
+from wasila.services.research_validate import (
     Anchor,
     RawSource,
     check_source,
@@ -271,7 +271,7 @@ def test_schema_errors() -> None:
 
 
 def test_writer_format_is_strict_json_schema() -> None:
-    fmt = response_format("raisebook_dossier_v1", WriterDoc)
+    fmt = response_format("wasila_dossier_v1", WriterDoc)
     schema = fmt["json_schema"]["schema"]
     assert fmt["json_schema"]["strict"] is True
     assert schema["additionalProperties"] is False

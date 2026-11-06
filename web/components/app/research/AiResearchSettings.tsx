@@ -214,7 +214,7 @@ export function AiResearchSettings({
       <div className="flex flex-col gap-24">
         <Statement />
         <EmptyState title="Research is not set up on this server">
-          Research keeps your OpenRouter key encrypted with a server key (<span className="font-mono">RAISEBOOK_SECRETS_KEK</span>), and this
+          Research keeps your OpenRouter key encrypted with a server key (<span className="font-mono">WASILA_SECRETS_KEK</span>), and this
           server has none. Whoever runs it can add one; the self-hosting guide says how. Agents can still save dossiers with{" "}
           <span className="font-mono">save_dossier</span>.
         </EmptyState>
@@ -279,7 +279,7 @@ export function AiResearchSettings({
               label="Your OpenRouter key"
               hint={
                 <>
-                  Create one at openrouter.ai under Keys, with a credit limit if you like. Raisebook checks it with OpenRouter, stores it
+                  Create one at openrouter.ai under Keys, with a credit limit if you like. Wasila checks it with OpenRouter, stores it
                   encrypted and never shows it again.
                 </>
               }
@@ -377,7 +377,7 @@ export function AiResearchSettings({
               </Field>
             ))}
           </div>
-          <p className="t-micro mt-6 text-muted">Prices are per million tokens in / out. Raisebook checks each id with OpenRouter when you save.</p>
+          <p className="t-micro mt-6 text-muted">Prices are per million tokens in / out. Wasila checks each id with OpenRouter when you save.</p>
         </details>
         {modelErr ? (
           <p className="t-body-s mt-8 text-bad">
@@ -545,8 +545,8 @@ function Statement() {
     <section aria-label="How research works" className="max-w-[72ch]">
       <p>
         Research runs on <b className="font-semibold">your own OpenRouter key</b>, only when someone presses Research. When you research an
-        investor, Raisebook sends their name, firm, title and links, your company profile and the round&apos;s terms (and your deck, when you
-        prefill the profile) to OpenRouter and the models below. Raisebook never pays for model calls and sees nothing beyond the cost
+        investor, Wasila sends their name, firm, title and links, your company profile and the round&apos;s terms (and your deck, when you
+        prefill the profile) to OpenRouter and the models below. Wasila never pays for model calls and sees nothing beyond the cost
         OpenRouter reports.
       </p>
       <p className="t-body-s mt-6 text-muted">

@@ -8,10 +8,10 @@ from typing import Any
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.core.ratelimit import LIMITS, Limit
-from raisebook.mcp.server import server_instructions
-from raisebook.mcp.tools import TOOL_MODULES
 from tests.factories import make_api_key, make_investor, make_workspace
+from wasila.core.ratelimit import LIMITS, Limit
+from wasila.mcp.server import server_instructions
+from wasila.mcp.tools import TOOL_MODULES
 
 INIT = {
     "protocolVersion": "2025-06-18",
@@ -22,13 +22,13 @@ INIT = {
 
 @pytest.fixture
 def probe(monkeypatch: Any) -> None:
-    monkeypatch.setattr("raisebook.mcp.tools.TOOL_MODULES", [*TOOL_MODULES, "tests.mcp_probe"])
+    monkeypatch.setattr("wasila.mcp.tools.TOOL_MODULES", [*TOOL_MODULES, "tests.mcp_probe"])
 
 
 async def test_requires_api_key(mcp_rpc: Any) -> None:
     r = await mcp_rpc(None, "initialize", INIT)
     assert r.status_code == 401 and "Bearer" in r.headers["www-authenticate"]
-    r = await mcp_rpc("rb_live_" + "a" * 32, "initialize", INIT)
+    r = await mcp_rpc("wsl_live_" + "a" * 32, "initialize", INIT)
     assert r.status_code == 401
 
 
@@ -56,9 +56,9 @@ async def test_initialize_and_instructions(db: AsyncSession, mcp_rpc: Any) -> No
     r = await mcp_rpc(raw, "initialize", INIT)
     assert r.status_code == 200, r.text
     result = r.json()["result"]
-    assert result["serverInfo"]["name"] == "raisebook"
+    assert result["serverInfo"]["name"] == "wasila"
     assert result["instructions"] == server_instructions()
-    assert result["instructions"].startswith("Raisebook is the founder's fundraising CRM")
+    assert result["instructions"].startswith("Wasila is the founder's fundraising CRM")
     assert "import_investors_csv defaults to dry_run=true" in result["instructions"]
 
 
@@ -111,7 +111,7 @@ async def test_write_tool_needs_write_scope(db: AsyncSession, mcp_call: Any, pro
     _, reader = await make_api_key(db, ws, scopes="read")
     res = await mcp_call(reader, "probe_write", {"investor_id": str(inv.id)})
     assert not res.ok and res.code == "insufficient_scope"
-    assert "raisebook:write" in res.text
+    assert "wasila:write" in res.text
     _, writer = await make_api_key(db, ws, scopes="read,write")
     res = await mcp_call(writer, "probe_write", {"investor_id": str(inv.id)})
     assert res.ok, res.text

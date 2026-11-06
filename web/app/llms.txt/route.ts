@@ -1,6 +1,6 @@
 import { llmsTxt } from "@/lib/seo/llms";
 
-/** /llms.txt (llmstxt.org): Raisebook described for AI assistants, built from the site's own facts. */
+/** /llms.txt (llmstxt.org): Wasila described for AI assistants, built from the site's own facts. */
 export const dynamic = "force-static";
 
 export function GET() {

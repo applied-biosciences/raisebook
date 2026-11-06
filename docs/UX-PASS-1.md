@@ -2,11 +2,11 @@
 
 Status: built and integrated (commit "UX pass 1: integrate"); checks and results in `design/screens/ux-pass-1/README.md`. Owner: product design lead. Date: 2026-10-12.
 
-This plan merges three local audits of Raisebook: first run, daily use with two companies of
+This plan merges three local audits of Wasila: first run, daily use with two companies of
 about 420 investors each, and a visual audit in light, dark, 1024/1280/1440 and 390px. The
-screenshots are in `/tmp/rb-audit-first-run/`, `/tmp/rb-audit-daily-use/` and
-`/tmp/rb-audit-visual/`. Copy anything you want to keep into `design/screens/` before a reboot
-clears them. The founder uses Raisebook every day for two companies. Their feedback was:
+screenshots are in `/tmp/wsl-audit-first-run/`, `/tmp/wsl-audit-daily-use/` and
+`/tmp/wsl-audit-visual/`. Copy anything you want to keep into `design/screens/` before a reboot
+clears them. The founder uses Wasila every day for two companies. Their feedback was:
 
 > "we need better ui/ux" and "for the timezone I want a search so I can search my city or
 > timezone, now it's just a default option picker".
@@ -21,9 +21,9 @@ unless this document changes it explicitly (see "Design-system changes").
 
 - **Work locally only.** Never deploy, never touch the server or DNS, and never push. Use the
   integrator recipe in `CLAUDE.md` (API on :8100, web production build on :3100, a throwaway
-  database, `RAISEBOOK_RATE_LIMIT_BACKEND=off`). If parallel workers run at the same time,
+  database, `WASILA_RATE_LIMIT_BACKEND=off`). If parallel workers run at the same time,
   each one uses its own ports and database (for example WS-A on :8110/:3110 with
-  `raisebook_uxa`).
+  `wasila_uxa`).
 - **No new dependencies.** There is still no component library, and no virtualization, date,
   timezone or fuzzy-search library. Everything is built by hand on the platform's `Intl.*`
   APIs.
@@ -39,14 +39,14 @@ unless this document changes it explicitly (see "Design-system changes").
   P0 or P1 items need one.
 - **Checks before finishing.** On the web side run `npm run lint && npm run typecheck && npm
   run build`, plus `npm run test:unit` once WS-A adds it. On the backend run `uv run pytest -q
-  && uv run ruff check . && uv run ruff format --check . && uv run mypy raisebook`. Every
+  && uv run ruff check . && uv run ruff format --check . && uv run mypy wasila`. Every
   item also needs a headless-Chrome check (puppeteer-core with the system Chrome, run from
   the scratchpad and never added to `package.json`). Save screenshots to
   `design/screens/ux-pass-1/<item-id>--{light,dark,mobile}.jpg`.
 - **Commits**: one per item where practical, prefixed with the workstream and item, for
   example `WS-A P0-1: Combobox primitive`. Commit only your own files.
-- **Demo data is fictional only.** Use the audit CSVs in `/tmp/rb-audit-daily-use/` (420 rows)
-  and `/tmp/rb-audit-first-run/` (410 messy rows) as scale fixtures. Copy them into
+- **Demo data is fictional only.** Use the audit CSVs in `/tmp/wsl-audit-daily-use/` (420 rows)
+  and `/tmp/wsl-audit-first-run/` (410 messy rows) as scale fixtures. Copy them into
   `backend/tests/fixtures/` only if every name and email in them is fictional (example.com).
 
 ### Shared acceptance bar (applies to every item, so it is not repeated)
@@ -192,7 +192,7 @@ Owns:
   `StagesEditor.tsx`, `web/components/app/settings/**`
 - `web/app/(app)/w/[ws]/settings/{page.tsx,layout.tsx,members/**,mcp/**,api-keys/**}`,
   `web/app/(app)/w/[ws]/r/[round]/settings/**`
-- Backend: `backend/raisebook/services/workspaces.py`, `backend/raisebook/services/rounds.py`
+- Backend: `backend/wasila/services/workspaces.py`, `backend/wasila/services/rounds.py`
   (currency validation only), `backend/tests/test_workspaces.py`
 
 ### WS-B: Round work surface ("Pipeline")
@@ -205,7 +205,7 @@ Owns:
   `useVirtualRows.ts` (new), `FilterBar.tsx` (new)
 - `web/app/(app)/w/[ws]/r/[round]/page.tsx`
 - `web/lib/api/rounds.ts`
-- Backend: `backend/raisebook/api/participants.py`, `services/participants.py`,
+- Backend: `backend/wasila/api/participants.py`, `services/participants.py`,
   `services/followups.py`, `schemas/participants.py`, `tests/api/test_participants_api.py`,
   `tests/isolation/test_rest_isolation.py` (WS-B is the only workstream that adds a REST
   route in this pass), `tests/test_permissions_features.py`
@@ -225,7 +225,7 @@ Owns:
 - `web/components/app/NamePrompt.tsx`, `RoundOverview.tsx`, `InvestorsDirectory.tsx`,
   `InvestorPage.tsx`, `InvestorProfile.tsx`, `ApiErrorState.tsx`, `account/**`
 - `web/components/marketing/**` (P2 only)
-- Backend: `backend/raisebook/api/activities.py`, `schemas/activities.py`,
+- Backend: `backend/wasila/api/activities.py`, `schemas/activities.py`,
   `services/activities.py` (read paths only), `services/search.py`, `api/investors.py`
   (read paths only), `tests/api/test_activities_api.py`, `tests/api/test_investors_api.py`
 
@@ -234,7 +234,7 @@ Owns:
 - `web/components/data/**`, `web/components/ui/FileDrop.tsx`,
   `web/app/(app)/w/[ws]/import/**`, `web/app/(app)/w/[ws]/settings/data/**`,
   `web/lib/api/data.ts`, `web/app/(marketing)/docs/csv/**`, `web/public/templates/**` (new)
-- Backend: `backend/raisebook/services/imports.py`, `services/csv_io.py`,
+- Backend: `backend/wasila/services/imports.py`, `services/csv_io.py`,
   `services/normalize.py`, `api/imports.py`, `schemas/imports.py` (or wherever the import
   schemas live), `mcp/tools/data.py`, `tests/services/test_imports.py`, `test_csv_io.py`,
   `test_normalize.py`, `tests/api/test_imports_api.py`, `tests/mcp/*import*`,
@@ -511,7 +511,7 @@ Acceptance:
 Acceptance:
 - [ ] At 1440×900, Compact mode shows ≥ 22 rows.
 - [ ] j/k and Enter work through 420 rows without the mouse, and scroll follows focus.
-- [ ] Column visibility is stored per round (key `rb-table-cols:<ws>:<round>`), not globally.
+- [ ] Column visibility is stored per round (key `wsl-table-cols:<ws>:<round>`), not globally.
 
 #### P1-3 Compact, scannable board (WS-B)
 - Cards: firm first ("Marrowstone Capital · Principal"). Follow-up and money chips share one
@@ -651,7 +651,7 @@ Acceptance:
 - Review: the counts become filter chips (All / Create / Update / Skip / Errors / Warnings)
   over a virtualized list of **every** row. The header and the action bar are sticky. j/k
   navigation. "Download rows with problems (CSV)", built client-side.
-- Result: "duplicates within this file" and "already in Raisebook" are reported separately,
+- Result: "duplicates within this file" and "already in Wasila" are reported separately,
   and each duplicate names the row it duplicates. Errors are grouped by kind. Next steps are
   offered ("Set follow-ups for the 40 in Meeting →").
 - Investor type: when there is no type column, the import guesses from the title or firm

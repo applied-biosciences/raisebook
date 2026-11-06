@@ -17,10 +17,10 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { ws } = await params;
   const s = await getSession();
   const w = s.status === "ok" ? s.session.workspaces.find((x) => x.slug === ws) : undefined;
-  return { title: { default: w?.name ?? "Workspace", template: `%s · ${w?.name ?? "Raisebook"}` }, robots: { index: false } };
+  return { title: { default: w?.name ?? "Workspace", template: `%s · ${w?.name ?? "Wasila"}` }, robots: { index: false } };
 }
 
-/** Fictional rounds for RAISEBOOK_WEB_AUTH_BYPASS=1 (dev only, no API). */
+/** Fictional rounds for WASILA_WEB_AUTH_BYPASS=1 (dev only, no API). */
 const BYPASS_ROUNDS: Round[] = [
   {
     id: "00000000-0000-4000-8000-0000000000r1",

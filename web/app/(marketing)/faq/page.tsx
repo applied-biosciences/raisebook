@@ -13,7 +13,7 @@ import { faqPage, pageGraph } from "@/lib/seo/schema";
 
 export const metadata: Metadata = pageMeta("/faq");
 
-const GROUPS = [{ group: "About Raisebook", items: HOME_FAQ }, ...MORE_FAQ];
+const GROUPS = [{ group: "About Wasila", items: HOME_FAQ }, ...MORE_FAQ];
 
 export default function FaqHub() {
   const all = GROUPS.flatMap((g) => g.items);
@@ -33,7 +33,7 @@ export default function FaqHub() {
         title="Questions founders ask"
         lede={
           <p>
-            Raisebook is a free, open-source investor CRM for startup founders. These are the questions people ask before they move
+            Wasila is a free, open-source investor CRM for startup founders. These are the questions people ask before they move
             their raise into it: price, privacy, agents, research, meetings and how it compares.
           </p>
         }
@@ -48,8 +48,8 @@ export default function FaqHub() {
         <ButtonLink href="/signin" variant="primary">
           Start your raise, free
         </ButtonLink>
-        <a href="mailto:0@raisebook.org" className="link">
-          Ask another question: 0@raisebook.org
+        <a href="mailto:hello@wasila.app" className="link">
+          Ask another question: hello@wasila.app
         </a>
       </div>
     </PageShell>

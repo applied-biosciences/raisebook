@@ -18,8 +18,8 @@ import pytest_asyncio
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from raisebook.services import jobs as jobs_svc
 from tests.factories import make_workspace
+from wasila.services import jobs as jobs_svc
 
 LEASE = 120
 

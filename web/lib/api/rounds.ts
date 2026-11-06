@@ -9,23 +9,7 @@ import { followUpState, priorityFromFit } from "../format";
 
 import { seg, type ApiClient } from "./client";
 import { roundPath } from "./core";
-import type {
-  DateString,
-  FollowUpItem,
-  FollowUpState,
-  Instrument,
-  Investor,
-  InvestorCompact,
-  Page,
-  Participant,
-  ParticipantOwner,
-  Round,
-  RoundStatus,
-  RoundSummary,
-  Stage,
-  StageInput,
-  UUID,
-} from "./types";
+import type { DateString, FollowUpItem, FollowUpState, Instrument, Investor, InvestorCompact, Jurisdiction, Page, Participant, ParticipantOwner, Round, RoundStatus, RoundSummary, Stage, StageInput, TaxRelief, UUID } from "./types";
 
 /* ---------- rounds ---------- */
 
@@ -38,6 +22,9 @@ export interface RoundInput {
   pre_money_valuation?: number | null;
   target_close_on?: DateString | null;
   notes?: string | null;
+  jurisdiction?: Jurisdiction;
+  tax_relief?: TaxRelief;
+  sharia_compliant?: boolean;
   stages?: StageInput[];
 }
 

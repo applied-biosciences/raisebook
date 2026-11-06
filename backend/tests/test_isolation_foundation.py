@@ -12,18 +12,18 @@ from typing import Any
 from fastapi.routing import APIRoute
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.models.workspace import ApiKey, Invite, Membership, Workspace
 from tests.factories import add_member, make_api_key, make_invite, make_workspace, owner_of
 from tests.test_permissions_matrix import ROWS
+from wasila.models.workspace import ApiKey, Invite, Membership, Workspace
 
 FB_MODULES = {
-    "raisebook.api.health",
-    "raisebook.api.auth",
-    "raisebook.api.me",
-    "raisebook.api.workspaces",
-    "raisebook.api.members",
-    "raisebook.api.invites",
-    "raisebook.api.api_keys",
+    "wasila.api.health",
+    "wasila.api.auth",
+    "wasila.api.me",
+    "wasila.api.workspaces",
+    "wasila.api.members",
+    "wasila.api.invites",
+    "wasila.api.api_keys",
 }
 # Routes that are not workspace-scoped (anonymous or the caller's own account).
 ORGLESS = {

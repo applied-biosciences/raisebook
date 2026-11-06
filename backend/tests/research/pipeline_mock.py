@@ -2,8 +2,8 @@
 
 ``Script`` answers ``POST /chat/completions`` like the real API: the identity call (Sonar,
 a fenced JSON block plus ``url_citation`` annotations), the three search calls (prose plus
-annotations; Raisebook keeps only the citations) and the writer call (structured JSON). The
-writer reads the ``<source id=… url=…>`` tags Raisebook sent and cites them by id, so tests
+annotations; Wasila keeps only the citations) and the writer call (structured JSON). The
+writer reads the ``<source id=… url=…>`` tags Wasila sent and cites them by id, so tests
 never depend on the order sources were stored in.
 
 The cast: **Dana Whitfield**, Partner at **Harbor Light Ventures** (``harborlight.example``),
@@ -167,7 +167,7 @@ SOURCE_TAG = re.compile(r'<source id="(s\d+)" url="([^"]+)"')
 def writer_doc(
     sources: dict[str, str], *, extra_facts: list[dict[str, Any]] | None = None
 ) -> dict[str, Any]:
-    """A dossier citing the sources Raisebook sent (url → id), plus traps for the validator."""
+    """A dossier citing the sources Wasila sent (url → id), plus traps for the validator."""
 
     def sid(fragment: str) -> list[str]:
         return [i for i, url in sources.items() if fragment in url][:1]

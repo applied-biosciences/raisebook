@@ -19,10 +19,10 @@ export const metadata: Metadata = pageMeta("/docs/api");
 
 const EXAMPLE = [
   `curl ${PUBLIC_API_URL}/v1/rounds/seed/summary \\`,
-  `  -H "Authorization: Bearer $RAISEBOOK_API_KEY"`,
+  `  -H "Authorization: Bearer $WASILA_API_KEY"`,
   "",
   `curl -X POST ${PUBLIC_API_URL}/v1/investors \\`,
-  `  -H "Authorization: Bearer $RAISEBOOK_API_KEY" \\`,
+  `  -H "Authorization: Bearer $WASILA_API_KEY" \\`,
   `  -H "Content-Type: application/json" \\`,
   `  -H "X-Agent-Name: weekly-sync" \\`,
   `  -d '{"name": "Dana Whitfield", "firm": "Harbor Light Ventures", "email": "dana@example.com", "type": "vc"}'`,
@@ -50,8 +50,8 @@ export default function RestApi() {
 
       <H2>Authentication</H2>
       <P>
-        Send a workspace API key as <C>Authorization: Bearer rb_live_…</C> or{" "}
-        <C>X-API-Key: rb_live_…</C>. The key decides the workspace; there is nothing else to
+        Send a workspace API key as <C>Authorization: Bearer wsl_live_…</C> or{" "}
+        <C>X-API-Key: wsl_live_…</C>. The key decides the workspace; there is nothing else to
         select. Owners create keys in Settings → API keys (<A href="/docs/mcp">scopes</A>).
         Requests made with a key are recorded as agent actions: add <C>X-Agent-Name</C> and{" "}
         <C>X-Agent-Model</C> to label them on the timeline.
@@ -109,7 +109,7 @@ export default function RestApi() {
       />
       <P>
         An id or slug from another workspace returns <C>404 not_found</C>, never 403, so
-        Raisebook does not reveal that it exists.
+        Wasila does not reveal that it exists.
       </P>
 
       <H2>Rate limits</H2>

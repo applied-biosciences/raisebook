@@ -6,10 +6,10 @@ from typing import Any
 
 import pytest
 
-from raisebook.models.enums import IdentityStatus
-from raisebook.models.investor import Investor
-from raisebook.services.openrouter import WebSource
-from raisebook.services.research_identity import (
+from wasila.models.enums import IdentityStatus
+from wasila.models.investor import Investor
+from wasila.services.openrouter import WebSource
+from wasila.services.research_identity import (
     Candidate,
     decide,
     parse_candidates,

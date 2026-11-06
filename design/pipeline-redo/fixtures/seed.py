@@ -278,7 +278,7 @@ def seed_mature(api: Api, today: date) -> dict:
         "POST",
         "/v1/api-keys",
         ws["slug"],
-        json={"name": "Research agent", "agent_name": "research-agent", "scopes": ["raisebook:read", "raisebook:write"]},
+        json={"name": "Research agent", "agent_name": "research-agent", "scopes": ["wasila:read", "wasila:write"]},
     )
     secret = key.get("secret") or key.get("key")
     p = by_stage["research"][1]

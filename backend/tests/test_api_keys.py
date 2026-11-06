@@ -8,10 +8,10 @@ from typing import Any
 import httpx
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.auth.api_keys import hash_api_key
-from raisebook.core import clock
-from raisebook.models.workspace import ApiKey
 from tests.factories import add_member, make_api_key, make_workspace, owner_of
+from wasila.auth.api_keys import hash_api_key
+from wasila.core import clock
+from wasila.models.workspace import ApiKey
 
 
 async def owner_client(db: AsyncSession, session_client: Any, **ws_kw: Any) -> tuple[Any, Any]:
@@ -28,10 +28,10 @@ async def test_owner_creates_key_secret_shown_once(db: AsyncSession, session_cli
     assert r.status_code == 201, r.text
     body = r.json()
     secret = body["secret"]
-    assert secret.startswith("rb_live_") and len(secret) == len("rb_live_") + 32
+    assert secret.startswith("wsl_live_") and len(secret) == len("wsl_live_") + 32
     key = body["api_key"]
     assert key["key_prefix"] == secret[:12]
-    assert key["scopes"] == ["raisebook:read", "raisebook:write"]  # read always included
+    assert key["scopes"] == ["wasila:read", "wasila:write"]  # read always included
     assert key["mode"] == "live" and key["agent_name"] == "claude-code"
     assert key["created_by"]  # display name of the owner
     row = await db.get(ApiKey, key["id"])
@@ -51,13 +51,13 @@ async def test_key_authenticates_both_headers(db: AsyncSession, client: httpx.As
     assert r.status_code == 200
     you = r.json()["you"]
     assert you["type"] == "agent" and you["key_prefix"] == raw[:12]
-    assert you["scopes"] == ["raisebook:read", "raisebook:write"]
+    assert you["scopes"] == ["wasila:read", "wasila:write"]
 
 
 async def test_sandbox_workspace_gets_test_keys(db: AsyncSession, session_client: Any) -> None:
     _ws, c = await owner_client(db, session_client, sandbox=True)
     r = await c.post("/v1/api-keys", json={"name": "demo"})
-    assert r.json()["secret"].startswith("rb_test_") and r.json()["api_key"]["mode"] == "test"
+    assert r.json()["secret"].startswith("wsl_test_") and r.json()["api_key"]["mode"] == "test"
 
 
 async def test_revoked_key_is_rejected(
@@ -72,7 +72,7 @@ async def test_revoked_key_is_rejected(
     r = await agent.get("/v1/workspace")
     assert r.status_code == 401
     assert r.json()["error"]["code"] == "invalid_api_key"
-    assert r.headers["www-authenticate"] == 'Bearer realm="raisebook"'
+    assert r.headers["www-authenticate"] == 'Bearer realm="wasila"'
     listed = (await c.get("/v1/api-keys")).json()["data"]
     assert listed[0]["revoked_at"] is not None
     # Revoking twice is fine.
@@ -94,8 +94,8 @@ async def test_wrong_mode_prefix_and_malformed_keys(
 ) -> None:
     ws = await make_workspace(db)
     _, raw = await make_api_key(db, ws)
-    swapped = "rb_test_" + raw[len("rb_live_") :]
-    for bad in (swapped, raw[:-1], raw + "x", "rb_live_short", "sk_live_" + "a" * 32, raw.upper()):
+    swapped = "wsl_test_" + raw[len("wsl_live_") :]
+    for bad in (swapped, raw[:-1], raw + "x", "wsl_live_short", "sk_live_" + "a" * 32, raw.upper()):
         r = await client.get("/v1/workspace", headers={"Authorization": f"Bearer {bad}"})
         assert r.status_code == 401, bad
         assert r.json()["error"]["code"] == "invalid_api_key"
@@ -124,18 +124,18 @@ async def test_last_used_at_is_touched(db: AsyncSession, key_client: Any, frozen
 
 async def test_scope_rules(db: AsyncSession, session_client: Any) -> None:
     _ws, c = await owner_client(db, session_client)
-    r = await c.post("/v1/api-keys", json={"name": "x", "scopes": ["raisebook:admin"]})
+    r = await c.post("/v1/api-keys", json={"name": "x", "scopes": ["wasila:admin"]})
     assert r.status_code == 422 and r.json()["error"]["code"] == "validation_error"
     assert r.json()["error"]["details"][0]["loc"] == ["body", "scopes"]
-    r = await c.post("/v1/api-keys", json={"name": "x", "scopes": ["raisebook:delete"]})
+    r = await c.post("/v1/api-keys", json={"name": "x", "scopes": ["wasila:delete"]})
     assert r.status_code == 422
     r = await c.post("/v1/api-keys", json={"name": "x", "scopes": ["read"]})
-    assert r.json()["api_key"]["scopes"] == ["raisebook:read"]
+    assert r.json()["api_key"]["scopes"] == ["wasila:read"]
     r = await c.post("/v1/api-keys", json={"name": "x", "scopes": ["admin", "write"]})
     assert r.json()["api_key"]["scopes"] == [
-        "raisebook:read",
-        "raisebook:write",
-        "raisebook:admin",
+        "wasila:read",
+        "wasila:write",
+        "wasila:admin",
     ]
 
 

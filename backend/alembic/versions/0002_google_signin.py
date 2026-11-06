@@ -1,7 +1,7 @@
 """Continue with Google: ``users.google_sub``.
 
 The Google account id (OIDC ``sub``) bound on a user's first Google sign-in. Nullable
-(magic-link-only accounts have none) and unique (one Google account, one Raisebook
+(magic-link-only accounts have none) and unique (one Google account, one Wasila
 account). Adding a nullable column is metadata-only in Postgres: no table rewrite.
 
 Revision ID: 0002

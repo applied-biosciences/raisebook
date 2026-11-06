@@ -9,7 +9,7 @@ import { pageGraph } from "@/lib/seo/schema";
 export const metadata: Metadata = pageMeta("/terms");
 
 const SECTIONS = [
-  "Who runs Raisebook",
+  "Who runs Wasila",
   "The service",
   "Your account and keys",
   "Your data",
@@ -32,7 +32,7 @@ export default function Terms() {
             <AsideFacts
               items={[
                 ["Updated", "2026-10-13"],
-                ["Covers", "raisebook.org"],
+                ["Covers", "wasila.app"],
                 ["Status", "In effect"],
               ]}
             />
@@ -45,7 +45,7 @@ export default function Terms() {
           title="Terms of use"
           lede={
             <p>
-              The short version: Raisebook is free, your data stays yours, use it for your own
+              The short version: Wasila is free, your data stays yours, use it for your own
               fundraising, and don&apos;t use it to hurt anyone. The longer version follows, in plain
               language.
             </p>
@@ -53,20 +53,20 @@ export default function Terms() {
         />
 
 
-        <H2>Who runs Raisebook</H2>
+        <H2>Who runs Wasila</H2>
         <P>
-          raisebook.org is operated by Zhirayr Gumruyan, an individual based in San Francisco, California (&ldquo;we&rdquo;).
-          Contact: 0@raisebook.org. By creating an account you agree to these terms.
+          Wasila is operated by Applied Biosciences Limited, a company registered in England and Wales (&ldquo;we&rdquo;).
+          Contact: hello@wasila.app. By creating an account you agree to these terms.
         </P>
 
         <H2>The service</H2>
         <Ul>
           <li>
-            Raisebook is free. There is no paid plan, and donations do not change what you get.
+            Access to Wasila is provided by Applied Biosciences Limited to the workspaces it invites.
           </li>
           <li>
             The software is open source under the GNU Affero General Public License v3. That license
-            covers the code. These terms cover your use of the hosted service at raisebook.org.
+            covers the code. These terms cover your use of the hosted service at wasila.app.
           </li>
           <li>
             We improve the service over time and may change or remove features. Changes that affect
@@ -91,7 +91,7 @@ export default function Terms() {
         <H2>Your data</H2>
         <Ul>
           <li>
-            What you put into Raisebook stays yours. You give us only the permission we need to
+            What you put into Wasila stays yours. You give us only the permission we need to
             store it, show it to your workspace and run the service. The{" "}
             <A href="/privacy">privacy page</A> is part of these terms.
           </li>
@@ -103,10 +103,10 @@ export default function Terms() {
         </Ul>
 
         <H2>Fair use</H2>
-        <P>Do not use Raisebook to:</P>
+        <P>Do not use Wasila to:</P>
         <Ul>
           <li>send spam or bulk outreach, or store data you obtained unlawfully;</li>
-          <li>scrape other services, or resell access to raisebook.org;</li>
+          <li>scrape other services, or resell access to wasila.app;</li>
           <li>
             probe, break or overload the service, get around rate limits, or reach another
             workspace&apos;s data;
@@ -119,14 +119,14 @@ export default function Terms() {
 
         <H2>Availability</H2>
         <P>
-          We work to keep Raisebook running and your data safe, but it is a free service run on a
-          small budget, with no uptime guarantee. If we ever decide to shut raisebook.org down, we
+          We work to keep Wasila running and your data safe, but it is a free service run on a
+          small budget, with no uptime guarantee. If we ever decide to shut wasila.app down, we
           will give at least 60 days&apos; notice by email and keep export working until the end.
         </P>
 
         <H2>No warranty</H2>
         <P>
-          Raisebook is provided &ldquo;as is&rdquo;, without warranties of any kind, to the extent the
+          Wasila is provided &ldquo;as is&rdquo;, without warranties of any kind, to the extent the
           law allows. It is a tool for keeping track of a fundraise. It is not financial, legal or
           investment advice, and the numbers it shows are only as good as what is entered.
         </P>
@@ -140,7 +140,7 @@ export default function Terms() {
 
         <H2>Ending</H2>
         <P>
-          You can stop using Raisebook and delete your account whenever you like. We may suspend or
+          You can stop using Wasila and delete your account whenever you like. We may suspend or
           close an account that breaks these terms, and we will tell you why unless the law or the
           safety of others prevents it. Where we can, we give you a chance to export first.
         </P>
@@ -148,11 +148,11 @@ export default function Terms() {
         <H2>Changes to these terms</H2>
         <P>
           We may update these terms. For changes that matter, we email account holders at least 30
-          days before they take effect. If you keep using Raisebook after that, the new terms apply.
+          days before they take effect. If you keep using Wasila after that, the new terms apply.
         </P>
 
         <H2>Law</H2>
-        <P>These terms are governed by the laws of the State of California, and disputes go to the courts of San Francisco County, California.</P>
+        <P>These terms are governed by the laws of England and Wales, and disputes go to the courts of England and Wales.</P>
       </PageShell>
     </>
   );

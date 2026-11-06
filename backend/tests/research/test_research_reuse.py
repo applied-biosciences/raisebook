@@ -19,19 +19,6 @@ import pytest
 from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.core import clock
-from raisebook.models.ai import CompanyProfile, WorkspaceAiSettings
-from raisebook.models.research import (
-    Dossier,
-    DossierFacts,
-    InvestorIdentity,
-    ResearchRun,
-    ResearchSource,
-)
-from raisebook.models.workspace import Workspace
-from raisebook.services import research as research_svc
-from raisebook.services.privacy_filter import notes_for_research
-from raisebook.services.research_reuse import FRESH_DAYS
 from tests.factories import (
     add_member,
     make_api_key,
@@ -42,6 +29,19 @@ from tests.factories import (
 )
 from tests.research.helpers import RW, research_world, run_jobs, set_key
 from tests.research.pipeline_mock import COST, FIRM, LINKEDIN, NAME, SITE, Script
+from wasila.core import clock
+from wasila.models.ai import CompanyProfile, WorkspaceAiSettings
+from wasila.models.research import (
+    Dossier,
+    DossierFacts,
+    InvestorIdentity,
+    ResearchRun,
+    ResearchSource,
+)
+from wasila.models.workspace import Workspace
+from wasila.services import research as research_svc
+from wasila.services.privacy_filter import notes_for_research
+from wasila.services.research_reuse import FRESH_DAYS
 
 FULL = ["identity", "search:activity", "search:thesis", "search:fund", "write"]
 ANCHORED_FULL = ["search:activity", "search:thesis", "search:fund", "write"]
@@ -147,7 +147,7 @@ async def test_mcp_research_investor_returns_the_fresh_dossier(
 
 
 async def test_mcp_tool_description_says_it_never_pays_twice() -> None:
-    from raisebook.mcp.server import create_mcp_server
+    from wasila.mcp.server import create_mcp_server
 
     server = create_mcp_server()
     tools = {t.name: t for t in await server.list_tools()}

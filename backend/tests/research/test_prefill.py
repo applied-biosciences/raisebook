@@ -9,10 +9,10 @@ from typing import Any
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.models.ai import CompanyProfile
-from raisebook.models.research import ResearchUpload
 from tests.research.helpers import ledger, research_world, run_jobs
 from tests.research.pipeline_mock import COST, Script
+from wasila.models.ai import CompanyProfile
+from wasila.models.research import ResearchUpload
 
 PDF = b"%PDF-1.7\n% fictional deck for Kestrel Robotics\n%%EOF\n"
 
@@ -44,7 +44,7 @@ async def test_prefill_drafts_without_saving(
     assert body["plugins"] == [
         {"id": "web", "max_results": 5, "include_domains": ["kestrel.example"]}
     ]
-    assert body["response_format"]["json_schema"]["name"] == "raisebook_company_profile_v1"
+    assert body["response_format"]["json_schema"]["name"] == "wasila_company_profile_v1"
     run = (await c.get(f"/v1/research/runs/{run_id}")).json()
     assert run["status"] == "succeeded"
     assert run["result"]["draft"]["pitch"].startswith("Kestrel builds")

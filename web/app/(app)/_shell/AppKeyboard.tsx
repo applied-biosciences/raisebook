@@ -15,8 +15,8 @@ import { useOptionalWorkspace, useSession } from "@/lib/session";
 import { applyThemePref } from "@/lib/theme";
 
 const enc = encodeURIComponent;
-const RECENT_KEY = (ws: string) => `rb-recent-investors:${ws}`;
-const LAST_ROUTE_KEY = (ws: string) => `rb-last-route:${ws}`;
+const RECENT_KEY = (ws: string) => `wsl-recent-investors:${ws}`;
+const LAST_ROUTE_KEY = (ws: string) => `wsl-last-route:${ws}`;
 
 type Recent = { id: string; name: string; firm?: string | null };
 

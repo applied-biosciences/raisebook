@@ -17,17 +17,17 @@ from sqlalchemy import delete, event, func, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
-from raisebook.auth.principal import worker_context
-from raisebook.core.clock import get_now
-from raisebook.models.investor import Investor, InvestorGroup
-from raisebook.models.user import User
-from raisebook.models.workspace import Workspace
-from raisebook.services import investor_links as links_svc
-from raisebook.services import investors as investors_svc
 from tests.api.helpers import activities_of, world
 from tests.conftest import TEST_DB_URL
 from tests.factories import make_investor, make_participant, make_workspace, owner_of
 from tests.research.test_research_schema import _alembic
+from wasila.auth.principal import worker_context
+from wasila.core.clock import get_now
+from wasila.models.investor import Investor, InvestorGroup
+from wasila.models.user import User
+from wasila.models.workspace import Workspace
+from wasila.services import investor_links as links_svc
+from wasila.services import investors as investors_svc
 
 AGENT = {"X-Agent-Name": "claude-code", "X-Agent-Model": "claude-opus-5-5"}
 

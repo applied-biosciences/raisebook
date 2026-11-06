@@ -7,13 +7,6 @@ from typing import Any
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.core.actor import user_actor
-from raisebook.models.activity import Activity
-from raisebook.models.imports import ImportRun
-from raisebook.models.investor import Investor
-from raisebook.models.round import Round, RoundParticipant, RoundStage
-from raisebook.models.user import LoginToken, User, UserSession
-from raisebook.models.workspace import ApiKey, Invite, Membership, Workspace
 from tests.factories import (
     add_member,
     make_activity,
@@ -26,6 +19,13 @@ from tests.factories import (
     make_workspace,
     owner_of,
 )
+from wasila.core.actor import user_actor
+from wasila.models.activity import Activity
+from wasila.models.imports import ImportRun
+from wasila.models.investor import Investor
+from wasila.models.round import Round, RoundParticipant, RoundStage
+from wasila.models.user import LoginToken, User, UserSession
+from wasila.models.workspace import ApiKey, Invite, Membership, Workspace
 
 
 async def populate(db: AsyncSession, ws: Workspace, user: User) -> None:

@@ -1,4 +1,4 @@
-<title>Raisebook</title>
+<title>Wasila</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -157,7 +157,7 @@ textarea { min-height: 96px; resize: vertical; line-height: 1.45; }
 
 <div class="wrap">
   <header class="top">
-    <div class="brand">Raisebook<small>SF Tech Week 2026</small></div>
+    <div class="brand">Wasila<small>SF Tech Week 2026</small></div>
     <div class="round-pick" role="group" aria-label="Round">
       <button id="r-qenzo" aria-pressed="true">Qenzo seed</button>
       <button id="r-elixion" aria-pressed="false">Elixion</button>
@@ -222,8 +222,8 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 const money = (n) => "$" + Math.round(n || 0).toLocaleString("en-US");
 const todayStr = () => new Date().toISOString().slice(0, 10);
 
-try { const s = JSON.parse(localStorage.getItem("rb-ui") || "{}"); if (s.round) st.round = s.round; if (s.view) st.view = s.view; } catch {}
-const saveUi = () => { try { localStorage.setItem("rb-ui", JSON.stringify({ round: st.round, view: st.view })); } catch {} };
+try { const s = JSON.parse(localStorage.getItem("wsl-ui") || "{}"); if (s.round) st.round = s.round; if (s.view) st.view = s.view; } catch {}
+const saveUi = () => { try { localStorage.setItem("wsl-ui", JSON.stringify({ round: st.round, view: st.view })); } catch {} };
 
 // per-round fields live in r.p[round] = {stage, followUp, amount, notes, log}
 const P = (r) => (r.p && r.p[st.round]) || {};
@@ -433,7 +433,7 @@ setRound(st.round); setView(st.view);
   db.collection("investors").limit(1000).onSnapshot((snap) => {
     st.rows = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     $("status").textContent = st.rows.length ? (canWrite ? "Synced" : "View only") : "No investors yet";
-    if (!st.rows.length) { $("view").innerHTML = `<div class="empty"><b>No investors yet</b>Ask Claude to load your investor list into Raisebook.</div>`; renderLedger(); return; }
+    if (!st.rows.length) { $("view").innerHTML = `<div class="empty"><b>No investors yet</b>Ask Claude to load your investor list into Wasila.</div>`; renderLedger(); return; }
     fillFilters(); render();
   }, (e) => { $("status").textContent = "Disconnected"; toast("Lost the connection to your pipeline. Reload to reconnect."); });
 })();

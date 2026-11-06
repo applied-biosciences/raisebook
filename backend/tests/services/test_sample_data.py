@@ -8,12 +8,12 @@ from typing import Any
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.models.activity import Activity
-from raisebook.models.investor import Investor
-from raisebook.models.round import Round, RoundParticipant, RoundStage
-from raisebook.services.normalize import derived_fields
-from raisebook.services.sample_data import PEOPLE, SAMPLE_NAME, create_sample_workspace
 from tests.factories import make_user
+from wasila.models.activity import Activity
+from wasila.models.investor import Investor
+from wasila.models.round import Round, RoundParticipant, RoundStage
+from wasila.services.normalize import derived_fields
+from wasila.services.sample_data import PEOPLE, SAMPLE_NAME, create_sample_workspace
 
 
 async def test_sample_workspace_shape(db: AsyncSession, frozen_now: Any) -> None:
@@ -97,7 +97,7 @@ async def test_sample_workspace_shape(db: AsyncSession, frozen_now: Any) -> None
         ).tuples()
     )
     assert ("agent", "claude-code", "claude-opus-4-5") in kinds
-    assert ("system", "raisebook", None) in kinds
+    assert ("system", "wasila", None) in kinds
     assert any(t == "user" for t, _, _ in kinds)
     n_kinds = set(
         await db.scalars(select(Activity.kind).where(Activity.workspace_id == ws.id).distinct())
@@ -151,8 +151,8 @@ async def test_sample_data_reads_like_a_real_raise(db: AsyncSession, frozen_now:
 
 async def test_sample_research_is_visible_without_a_key(db: AsyncSession, frozen_now: Any) -> None:
     """Three dossiers "by claude-code" on fictional *.example sources, and a company profile."""
-    from raisebook.models.ai import CompanyProfile
-    from raisebook.models.research import Dossier, DossierFacts, ResearchSource
+    from wasila.models.ai import CompanyProfile
+    from wasila.models.research import Dossier, DossierFacts, ResearchSource
 
     user = await make_user(db)
     ws = await create_sample_workspace(db, user=user, now=frozen_now)

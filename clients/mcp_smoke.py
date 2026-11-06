@@ -1,6 +1,6 @@
-"""MCP smoke test for a running Raisebook API (Python 3.10+, standard library only).
+"""MCP smoke test for a running Wasila API (Python 3.10+, standard library only).
 
-    export RAISEBOOK_API_KEY=rb_test_...            # a key for a sample (sandbox) workspace
+    export WASILA_API_KEY=wsl_test_...            # a key for a sample (sandbox) workspace
     python clients/mcp_smoke.py --url http://localhost:8000/mcp
     python clients/mcp_smoke.py --url http://localhost:8000/mcp --write   # also exercise writes
 
@@ -10,7 +10,7 @@ tools/call) and checks:
 - the server name, the instructions and the 15 tools with their annotations;
 - read tools: get_workspace, list_rounds, get_round_summary, search_investors,
   list_due_follow_ups, export_round;
-- with ``--write`` (sandbox keys only, ``rb_test_``): add_investor twice (dedupe),
+- with ``--write`` (sandbox keys only, ``wsl_test_``): add_investor twice (dedupe),
   add_to_round, move_stage (and the no-op repeat), log_activity with an idempotency key
   (twice), set_follow_up, record_commitment, get_investor (the agent shows on the
   timeline), update_investor. Writes use a fictional investor on ``example.com``.
@@ -126,10 +126,10 @@ def run(url: str, key: str, write: bool) -> int:
         {
             "protocolVersion": "2025-06-18",
             "capabilities": {},
-            "clientInfo": {"name": "raisebook-mcp-smoke", "version": "1"},
+            "clientInfo": {"name": "wasila-mcp-smoke", "version": "1"},
         },
     )
-    s.check(init.get("serverInfo", {}).get("name") == "raisebook", "server name is raisebook")
+    s.check(init.get("serverInfo", {}).get("name") == "wasila", "server name is wasila")
     s.check("get_workspace" in (init.get("instructions") or ""), "server instructions present")
 
     tools = {t["name"]: t for t in s.rpc("tools/list")["tools"]}
@@ -159,8 +159,8 @@ def run(url: str, key: str, write: bool) -> int:
     s.tool("list_due_follow_ups", {"within_days": 7})
 
     if write:
-        if not key.startswith("rb_test_"):
-            print("  --write needs a sandbox key (rb_test_…); skipping writes.")
+        if not key.startswith("wsl_test_"):
+            print("  --write needs a sandbox key (wsl_test_…); skipping writes.")
         elif not round_ref:
             print("  --write needs an open round; skipping writes.")
         else:
@@ -203,13 +203,13 @@ def run(url: str, key: str, write: bool) -> int:
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     p.add_argument(
-        "--url", default=os.environ.get("RAISEBOOK_MCP_URL", "http://localhost:8000/mcp")
+        "--url", default=os.environ.get("WASILA_MCP_URL", "http://localhost:8000/mcp")
     )
-    p.add_argument("--key", default=os.environ.get("RAISEBOOK_API_KEY", ""))
+    p.add_argument("--key", default=os.environ.get("WASILA_API_KEY", ""))
     p.add_argument("--write", action="store_true", help="also run writes (sandbox keys only)")
     args = p.parse_args()
     if not args.key:
-        print("Set RAISEBOOK_API_KEY or pass --key.", file=sys.stderr)
+        print("Set WASILA_API_KEY or pass --key.", file=sys.stderr)
         return 2
     return run(args.url, args.key, args.write)
 

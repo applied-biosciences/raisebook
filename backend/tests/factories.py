@@ -15,17 +15,17 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.auth.magic_link import new_token
-from raisebook.core.actor import Actor
-from raisebook.core.clock import get_now
-from raisebook.models.activity import Activity
-from raisebook.models.enums import ActorType, Role, Via
-from raisebook.models.investor import Investor
-from raisebook.models.round import DEFAULT_STAGES, Round, RoundParticipant, RoundStage
-from raisebook.models.user import User
-from raisebook.models.workspace import ApiKey, Invite, Membership, Workspace
-from raisebook.services.api_keys import create_api_key
-from raisebook.services.workspaces import create_workspace_row, slugify
+from wasila.auth.magic_link import new_token
+from wasila.core.actor import Actor
+from wasila.core.clock import get_now
+from wasila.models.activity import Activity
+from wasila.models.enums import ActorType, Role, Via
+from wasila.models.investor import Investor
+from wasila.models.round import DEFAULT_STAGES, Round, RoundParticipant, RoundStage
+from wasila.models.user import User
+from wasila.models.workspace import ApiKey, Invite, Membership, Workspace
+from wasila.services.api_keys import create_api_key
+from wasila.services.workspaces import create_workspace_row, slugify
 
 _seq = itertools.count(1)
 
@@ -142,7 +142,7 @@ async def make_api_key(
     revoked: bool = False,
     created_by: User | None = None,
 ) -> tuple[ApiKey, str]:
-    """``(ApiKey, plaintext)``. Mode follows the workspace (sandbox → ``rb_test_``)."""
+    """``(ApiKey, plaintext)``. Mode follows the workspace (sandbox → ``wsl_test_``)."""
     created = await create_api_key(
         db,
         workspace_id=ws.id,
@@ -280,7 +280,7 @@ async def make_activity(
     body: str | None = "Called and talked about the pilot.",
     **fields: Any,
 ) -> Activity:
-    act = actor or Actor(ActorType.SYSTEM, Via.SYSTEM, label="raisebook")
+    act = actor or Actor(ActorType.SYSTEM, Via.SYSTEM, label="wasila")
     now = get_now()
     row = Activity(
         workspace_id=investor.workspace_id,

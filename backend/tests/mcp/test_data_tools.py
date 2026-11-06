@@ -7,10 +7,6 @@ from typing import Any
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.mcp.tools import data as data_tools
-from raisebook.models.activity import Activity
-from raisebook.models.imports import ImportRun
-from raisebook.models.investor import Investor
 from tests.factories import (
     make_api_key,
     make_investor,
@@ -18,6 +14,10 @@ from tests.factories import (
     make_round,
     make_workspace,
 )
+from wasila.mcp.tools import data as data_tools
+from wasila.models.activity import Activity
+from wasila.models.imports import ImportRun
+from wasila.models.investor import Investor
 
 CSV = (
     "Name,Firm,Email,Pipeline stage,Fit\n"
@@ -136,7 +136,7 @@ async def test_export_round(db: AsyncSession, mcp_call: Any, frozen_now: Any) ->
     assert r.ok, r.text
     assert r.data["round"] == {"slug": "seed", "name": "Seed"}
     assert r.data["format"] == "json" and r.data["row_count"] == 1
-    assert '"raisebook.round"' in r.data["content"]
+    assert '"wasila.round"' in r.data["content"]
 
     r = await mcp_call(raw, "export_round", {"round": "seed", "format": "csv"})
     assert r.ok and r.data["filename"].endswith(".csv")

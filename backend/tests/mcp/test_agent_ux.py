@@ -7,9 +7,9 @@ from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook import __version__
 from tests.api.helpers import world
 from tests.factories import make_investor, make_participant, make_round, make_workspace
+from wasila import __version__
 
 
 async def test_matched_add_keeps_notes_and_reports_skipped_fields(

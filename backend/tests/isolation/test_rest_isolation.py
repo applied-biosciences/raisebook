@@ -10,7 +10,7 @@ for B's names find nothing, creates land in A, and B's data is unchanged afterwa
 from __future__ import annotations
 
 from collections.abc import Awaitable, Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from typing import Any
 
@@ -19,22 +19,6 @@ from fastapi.routing import APIRoute
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.models.activity import Activity
-from raisebook.models.ai import CompanyProfile, WorkspaceAiSettings
-from raisebook.models.investor import Investor
-from raisebook.models.meeting import Meeting
-from raisebook.models.research import (
-    Dossier,
-    DossierFacts,
-    FieldSuggestion,
-    InvestorIdentity,
-    InvestorIdentityCandidate,
-    ResearchBatch,
-    ResearchRun,
-    ResearchSource,
-)
-from raisebook.models.round import Round, RoundParticipant, RoundStage
-from raisebook.models.workspace import ApiKey, Invite, Membership, Workspace
 from tests.factories import (
     add_member,
     make_activity,
@@ -46,6 +30,22 @@ from tests.factories import (
     make_workspace,
     owner_of,
 )
+from wasila.models.activity import Activity
+from wasila.models.ai import CompanyProfile, WorkspaceAiSettings
+from wasila.models.investor import Investor
+from wasila.models.meeting import Meeting
+from wasila.models.research import (
+    Dossier,
+    DossierFacts,
+    FieldSuggestion,
+    InvestorIdentity,
+    InvestorIdentityCandidate,
+    ResearchBatch,
+    ResearchRun,
+    ResearchSource,
+)
+from wasila.models.round import Round, RoundParticipant, RoundStage
+from wasila.models.workspace import ApiKey, Invite, Membership, Workspace
 
 # Routes that are not workspace-scoped (anonymous, or the caller's own account).
 ORGLESS = {
@@ -78,6 +78,9 @@ ORGLESS = {
     ("POST", "/v1/me/calendar-feed"),
     ("DELETE", "/v1/me/calendar-feed"),
     ("GET", "/v1/calendar/{token}.ics"),
+    # Wasila Funding Room share links: the token is the credential (tests/test_wasila_features).
+    ("GET", "/v1/room-links/{token}"),
+    ("GET", "/v1/room-links/{token}/documents/{doc_id}"),
 }
 
 B_EMAIL = "blake.quill@example.com"
@@ -119,6 +122,8 @@ class Two:
     b_suggestion: Ref
     b_candidate: Ref
     b_meeting: Ref
+    # Wasila rows of B (Funding Room, lists, outreach …): tests/isolation/wasila_cases.py.
+    bw: dict[str, Ref] = field(default_factory=dict)
 
 
 async def two_workspaces(db: AsyncSession) -> Two:
@@ -163,6 +168,9 @@ async def two_workspaces(db: AsyncSession) -> Two:
     await db.flush()
     b_research = await _b_research(db, b, b_inv, b_round)
     b_meeting = await _b_meeting(db, b, b_inv, b_round)
+    from tests.isolation.wasila_cases import b_rows
+
+    bw = await b_rows(db, b, b_inv)
     return Two(
         a=Ref(a.id, str(a.slug), a.name),
         b=Ref(b.id, str(b.slug), b.name),
@@ -179,6 +187,7 @@ async def two_workspaces(db: AsyncSession) -> Two:
         b_invite=Ref(b_invite.id),
         b_key=Ref(b_key.id),
         b_meeting=b_meeting,
+        bw=bw,
         **b_research,
     )
 
@@ -186,7 +195,7 @@ async def two_workspaces(db: AsyncSession) -> Two:
 async def _b_meeting(db: AsyncSession, b: Any, b_inv: Any, b_round: Any) -> Ref:
     from datetime import UTC, datetime
 
-    from raisebook.models.meeting import Meeting
+    from wasila.models.meeting import Meeting
 
     m = Meeting(
         workspace_id=b.id,
@@ -198,7 +207,7 @@ async def _b_meeting(db: AsyncSession, b: Any, b_inv: Any, b_round: Any) -> Ref:
         timezone="UTC",
         location="Bravo HQ",
         actor_type="system",
-        actor_label="raisebook",
+        actor_label="wasila",
         via="system",
     )
     db.add(m)
@@ -209,7 +218,7 @@ async def _b_meeting(db: AsyncSession, b: Any, b_inv: Any, b_round: Any) -> Ref:
 async def _b_research(db: AsyncSession, b: Any, b_inv: Any, b_round: Any) -> dict[str, Ref]:
     """B's research rows: a batch, a finished run, a dossier, a source, a pending suggestion
     and identity candidates (what A must never see or change)."""
-    actor = {"actor_type": "system", "via": "system", "actor_label": "raisebook"}
+    actor = {"actor_type": "system", "via": "system", "actor_label": "wasila"}
     batch = ResearchBatch(workspace_id=b.id, kind="dossier", total=1, **actor)
     db.add(batch)
     await db.flush()
@@ -404,6 +413,9 @@ async def snapshot_b(db: AsyncSession, t: Two) -> dict[str, Any]:
             .where(Meeting.workspace_id == wid)
             .order_by(Meeting.id)
         ),
+        "wasila": await __import__("tests.isolation.wasila_cases", fromlist=["x"]).snapshot(
+            db, wid
+        ),
         "ai_settings": await rows(
             select(
                 WorkspaceAiSettings.preset,
@@ -441,6 +453,8 @@ def no_b(text: str, t: Two) -> None:
         "Bravo GP",
         B_MEETING,
         str(t.b_meeting.id),
+        *[str(r.id) for r in t.bw.values()],
+        *[r.name for r in t.bw.values() if r.name],
     ):
         assert marker not in text, f"leaked {marker!r}: {text[:300]}"
 
@@ -549,7 +563,7 @@ async def _keys(c: Any, t: Two, who: str) -> None:
 
 @case("POST", "/v1/api-keys")
 async def _key_create(c: Any, t: Two, who: str) -> None:
-    r = await c.post("/v1/api-keys", json={"name": "x", "scopes": ["raisebook:read"]})
+    r = await c.post("/v1/api-keys", json={"name": "x", "scopes": ["wasila:read"]})
     assert r.status_code in (201, 403)
     no_b(r.text, t)
 
@@ -921,8 +935,8 @@ async def _import_runs(c: Any, t: Two, who: str) -> None:
 
 
 def _mock_openrouter() -> None:
-    from raisebook.services import openrouter
     from tests.research.openrouter_mock import OpenRouterMock
+    from wasila.services import openrouter
 
     openrouter.set_transport(OpenRouterMock().transport)  # reset by the autouse guard
 
@@ -1241,6 +1255,10 @@ async def _meeting_ics(c: Any, t: Two, who: str) -> None:
 
 
 # --- the tests ---------------------------------------------------------------------------
+
+
+# Wasila routes register their cases in ``CASES`` on import.
+from tests.isolation import wasila_cases as _wasila_cases  # noqa: E402,F401
 
 
 def workspace_routes(app: Any) -> set[tuple[str, str]]:

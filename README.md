@@ -1,18 +1,18 @@
-# Raisebook: the free, open-source investor CRM for founders
+# Wasila: the free, open-source investor CRM for founders
 
-[![M8ven Verified](https://m8ven.ai/badge/mcp/gumruyanzh-raisebook-1bxu0o?variant=verified&v=c1ce95b2a161546abc067ae305ec022e)](https://m8ven.ai/mcp/gumruyanzh-raisebook-1bxu0o?s=readme)
+[![M8ven Verified](https://m8ven.ai/badge/mcp/applied-biosciences-wasila-1bxu0o?variant=verified&v=c1ce95b2a161546abc067ae305ec022e)](https://m8ven.ai/mcp/applied-biosciences-wasila-1bxu0o?s=readme)
 
-**Raisebook is a free, open-source investor CRM (fundraising CRM) for startup founders.** It
+**Wasila is a free, open-source investor CRM (fundraising CRM) for startup founders.** It
 tracks every investor through every round (stages, fit, follow-ups, meetings, notes and
 commitments) and ships an MCP server, so Claude Code, Codex, Cursor or any MCP client can work
 the pipeline with you.
 
-**[Start your raise at raisebook.org](https://raisebook.org)**, free, or self-host it.
-Licensed under AGPL-3.0. [Pricing](https://raisebook.org/pricing) ·
-[Docs](https://raisebook.org/docs) · [Compare](https://raisebook.org/compare) ·
-[FAQ](https://raisebook.org/faq) · [llms.txt](https://raisebook.org/llms.txt)
+**[Start your raise at wasila.app](https://wasila.app)**, free, or self-host it.
+Licensed under AGPL-3.0. [Pricing](https://wasila.app/pricing) ·
+[Docs](https://wasila.app/docs) · [Compare](https://wasila.app/compare) ·
+[FAQ](https://wasila.app/faq) · [llms.txt](https://wasila.app/llms.txt)
 
-![A round in Raisebook: the ledger strip, and investors on a kanban board by stage](docs/img/board.png)
+![A round in Wasila: the ledger strip, and investors on a kanban board by stage](docs/img/board.png)
 
 ## Who it's for
 
@@ -27,7 +27,7 @@ it is built for founders raising money, not for VC firms managing deal flow.
 
 ## Free forever
 
-Raisebook costs $0, and that will not change.
+Wasila costs $0, and that will not change.
 
 - There is no paid tier, no seat price and no feature behind a paywall. Every workspace gets
   every feature, with the same limits.
@@ -40,20 +40,20 @@ Raisebook costs $0, and that will not change.
 
 1. **Your data is yours.** A workspace is visible only to its members and to the API keys its
    owners create.
-2. **We never pool, sell, rent or mine it.** Raisebook never builds an investor database from
+2. **We never pool, sell, rent or mine it.** Wasila never builds an investor database from
    your data and never shows one workspace's data to another.
 3. **No ads, no trackers.** No analytics scripts, pixels or third-party cookies. Fonts are
-   served by Raisebook.
-4. **No AI on your data unless you bring it.** Raisebook never runs or pays for AI on its
+   served by Wasila.
+4. **No AI on your data unless you bring it.** Wasila never runs or pays for AI on its
    own. Investor research runs only when you press a button, on your own OpenRouter key, and
    sends only the investor's name, firm and links, your company profile and round terms.
    Agents you connect use your key, and every action they take is on the timeline.
 5. **Leave any time.** Export everything as CSV and JSON. Delete your workspace or account
    permanently, effective immediately.
-6. **Check our work.** Raisebook is open source under AGPL-3.0, including the code that
+6. **Check our work.** Wasila is open source under AGPL-3.0, including the code that
    handles your data.
 
-The details are on [raisebook.org/privacy](https://raisebook.org/privacy).
+The details are on [wasila.app/privacy](https://wasila.app/privacy).
 
 ## What it does
 
@@ -92,11 +92,11 @@ Limits per workspace, the same for everyone: 50 rounds, 20,000 investors, 20 mem
 ## How it compares
 
 From each product's public pricing page on 2026-10-15; sources and details on
-[raisebook.org/compare](https://raisebook.org/compare).
+[wasila.app/compare](https://wasila.app/compare).
 
 | | Lowest paid price | Free plan | Open source | MCP server |
 |---|---|---|---|---|
-| **Raisebook** | $0, no paid tier | Everything: 50 rounds, 20,000 investors, 20 members | Yes (AGPL-3.0) | Yes, free plan |
+| **Wasila** | $0, no paid tier | Everything: 50 rounds, 20,000 investors, 20 members | Yes (AGPL-3.0) | Yes, free plan |
 | Foundersuite | $745/yr (Silver) | Basic: 75 investors per pipeline | No | Not listed |
 | Visible | $59/mo (Base, annual) | Starter: 2 pipelines, 100 update recipients | No | Yes |
 | Affinity | $2,000/user/yr | None listed | No | Not checked |
@@ -104,7 +104,7 @@ From each product's public pricing page on 2026-10-15; sources and details on
 | folk | $24/member/mo (annual) | 14-day trial | No | Yes |
 
 Foundersuite includes an investor database, Visible adds investor updates and data rooms,
-Affinity is built for VC firms, and Attio and folk are general CRMs. Raisebook does the
+Affinity is built for VC firms, and Attio and folk are general CRMs. Wasila does the
 investor pipeline only, free and open source.
 
 ## Connect your agent (MCP quickstart)
@@ -112,9 +112,9 @@ investor pipeline only, free and open source.
 Create a key in Settings → Connect an agent (it is shown once), then:
 
 ```bash
-claude mcp add --transport http raisebook \
-  https://api.raisebook.org/mcp \
-  --header "Authorization: Bearer rb_live_XXXX" \
+claude mcp add --transport http wasila \
+  https://api.wasila.app/mcp \
+  --header "Authorization: Bearer wsl_live_XXXX" \
   --header "X-Agent-Name: claude-code"
 ```
 
@@ -125,23 +125,23 @@ literal key: that writes it to a shared `.mcp.json`. An optional
 Codex (`~/.codex/config.toml`):
 
 ```toml
-[mcp_servers.raisebook]
-url = "https://api.raisebook.org/mcp"
-bearer_token_env_var = "RAISEBOOK_API_KEY"
+[mcp_servers.wasila]
+url = "https://api.wasila.app/mcp"
+bearer_token_env_var = "WASILA_API_KEY"
 http_headers = { "X-Agent-Name" = "codex" }
 ```
 
-Then `export RAISEBOOK_API_KEY=rb_live_…` in the shell that starts Codex.
+Then `export WASILA_API_KEY=wsl_live_…` in the shell that starts Codex.
 
-Cursor (`~/.cursor/mcp.json`; start Cursor from a terminal so it sees `RAISEBOOK_API_KEY`):
+Cursor (`~/.cursor/mcp.json`; start Cursor from a terminal so it sees `WASILA_API_KEY`):
 
 ```json
 {
   "mcpServers": {
-    "raisebook": {
-      "url": "https://api.raisebook.org/mcp",
+    "wasila": {
+      "url": "https://api.wasila.app/mcp",
       "headers": {
-        "Authorization": "Bearer ${env:RAISEBOOK_API_KEY}",
+        "Authorization": "Bearer ${env:WASILA_API_KEY}",
         "X-Agent-Name": "cursor"
       }
     }
@@ -153,20 +153,20 @@ Then ask: "What follow-ups are due this week in Seed?" or "Add these five invest
 notes to Seed and remind me Friday." The agent starts with `get_workspace`, can create a
 round (`create_round`), add up to 50 investors at once (`add_investors`) and set follow-ups
 in the same call. A read-only key only sees the read tools. Setup for other clients and the
-full tool reference: [raisebook.org/docs/mcp](https://raisebook.org/docs/mcp).
+full tool reference: [wasila.app/docs/mcp](https://wasila.app/docs/mcp).
 
 ## Quick start (development)
 
 You need Python 3.12 with [uv](https://docs.astral.sh/uv/), Node 20.9+, and Postgres 17 on
-localhost with `raisebook_dev` and `raisebook_test` databases (extensions `citext` and
+localhost with `wasila_dev` and `wasila_test` databases (extensions `citext` and
 `pg_trgm`).
 
 ```bash
 # API and MCP server on :8000
 cd backend
 uv sync
-RAISEBOOK_DATABASE_URL=postgresql://localhost/raisebook_dev uv run alembic upgrade head
-RAISEBOOK_ENV=dev uv run uvicorn --factory raisebook.main:create_app --reload
+WASILA_DATABASE_URL=postgresql://localhost/wasila_dev uv run alembic upgrade head
+WASILA_ENV=dev uv run uvicorn --factory wasila.main:create_app --reload
 
 # Web app on :3000 (another terminal)
 cd web
@@ -178,13 +178,13 @@ Open http://localhost:3000/signin and request a link. In development the "check 
 page shows the link, so you do not need email. For a workspace full of fictional investors:
 
 ```bash
-cd backend && uv run rbctl seed-demo --email you@example.com
+cd backend && uv run wasilactl seed-demo --email you@example.com
 ```
 
 Checks:
 
 ```bash
-cd backend && uv run pytest -q && uv run ruff check . && uv run ruff format --check . && uv run mypy raisebook
+cd backend && uv run pytest -q && uv run ruff check . && uv run ruff format --check . && uv run mypy wasila
 cd web && npm run lint && npm run typecheck && npm run build
 ```
 
@@ -197,11 +197,11 @@ cp deploy/.env.example deploy/.env   # set your hosts and secrets
 docker compose -f deploy/docker-compose.yml up -d --build
 ```
 
-Step by step: [raisebook.org/docs/self-hosting](https://raisebook.org/docs/self-hosting),
+Step by step: [wasila.app/docs/self-hosting](https://wasila.app/docs/self-hosting),
 [`docs/DEPLOY.md`](docs/DEPLOY.md) and the trust boundaries in
 [`deploy/README.md`](deploy/README.md): never expose the API port directly with
 `FORWARDED_ALLOW_IPS=*`, and keep every subdomain of your cookie domain first-party.
-Run `rbctl housekeeping` daily; it deletes expired sign-in requests, sessions and dead invites.
+Run `wasilactl housekeeping` daily; it deletes expired sign-in requests, sessions and dead invites.
 
 ## Repository
 
@@ -221,9 +221,9 @@ Issues and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) fi
 
 ## License
 
-Copyright (C) 2026 Zhirayr Gumruyan and Raisebook contributors.
+Copyright (C) 2026 Zhirayr Gumruyan and Wasila contributors.
 
-Raisebook is free software: you can redistribute it and/or modify it under the terms of the
+Wasila is free software: you can redistribute it and/or modify it under the terms of the
 GNU Affero General Public License as published by the Free Software Foundation, version 3.
 It is distributed in the hope that it will be useful, but without any warranty; without even
 the implied warranty of merchantability or fitness for a particular purpose. See

@@ -258,7 +258,7 @@ async def test_bulk_move_is_one_request_and_restore_undoes_it(
 ) -> None:
     from sqlalchemy import select
 
-    from raisebook.models.activity import Activity
+    from wasila.models.activity import Activity
 
     w = await world(db)
     invs = await _thirty(db, w)

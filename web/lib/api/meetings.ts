@@ -128,7 +128,7 @@ export async function downloadMeetingIcs(c: ApiClient, id: UUID): Promise<void> 
   try {
     const a = document.createElement("a");
     a.href = url;
-    a.download = `raisebook-meeting-${id}.ics`;
+    a.download = `wasila-meeting-${id}.ics`;
     document.body.appendChild(a);
     a.click();
     a.remove();

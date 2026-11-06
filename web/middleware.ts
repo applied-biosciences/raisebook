@@ -3,20 +3,20 @@ import { NextResponse, type NextRequest } from "next/server";
 /**
  * Two jobs, both before rendering:
  *
- * 1. Auth gate for signed-in routes. The API owns the session (HttpOnly `rb_session`, SPEC
+ * 1. Auth gate for signed-in routes. The API owns the session (HttpOnly `wsl_session`, SPEC
  *    §4.2); this only checks that the cookie is present and sends signed-out visitors to
  *    /signin?next=<path>. An expired cookie is caught by (app)/layout.tsx, which asks the API.
- *    The request path is forwarded as `x-rb-path` so layouts can build the `next` parameter.
+ *    The request path is forwarded as `x-wsl-path` so layouts can build the `next` parameter.
  * 2. "/" for signed-in visitors goes to /app. Doing it here keeps the landing page static
  *    (no cookies() call while rendering), so Next serves it from its cache instead of
  *    rendering it per visit. Only requests that carry a session cookie ask the API, and a
  *    stale cookie falls through to the landing page instead of bouncing to sign-in.
  */
 
-const SESSION_COOKIE = "rb_session";
+const SESSION_COOKIE = "wsl_session";
 
 function bypass(): boolean {
-  return process.env.NODE_ENV !== "production" && process.env.RAISEBOOK_WEB_AUTH_BYPASS === "1";
+  return process.env.NODE_ENV !== "production" && process.env.WASILA_WEB_AUTH_BYPASS === "1";
 }
 
 async function landing(req: NextRequest): Promise<NextResponse> {
@@ -41,7 +41,7 @@ export async function middleware(req: NextRequest) {
   if (pathname === "/") return landing(req);
 
   const headers = new Headers(req.headers);
-  headers.set("x-rb-path", `${pathname}${search}`);
+  headers.set("x-wsl-path", `${pathname}${search}`);
 
   if (req.cookies.get(SESSION_COOKIE)?.value || bypass()) {
     return NextResponse.next({ request: { headers } });

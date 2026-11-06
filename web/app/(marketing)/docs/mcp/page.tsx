@@ -46,7 +46,7 @@ export default function McpSetup() {
         title="Connect an agent"
         lede={
           <p>
-            Raisebook runs an MCP server, so Claude Code, Codex, Cursor or any MCP client can work
+            Wasila runs an MCP server, so Claude Code, Codex, Cursor or any MCP client can work
             your pipeline: log calls, move stages, set follow-ups, schedule meetings, import a list. The agent uses a
             key from your workspace, and every write lands on the timeline under its name.
           </p>
@@ -64,7 +64,7 @@ export default function McpSetup() {
           [
             <span key="a" className="text-muted">Auth</span>,
             <span key="b">
-              <C>Authorization: Bearer rb_live_…</C> or <C>X-API-Key: rb_live_…</C>
+              <C>Authorization: Bearer wsl_live_…</C> or <C>X-API-Key: wsl_live_…</C>
             </span>,
           ],
           [<span key="o" className="text-muted">Tools</span>, <A key="l" href="/docs/mcp-tools">{`${MCP_TOOL_COUNT} tools, no deletes`}</A>],
@@ -73,7 +73,7 @@ export default function McpSetup() {
 
       <Step n="01" title="Create a key" />
       <P>
-        In Raisebook, open Settings → API keys and choose &ldquo;Create key&rdquo;. Only a
+        In Wasila, open Settings → API keys and choose &ldquo;Create key&rdquo;. Only a
         workspace owner can create keys, and only from the web app, so an agent can never mint or
         widen its own access.
       </P>
@@ -82,22 +82,22 @@ export default function McpSetup() {
         head={["Scope", "Lets the agent"]}
         minWidth={420}
         rows={[
-          ["raisebook:read", "Read rounds, investors, timelines, summaries and follow-ups, and export. Always included."],
-          ["raisebook:write", "Add and update investors, move stages, log activity, set follow-ups, record commitments, import. Every MCP write tool."],
-          ["raisebook:admin", "Change workspace settings and delete rounds over REST. Requires write. MCP does not need it."],
+          ["wasila:read", "Read rounds, investors, timelines, summaries and follow-ups, and export. Always included."],
+          ["wasila:write", "Add and update investors, move stages, log activity, set follow-ups, record commitments, import. Every MCP write tool."],
+          ["wasila:admin", "Change workspace settings and delete rounds over REST. Requires write. MCP does not need it."],
         ]}
       />
       <P>
         Give the key an agent name, such as <C>claude-code</C>, so its actions are easy to tell
-        apart on the timeline. The secret (<C>rb_live_</C> + 32 characters) is shown once. Store
+        apart on the timeline. The secret (<C>wsl_live_</C> + 32 characters) is shown once. Store
         it in your agent&apos;s config or a password manager. Sample workspaces use{" "}
-        <C>rb_test_</C> keys, which work only there.
+        <C>wsl_test_</C> keys, which work only there.
       </P>
 
       <Step n="02" title="Add it to your agent" />
       <CodeBlock tabs={clientTabs()} className="mb-10" />
       <Muted>
-        Replace <C>rb_live_XXXX</C> with your key, or set <C>RAISEBOOK_API_KEY</C> where the
+        Replace <C>wsl_live_XXXX</C> with your key, or set <C>WASILA_API_KEY</C> where the
         snippet reads it from the environment. Syntax checked against each client&apos;s own
         documentation on {SNIPPETS_CHECKED_ON}. Clients change; if a command is rejected, check
         the client&apos;s MCP docs for the current form.
@@ -109,7 +109,7 @@ export default function McpSetup() {
         head={["Header", "Required", "What it does"]}
         minWidth={520}
         rows={[
-          ["Authorization", "yes", "Bearer rb_live_… (or send the key as X-API-Key)."],
+          ["Authorization", "yes", "Bearer wsl_live_… (or send the key as X-API-Key)."],
           ["X-Agent-Name", "no", "Name shown on the timeline, e.g. claude-code. Letters, digits, space, dot, dash, underscore, up to 60. Default: the key's agent name, then the key name."],
           ["X-Agent-Model", "no", "Model shown next to the name, e.g. claude-opus-4-5. Up to 80 characters."],
         ]}
@@ -149,7 +149,7 @@ export default function McpSetup() {
         minWidth={480}
         rows={[
           ["invalid_api_key", "The key is wrong, revoked or expired. Create a new one and update the client config."],
-          ["insufficient_scope", "The key lacks raisebook:write. Create a key with write scope."],
+          ["insufficient_scope", "The key lacks wasila:write. Create a key with write scope."],
           ["round_required", "The workspace has several open rounds. Name the round in the prompt (\"in Seed\")."],
           ["ambiguous_reference", "More than one investor matches. Use the email, LinkedIn URL or \"Name @ Firm\"."],
           ["not_in_round", "Add the investor to the round first (add_to_round)."],
@@ -158,7 +158,7 @@ export default function McpSetup() {
       />
       <Note>
         <p>
-          Web-only connectors (claude.ai and ChatGPT connectors) need OAuth, which Raisebook does
+          Web-only connectors (claude.ai and ChatGPT connectors) need OAuth, which Wasila does
           not offer yet. Use a client that accepts a header, or mcp-remote.
         </p>
       </Note>

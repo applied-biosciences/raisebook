@@ -9,9 +9,6 @@ import pytest
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.core import ratelimit
-from raisebook.models.activity import Activity
-from raisebook.models.investor import Investor
 from tests.factories import (
     add_member,
     make_api_key,
@@ -21,6 +18,9 @@ from tests.factories import (
     owner_of,
 )
 from tests.matrix import ALL, PRINCIPALS, WRITERS, Row, run_row
+from wasila.core import ratelimit
+from wasila.models.activity import Activity
+from wasila.models.investor import Investor
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures"
 CSV = "Name,Email,Pipeline stage\nDana Whitfield,dana@example.com,Meeting\n"

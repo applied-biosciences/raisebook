@@ -62,9 +62,9 @@ export async function renderOg({
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ fontFamily: "Bricolage", fontSize: 40, letterSpacing: "-0.02em" }}>
-            Raisebook
+            Wasila
           </div>
-          <div style={{ fontFamily: "PlexMono", fontSize: 20, color: T.muted }}>raisebook.org</div>
+          <div style={{ fontFamily: "PlexMono", fontSize: 20, color: T.muted }}>wasila.app</div>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", marginTop: 44 }}>

@@ -46,6 +46,7 @@ import { LogComposer } from "./LogComposer";
 import { NextMeeting } from "./meetings/NextMeeting";
 import { CommitmentDialog, useParticipantSave } from "./ParticipantFields";
 import { ReachOut } from "./ReachOut";
+import { InvestorExtras } from "./wasila/InvestorExtras";
 import { DossierPanel } from "./research/DossierPanel";
 import { moneyInput, parseMoney, personName } from "./util";
 
@@ -426,6 +427,16 @@ export function InvestorPage({
                 });
                 void reloadTimeline();
               }}
+            />
+          </div>
+          <div className="rounded-md border border-line bg-surface p-16 phone:order-5">
+            <InvestorExtras
+              client={client}
+              investorId={inv.id}
+              wsSlug={workspace.slug}
+              canWrite={canWrite}
+              country={inv.country}
+              phone={inv.phone}
             />
           </div>
           <div className="rounded-md border border-line bg-surface p-16 phone:order-6">

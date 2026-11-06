@@ -36,11 +36,11 @@ export async function hasSessionCookie(): Promise<boolean> {
 }
 
 /**
- * Dev-only escape hatch: `RAISEBOOK_WEB_AUTH_BYPASS=1` renders signed-in routes without an
+ * Dev-only escape hatch: `WASILA_WEB_AUTH_BYPASS=1` renders signed-in routes without an
  * API, using fictional placeholder data. Never honored in production.
  */
 export function authBypass(): boolean {
-  return process.env.NODE_ENV !== "production" && process.env.RAISEBOOK_WEB_AUTH_BYPASS === "1";
+  return process.env.NODE_ENV !== "production" && process.env.WASILA_WEB_AUTH_BYPASS === "1";
 }
 
 export const BYPASS_SESSION: SessionInfo = {
@@ -82,7 +82,7 @@ export const getSession = cache(async (): Promise<SessionResult> => {
     if (err instanceof ApiError) return { status: "error", error: err };
     return {
       status: "error",
-      error: new ApiError(0, "network_unreachable", "Could not reach the Raisebook API."),
+      error: new ApiError(0, "network_unreachable", "Could not reach the Wasila API."),
     };
   }
 });

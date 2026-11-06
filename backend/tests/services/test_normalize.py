@@ -6,8 +6,8 @@ from datetime import date
 
 import pytest
 
-from raisebook.core.errors import ValidationFailed
-from raisebook.services import normalize as n
+from wasila.core.errors import ValidationFailed
+from wasila.services import normalize as n
 
 
 def test_norm_and_name_key() -> None:

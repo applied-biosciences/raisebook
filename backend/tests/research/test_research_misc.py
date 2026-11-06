@@ -11,15 +11,15 @@ from typing import Any
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook import worker
-from raisebook.models.enums import ResearchKind
-from raisebook.models.research import ResearchRun, ResearchSource
-from raisebook.services import housekeeping, jobs, research, spend
-from raisebook.services import research_prompts as prompts
-from raisebook.services.ai_settings import get_or_default
 from tests.research.helpers import AGENT, agent_doc, research_world, run_jobs
 from tests.research.openrouter_mock import FAKE_KEY
 from tests.research.pipeline_mock import LINKEDIN, SITE, Script
+from wasila import worker
+from wasila.models.enums import ResearchKind
+from wasila.models.research import ResearchRun, ResearchSource
+from wasila.services import housekeeping, jobs, research, spend
+from wasila.services import research_prompts as prompts
+from wasila.services.ai_settings import get_or_default
 
 PROMPT_SHA = "87c88a119cab662dc7a845950089e0fd6a7d8d4fa41948a4c89fc7e3c92a2edb"
 
@@ -46,7 +46,7 @@ def test_research_handlers_are_registered() -> None:
 
 async def test_median_of_real_costs_after_20_runs(db: AsyncSession, frozen_now: Any) -> None:
     w = await research_world(db, with_key=False)
-    from raisebook.auth.principal import worker_context
+    from wasila.auth.principal import worker_context
 
     ws = await worker_context(
         db,

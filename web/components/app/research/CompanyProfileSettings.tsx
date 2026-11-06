@@ -252,7 +252,7 @@ export function CompanyProfileSettings({ profile: p0, ai }: { profile: CompanyPr
             {run ? <RunProgress run={run} client={client} wsSlug={workspace.slug} canWrite={canWrite} onChange={setRun0} compact /> : null}
             {startErr ? <ResearchError error={startErr} wsSlug={workspace.slug} /> : null}
             <p className="t-body-s text-muted">
-              Your deck and website are sent to the AI provider through your OpenRouter key and not kept by Raisebook. Nothing is saved until
+              Your deck and website are sent to the AI provider through your OpenRouter key and not kept by Wasila. Nothing is saved until
               you press Save.
             </p>
           </div>

@@ -1,0 +1,165 @@
+"""Sign-in flows: request a magic link, verify it, sign out (SPEC §4.1).
+
+``request_magic_link`` never reveals whether an account exists and answers the
+same way when rate-limited (5 per email per 15 minutes; 5 per inbox per 15 minutes and 20
+per day, aliases folded by ``magic_link.mailbox_key``; 100 per IP per hour by default): no
+email is sent and a warning is logged with the email hashed. A provider failure or the
+server-wide email cap is 503 ``email_unavailable`` (``email.send_guarded``). The user row is
+created on the first successful verify. An invite attached to the request is
+accepted in the verify transaction when the emails match.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from datetime import datetime
+
+import structlog
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from wasila.auth import magic_link
+from wasila.auth.principal import user_workspaces
+from wasila.auth.session import create_user_session
+from wasila.config import get_settings
+from wasila.core import ratelimit
+from wasila.core.errors import InvalidToken, SessionConflict, ValidationFailed
+from wasila.core.logging import hash_email
+from wasila.models.enums import Role
+from wasila.models.user import User, UserSession
+from wasila.models.workspace import Invite, Workspace
+from wasila.services import invites as invites_svc
+from wasila.services.email import EmailSender, magic_link_email, send_guarded
+from wasila.services.users import get_or_create_user
+
+log = structlog.get_logger(__name__)
+
+MAGIC_LINKS_PER_EMAIL = 5
+
+
+@dataclass(frozen=True)
+class MagicLinkResult:
+    sent: bool
+    link: str | None  # only for the dev_link echo
+
+
+async def request_magic_link(
+    db: AsyncSession,
+    sender: EmailSender,
+    *,
+    email: str,
+    now: datetime,
+    redirect_path: str | None = None,
+    invite_token: str | None = None,
+    ip: str | None = None,
+) -> MagicLinkResult:
+    addr = magic_link.normalize_email(email)
+    if addr is None:
+        raise ValidationFailed("email", "Enter a valid email address.")
+    limited = await magic_link.recent_token_count(db, addr, now=now) >= MAGIC_LINKS_PER_EMAIL
+    if not limited:
+        inbox = magic_link.mailbox_key(addr)
+        for kind in ("magic_mailbox", "magic_mailbox_day"):
+            if not (await ratelimit.check(kind, inbox, now=now)).allowed:
+                limited = True
+                break
+    if not limited and ip:
+        limited = not (await ratelimit.check("magic_ip", ip, now=now)).allowed
+    if limited:
+        log.warning("magic_link_rate_limited", email_hash=hash_email(addr))
+        return MagicLinkResult(sent=False, link=None)
+
+    invite: Invite | None = None
+    if invite_token:
+        found = await invites_svc.find_by_token(db, invite_token)
+        if (
+            found is not None
+            and str(found.email).lower() == addr
+            and invites_svc.invite_status(found, now) == "pending"
+        ):
+            invite = found
+    issued = await magic_link.issue_login_token(
+        db,
+        addr,
+        now=now,
+        redirect_path=redirect_path,
+        invite_id=invite.id if invite else None,
+        ip=ip,
+    )
+    await db.commit()
+    s = get_settings()
+    await send_guarded(
+        sender, magic_link_email(addr, issued.link, ttl_minutes=s.magic_link_ttl_minutes), now=now
+    )
+    return MagicLinkResult(sent=True, link=issued.link if s.echo_magic_links else None)
+
+
+@dataclass(frozen=True)
+class VerifyResult:
+    user: User
+    session: UserSession
+    cookie: str
+    redirect_path: str | None
+    workspaces: list[tuple[Workspace, Role]]
+
+
+@dataclass(frozen=True)
+class PeekResult:
+    valid: bool
+    email_hint: str | None
+
+
+async def peek(db: AsyncSession, token: str, *, now: datetime) -> PeekResult:
+    """Whether a sign-in link is still usable, and a masked email (does not spend it)."""
+    row = await magic_link.peek_login_token(db, token, now=now)
+    if row is None:
+        return PeekResult(False, None)
+    return PeekResult(True, invites_svc.email_hint(str(row.email)))
+
+
+async def verify(
+    db: AsyncSession,
+    token: str,
+    *,
+    now: datetime,
+    user_agent: str | None = None,
+    ip: str | None = None,
+    signed_in_email: str | None = None,
+    switch_account: bool = False,
+) -> VerifyResult:
+    """Spend the token and start a session.
+
+    When the browser is already signed in as a different user, nothing is spent
+    and 409 ``session_conflict`` is raised unless ``switch_account`` is set. This
+    stops a forwarded link from silently swapping someone into another account.
+    """
+    if signed_in_email is not None and not switch_account:
+        pending = await magic_link.peek_login_token(db, token, now=now)
+        if pending is not None and str(pending.email).lower() != signed_in_email.lower():
+            raise SessionConflict(
+                details={
+                    "signed_in_as": invites_svc.email_hint(signed_in_email),
+                    "link_for": invites_svc.email_hint(str(pending.email)),
+                }
+            )
+    login = await magic_link.consume_login_token(db, token, now=now)
+    if login is None:
+        raise InvalidToken(
+            "This sign-in link is invalid, already used or expired. Request a new one."
+        )
+    user, _created = await get_or_create_user(db, str(login.email), now=now)
+    user.last_signin_at = now
+    redirect_path = login.redirect_path
+    if login.invite_id is not None:
+        inv = await db.get(Invite, login.invite_id)
+        if inv is not None and invites_svc.invite_status(inv, now) == "pending":
+            ws = await invites_svc.accept_invite_row(db, inv, user, now=now)
+            redirect_path = redirect_path or f"/w/{ws.slug}"
+    sess, cookie = await create_user_session(db, user, now=now, user_agent=user_agent, ip=ip)
+    await db.flush()
+    return VerifyResult(
+        user=user,
+        session=sess,
+        cookie=cookie,
+        redirect_path=redirect_path,
+        workspaces=await user_workspaces(db, user.id),
+    )

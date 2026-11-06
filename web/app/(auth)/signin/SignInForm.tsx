@@ -9,7 +9,7 @@ import { ApiError, api, errorMessage } from "@/lib/api/client";
 import { requestMagicLink, type MagicLinkRequest } from "@/lib/api/core";
 
 /** sessionStorage key for the last request (check page: resend, and the dev link). */
-export const PENDING_KEY = "rb-signin";
+export const PENDING_KEY = "wsl-signin";
 
 export interface PendingSignIn {
   request: MagicLinkRequest;
@@ -38,7 +38,7 @@ export function readPending(): PendingSignIn | null {
  * (other devices only see the masked hint). localStorage, because the emailed link opens in a
  * new tab; it expires with the link (15 minutes) and is cleared on sign-in.
  */
-const REQUESTED_KEY = "rb-signin-requested";
+const REQUESTED_KEY = "wsl-signin-requested";
 const REQUESTED_TTL_MS = 15 * 60 * 1000;
 
 export function rememberRequestedEmail(email: string): void {

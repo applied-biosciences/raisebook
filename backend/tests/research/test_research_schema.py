@@ -17,9 +17,11 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from alembic import command
-from raisebook.models.activity import Activity
-from raisebook.models.investor import Investor
-from raisebook.models.research import (
+from tests.conftest import BACKEND_DIR, TEST_DB_URL
+from tests.factories import make_investor, make_round, make_workspace, owner_of
+from wasila.models.activity import Activity
+from wasila.models.investor import Investor
+from wasila.models.research import (
     Dossier,
     DossierFacts,
     FieldSuggestion,
@@ -27,8 +29,6 @@ from raisebook.models.research import (
     ResearchRun,
     ResearchSource,
 )
-from tests.conftest import BACKEND_DIR, TEST_DB_URL
-from tests.factories import make_investor, make_round, make_workspace, owner_of
 
 
 def _alembic(schema: str, *args: str) -> None:
@@ -78,7 +78,7 @@ async def test_activities_accept_the_research_kind(db: AsyncSession) -> None:
             kind="research",
             body="Researched: Strong fit",
             actor_type="system",
-            actor_label="raisebook",
+            actor_label="wasila",
             via="system",
         )
     )
@@ -90,7 +90,7 @@ async def test_activities_accept_the_research_kind(db: AsyncSession) -> None:
                 investor_id=inv.id,
                 kind="gossip",
                 actor_type="system",
-                actor_label="raisebook",
+                actor_label="wasila",
                 via="system",
             )
         )

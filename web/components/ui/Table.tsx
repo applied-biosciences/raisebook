@@ -75,7 +75,7 @@ export function Table({
   return (
     <table
       ref={ref}
-      className={cn("w-full border-collapse text-base", stack && "rb-stack", className)}
+      className={cn("w-full border-collapse text-base", stack && "wsl-stack", className)}
       style={{ minWidth, ...style }}
       {...rest}
     />

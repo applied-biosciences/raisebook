@@ -1,6 +1,6 @@
 # Security policy
 
-Raisebook holds founders' fundraising data: investor contacts, notes and commitments. We
+Wasila holds founders' fundraising data: investor contacts, notes and commitments. We
 take reports seriously and answer every one.
 
 ## Reporting a vulnerability
@@ -8,11 +8,11 @@ take reports seriously and answer every one.
 Please **do not open a public issue** for a security problem.
 
 - Use GitHub's private reporting: **Security → Report a vulnerability** on
-  [github.com/gumruyanzh/raisebook](https://github.com/gumruyanzh/raisebook/security/advisories/new).
-- Or email **0@raisebook.org** with "Security" in the subject.
+  [github.com/applied-biosciences/wasila](https://github.com/applied-biosciences/wasila/security/advisories/new).
+- Or email **hello@wasila.app** with "Security" in the subject.
 
 Include what you found, how to reproduce it, and the impact you expect. Test only against
-your own self-hosted instance or your own account and workspace on raisebook.org. Never
+your own self-hosted instance or your own account and workspace on wasila.app. Never
 access, change or delete data that isn't yours, and don't run load tests against the hosted
 service.
 
@@ -21,19 +21,19 @@ What happens next:
 - We tell you our assessment and a fix timeline within **10 working days**.
 - We credit you in the release notes when the fix ships, unless you prefer not to be named.
 
-Raisebook is a free, volunteer-run project, so there is no paid bug bounty. We are grateful
+Wasila is a free, volunteer-run project, so there is no paid bug bounty. We are grateful
 for every report anyway.
 
 ## What is in scope
 
-Everything in this repository and the hosted service at `raisebook.org` /
-`api.raisebook.org`. We especially want to hear about:
+Everything in this repository and the hosted service at `wasila.app` /
+`api.wasila.app`. We especially want to hear about:
 
 - **Workspace isolation:** any way to read or change another workspace's rounds, investors,
   timeline, members or keys, through the web app, the REST API, the MCP server, imports or
-  exports. This is the most important property of Raisebook.
+  exports. This is the most important property of Wasila.
 - Authentication: magic links, session cookies, CSRF, invite tokens.
-- API keys: scope escalation, a key minting or widening keys, `rb_test_` keys reaching real
+- API keys: scope escalation, a key minting or widening keys, `wsl_test_` keys reaching real
   workspaces.
 - Injection: SQL, CSV/formula injection in exports, stored XSS in notes or names.
 - Data that outlives a delete (workspace, account, investor), or personal data in logs.
@@ -47,7 +47,7 @@ engineering.
 Only the latest commit on `main` (and the hosted service, which runs it) gets security fixes.
 Self-hosters should update regularly (`deploy/README.md`).
 
-## How Raisebook protects data
+## How Wasila protects data
 
 - Every workspace-scoped query filters by the caller's workspace, and child tables use
   composite `(workspace_id, id)` foreign keys, so the database refuses cross-workspace links.
@@ -66,7 +66,7 @@ Self-hosters should update regularly (`deploy/README.md`).
 - Sessions slide for 30 days of use and end 90 days after sign-in at the latest; the Account
   page lists signed-in browsers and can sign out the others.
 - Failed API-key lookups, invites per person and new workspaces per person are rate limited,
-  and invite emails carry a fixed subject, so Raisebook can't be used as a spam relay.
+  and invite emails carry a fixed subject, so Wasila can't be used as a spam relay.
 
 ## Known issues
 

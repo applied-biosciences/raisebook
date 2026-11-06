@@ -4,7 +4,7 @@
  * `./data`, loaded with `loadZoneData()` the first time a picker opens; everything here works
  * without it, just with plainer labels and a city-only search.
  *
- * The value Raisebook stores is always the canonical IANA id (`canonicalZone`).
+ * The value Wasila stores is always the canonical IANA id (`canonicalZone`).
  */
 
 import { fold } from "../rank";

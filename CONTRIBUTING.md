@@ -1,6 +1,6 @@
-# Contributing to Raisebook
+# Contributing to Wasila
 
-Thanks for helping. Raisebook is a free, open-source fundraising CRM, and it stays that way
+Thanks for helping. Wasila is a free, open-source fundraising CRM, and it stays that way
 because people fix what bothers them. This page says how to get a change in.
 
 ## Before you start
@@ -8,7 +8,7 @@ because people fix what bothers them. This page says how to get a change in.
 - **Bugs**: open an issue with what you did, what you expected and what happened. Include the
   `request_id` from the error if there is one. Never paste real investor data, API keys or
   session cookies into an issue.
-- **Features**: open an issue to discuss it before writing code. Raisebook has a short list of
+- **Features**: open an issue to discuss it before writing code. Wasila has a short list of
   things it will never do (paid tiers, cross-workspace features, trackers, scraping), listed in
   `docs/SPEC.md` §1.6. A pull request that adds one of them will be closed.
 - **Security problems**: do not open a public issue. Follow [SECURITY.md](SECURITY.md).
@@ -49,7 +49,7 @@ If your change disagrees with the spec, change the spec in the same pull request
 3. Run the checks:
 
    ```bash
-   cd backend && uv run pytest -q && uv run ruff check . && uv run ruff format --check . && uv run mypy raisebook
+   cd backend && uv run pytest -q && uv run ruff check . && uv run ruff format --check . && uv run mypy wasila
    cd web && npm run lint && npm run typecheck && npm run build
    ```
 
@@ -65,5 +65,5 @@ numbers. Avoid "AI-powered", "seamless", "supercharge" and exclamation marks. `d
 
 ## License
 
-Raisebook is licensed under AGPL-3.0. By contributing, you agree that your contribution is
+Wasila is licensed under AGPL-3.0. By contributing, you agree that your contribution is
 licensed under the same terms.

@@ -8,7 +8,7 @@ import { api, errorMessage } from "@/lib/api/client";
 import { updateMe } from "@/lib/api/core";
 import { useSession } from "@/lib/session";
 
-const ASKED_KEY = "rb-name-asked";
+const ASKED_KEY = "wsl-name-asked";
 
 /** "Add your name" dialog, opened from the account menu or the one-time toast. */
 export function NameDialog({ open, onClose }: { open: boolean; onClose: () => void }) {

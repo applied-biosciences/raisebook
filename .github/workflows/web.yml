@@ -25,8 +25,8 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: "1"
       NEXT_PUBLIC_API_URL: http://localhost:8000
-      NEXT_PUBLIC_SITE_URL: https://raisebook.org
-      NEXT_PUBLIC_PUBLIC_API_URL: https://api.raisebook.org
+      NEXT_PUBLIC_SITE_URL: https://wasila.app
+      NEXT_PUBLIC_PUBLIC_API_URL: https://api.wasila.app
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

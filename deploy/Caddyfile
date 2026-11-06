@@ -1,8 +1,8 @@
-# Raisebook reverse proxy (SPEC §11). Caddy gets and renews TLS certificates by itself once
+# Wasila reverse proxy (SPEC §11). Caddy gets and renews TLS certificates by itself once
 # DNS points at this host (docs/DEPLOY.md). Hosts come from the environment so self-hosters
 # can use their own domains:
-#   WEB_HOST  (default raisebook.org)       → web:3000
-#   API_HOST  (default api.raisebook.org)   → api:8000, including the MCP endpoint /mcp
+#   WEB_HOST  (default wasila.app)       → web:3000
+#   API_HOST  (default api.wasila.app)   → api:8000, including the MCP endpoint /mcp
 #   www.WEB_HOST                            → permanent redirect to WEB_HOST
 
 {
@@ -21,24 +21,24 @@
 	}
 }
 
-{$WEB_HOST:raisebook.org} {
+{$WEB_HOST:wasila.app} {
 	import security_headers
 	encode zstd gzip
 	header {
 		# Self plus the API origin, nothing else: no analytics, no CDNs, no third-party fonts.
 		# 'unsafe-inline' is needed for Next.js bootstrap scripts and the theme pre-paint script.
-		Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://{$API_HOST:api.raisebook.org}; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+		Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://{$API_HOST:api.wasila.app}; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
 		X-Frame-Options "DENY"
 	}
 	reverse_proxy web:3000
 }
 
-www.{$WEB_HOST:raisebook.org} {
+www.{$WEB_HOST:wasila.app} {
 	import security_headers
-	redir https://{$WEB_HOST:raisebook.org}{uri} permanent
+	redir https://{$WEB_HOST:wasila.app}{uri} permanent
 }
 
-{$API_HOST:api.raisebook.org} {
+{$API_HOST:api.wasila.app} {
 	import security_headers
 	header {
 		Content-Security-Policy "default-src 'none'; frame-ancestors 'none'"

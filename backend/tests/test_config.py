@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from raisebook.config import Settings
+from wasila.config import Settings
 
 
 @pytest.mark.parametrize(
@@ -20,5 +20,5 @@ from raisebook.config import Settings
 def test_cors_origins_accepts_comma_list_and_json(
     monkeypatch: pytest.MonkeyPatch, raw: str, expected: list[str]
 ) -> None:
-    monkeypatch.setenv("RAISEBOOK_CORS_ORIGINS", raw)
+    monkeypatch.setenv("WASILA_CORS_ORIGINS", raw)
     assert Settings().cors_origins == expected

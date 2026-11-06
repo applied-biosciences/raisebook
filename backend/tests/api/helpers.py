@@ -8,12 +8,12 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.models.activity import Activity
-from raisebook.models.investor import Investor
-from raisebook.models.round import Round, RoundParticipant
-from raisebook.models.user import User
-from raisebook.models.workspace import Workspace
 from tests.factories import make_api_key, make_investor, make_round, make_workspace, owner_of
+from wasila.models.activity import Activity
+from wasila.models.investor import Investor
+from wasila.models.round import Round, RoundParticipant
+from wasila.models.user import User
+from wasila.models.workspace import Workspace
 
 
 @dataclass

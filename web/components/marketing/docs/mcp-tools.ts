@@ -1,6 +1,6 @@
 /**
  * The 28 MCP tools (SPEC §6.4, the four meeting tools of §6.8, the two linked-card tools of §6.9, and the five research tools from RESEARCH-PLAN §7, served only with
- * RAISEBOOK_RESEARCH_ENABLED). Descriptions are the binding tool description text, word for
+ * WASILA_RESEARCH_ENABLED). Descriptions are the binding tool description text, word for
  * word. Parameters follow the spec's input schemas. If the spec changes, change this file.
  */
 
@@ -503,7 +503,7 @@ export const MCP_TOOLS: McpTool[] = [
   },
 ];
 
-/** Research tools are served only with RAISEBOOK_RESEARCH_ENABLED (unreleased, off by default). */
+/** Research tools are served only with WASILA_RESEARCH_ENABLED (unreleased, off by default). */
 export const RESEARCH_TOOL_NAMES: ReadonlySet<string> = new Set([
   "get_dossier",
   "list_research_runs",

@@ -20,7 +20,7 @@ const ROUND_COLUMNS =
   "investor_id, name, firm, title, type, email, linkedin_url, website_url, x_url, location, check_min, check_max, check_note, stage_focus, industries, tags, source, warm_intro_by, stage, stage_label, fit, priority, probability, amount_soft, amount_committed, committed_on, follow_up_on, follow_up_note, next_step, owner_email, last_activity_at, notes";
 
 const WORKSPACE_JSON = `{
-  "format": "raisebook.export",
+  "format": "wasila.export",
   "version": 1,
   "exported_at": "2026-10-10T17:04:05Z",
   "workspace": { "id": "…", "slug": "kestrel-k7p2", "name": "Kestrel Robotics", … },
@@ -68,8 +68,8 @@ export default function ExportDelete() {
       <H2>Round CSV</H2>
       <P>
         One row per investor in the round, with these columns in this order. Lists are joined with{" "}
-        <C>; </C>. The file is named <C>raisebook-&lt;workspace&gt;-&lt;round&gt;-&lt;YYYYMMDD&gt;.csv</C>.
-        The header names are Raisebook&apos;s field names, so the file imports back as is.
+        <C>; </C>. The file is named <C>wasila-&lt;workspace&gt;-&lt;round&gt;-&lt;YYYYMMDD&gt;.csv</C>.
+        The header names are Wasila&apos;s field names, so the file imports back as is.
       </P>
       <CodeBlock code={ROUND_COLUMNS.split(", ").join("\n")} lang="text" title="columns" className="mb-18" />
       <Note>
@@ -85,7 +85,7 @@ export default function ExportDelete() {
         participation in each round, the whole timeline and the import history. API keys,
         sessions and sign-in tokens are never exported.
       </P>
-      <CodeBlock code={WORKSPACE_JSON} lang="json" title="raisebook.export v1" className="mb-18" />
+      <CodeBlock code={WORKSPACE_JSON} lang="json" title="wasila.export v1" className="mb-18" />
 
       <H2>Deleting</H2>
       <DocTable
@@ -107,7 +107,7 @@ export default function ExportDelete() {
         </li>
         <li>
           If you own a workspace that has other members, transfer ownership before deleting your
-          account. Raisebook tells you which workspaces need it.
+          account. Wasila tells you which workspaces need it.
         </li>
         <li>
           On the hosted service, backups are kept for at most 14 days, so deleted data is gone

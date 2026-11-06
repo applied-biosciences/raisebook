@@ -1,4 +1,4 @@
-# Raisebook: the whole stack on one host (SPEC §11). raisebook.org runs this file; see
+# Wasila: the whole stack on one host (SPEC §11). wasila.app runs this file; see
 # docs/DEPLOY.md.
 #
 #   cp deploy/.env.example deploy/.env      # then set your hosts and secrets
@@ -10,7 +10,7 @@
 # (TLS + reverse proxy). Only caddy publishes ports. Every container's log is capped at
 # 5 x 20 MB, so a traffic spike cannot fill the disk.
 
-name: raisebook
+name: wasila
 
 x-logging: &logging
   driver: json-file
@@ -19,40 +19,40 @@ x-logging: &logging
     max-file: "5"
 
 x-api-env: &api-env
-  RAISEBOOK_ENVIRONMENT: ${RAISEBOOK_ENVIRONMENT:-production}
-  RAISEBOOK_DATABASE_URL: postgresql://${POSTGRES_USER:-raisebook}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in deploy/.env}@postgres:5432/${POSTGRES_DB:-raisebook}
-  RAISEBOOK_DB_POOL_SIZE: ${RAISEBOOK_DB_POOL_SIZE:-5}
-  RAISEBOOK_PUBLIC_BASE_URL: https://${API_HOST:-api.raisebook.org}
-  RAISEBOOK_APP_URL: https://${WEB_HOST:-raisebook.org}
-  RAISEBOOK_CORS_ORIGINS: ${RAISEBOOK_CORS_ORIGINS:-[]}
-  RAISEBOOK_SESSION_SECRET: ${RAISEBOOK_SESSION_SECRET:?set RAISEBOOK_SESSION_SECRET in deploy/.env}
-  RAISEBOOK_SESSION_COOKIE_DOMAIN: ${RAISEBOOK_SESSION_COOKIE_DOMAIN:-raisebook.org}
-  RAISEBOOK_SESSION_COOKIE_SECURE: "true"
-  RAISEBOOK_GOOGLE_CLIENT_ID: ${RAISEBOOK_GOOGLE_CLIENT_ID:-}
-  RAISEBOOK_GOOGLE_CLIENT_SECRET: ${RAISEBOOK_GOOGLE_CLIENT_SECRET:-}
-  RAISEBOOK_EMAIL_BACKEND: ${RAISEBOOK_EMAIL_BACKEND:-smtp}
-  RAISEBOOK_EMAIL_FROM: ${RAISEBOOK_EMAIL_FROM:-Raisebook <login@raisebook.org>}
-  RAISEBOOK_SMTP_HOST: ${RAISEBOOK_SMTP_HOST:-}
-  RAISEBOOK_SMTP_PORT: ${RAISEBOOK_SMTP_PORT:-587}
-  RAISEBOOK_SMTP_USERNAME: ${RAISEBOOK_SMTP_USERNAME:-}
-  RAISEBOOK_SMTP_PASSWORD: ${RAISEBOOK_SMTP_PASSWORD:-}
-  RAISEBOOK_SMTP_STARTTLS: ${RAISEBOOK_SMTP_STARTTLS:-true}
-  RAISEBOOK_RATE_LIMIT_BACKEND: ${RAISEBOOK_RATE_LIMIT_BACKEND:-postgres}
-  RAISEBOOK_MAX_WORKSPACES_PER_USER: ${RAISEBOOK_MAX_WORKSPACES_PER_USER:-10}
-  RAISEBOOK_WORKSPACE_LIMIT_EXEMPT_EMAILS: ${RAISEBOOK_WORKSPACE_LIMIT_EXEMPT_EMAILS:-}
-  RAISEBOOK_LOG_LEVEL: ${RAISEBOOK_LOG_LEVEL:-INFO}
-  RAISEBOOK_LOG_JSON: "true"
+  WASILA_ENVIRONMENT: ${WASILA_ENVIRONMENT:-production}
+  WASILA_DATABASE_URL: postgresql://${POSTGRES_USER:-wasila}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in deploy/.env}@postgres:5432/${POSTGRES_DB:-wasila}
+  WASILA_DB_POOL_SIZE: ${WASILA_DB_POOL_SIZE:-5}
+  WASILA_PUBLIC_BASE_URL: https://${API_HOST:-api.wasila.app}
+  WASILA_APP_URL: https://${WEB_HOST:-wasila.app}
+  WASILA_CORS_ORIGINS: ${WASILA_CORS_ORIGINS:-[]}
+  WASILA_SESSION_SECRET: ${WASILA_SESSION_SECRET:?set WASILA_SESSION_SECRET in deploy/.env}
+  WASILA_SESSION_COOKIE_DOMAIN: ${WASILA_SESSION_COOKIE_DOMAIN:-wasila.app}
+  WASILA_SESSION_COOKIE_SECURE: "true"
+  WASILA_GOOGLE_CLIENT_ID: ${WASILA_GOOGLE_CLIENT_ID:-}
+  WASILA_GOOGLE_CLIENT_SECRET: ${WASILA_GOOGLE_CLIENT_SECRET:-}
+  WASILA_EMAIL_BACKEND: ${WASILA_EMAIL_BACKEND:-smtp}
+  WASILA_EMAIL_FROM: ${WASILA_EMAIL_FROM:-Wasila <login@wasila.app>}
+  WASILA_SMTP_HOST: ${WASILA_SMTP_HOST:-}
+  WASILA_SMTP_PORT: ${WASILA_SMTP_PORT:-587}
+  WASILA_SMTP_USERNAME: ${WASILA_SMTP_USERNAME:-}
+  WASILA_SMTP_PASSWORD: ${WASILA_SMTP_PASSWORD:-}
+  WASILA_SMTP_STARTTLS: ${WASILA_SMTP_STARTTLS:-true}
+  WASILA_RATE_LIMIT_BACKEND: ${WASILA_RATE_LIMIT_BACKEND:-postgres}
+  WASILA_MAX_WORKSPACES_PER_USER: ${WASILA_MAX_WORKSPACES_PER_USER:-10}
+  WASILA_WORKSPACE_LIMIT_EXEMPT_EMAILS: ${WASILA_WORKSPACE_LIMIT_EXEMPT_EMAILS:-}
+  WASILA_LOG_LEVEL: ${WASILA_LOG_LEVEL:-INFO}
+  WASILA_LOG_JSON: "true"
   # Sign-in links per client IP per hour (default 100; raise it for an event on shared
   # Wi-Fi) and all outbound email per hour (default 500; keep it under your email plan).
-  RAISEBOOK_MAGIC_LINKS_PER_IP_HOUR: ${RAISEBOOK_MAGIC_LINKS_PER_IP_HOUR:-}
-  RAISEBOOK_EMAIL_GLOBAL_PER_HOUR: ${RAISEBOOK_EMAIL_GLOBAL_PER_HOUR:-}
+  WASILA_MAGIC_LINKS_PER_IP_HOUR: ${WASILA_MAGIC_LINKS_PER_IP_HOUR:-}
+  WASILA_EMAIL_GLOBAL_PER_HOUR: ${WASILA_EMAIL_GLOBAL_PER_HOUR:-}
   # AI research stays off unless switched on in deploy/.env (docs/DEPLOY.md "AI research").
-  # api and worker both need the same RAISEBOOK_SECRETS_KEK.
-  RAISEBOOK_RESEARCH_ENABLED: ${RAISEBOOK_RESEARCH_ENABLED:-false}
-  RAISEBOOK_SECRETS_KEK: ${RAISEBOOK_SECRETS_KEK:-}
-  RAISEBOOK_SECRETS_KEK_PREVIOUS: ${RAISEBOOK_SECRETS_KEK_PREVIOUS:-}
-  RAISEBOOK_OPERATOR_EMAIL: ${RAISEBOOK_OPERATOR_EMAIL:-}
-  RAISEBOOK_WORKER_CONCURRENCY: ${RAISEBOOK_WORKER_CONCURRENCY:-4}
+  # api and worker both need the same WASILA_SECRETS_KEK.
+  WASILA_RESEARCH_ENABLED: ${WASILA_RESEARCH_ENABLED:-false}
+  WASILA_SECRETS_KEK: ${WASILA_SECRETS_KEK:-}
+  WASILA_SECRETS_KEK_PREVIOUS: ${WASILA_SECRETS_KEK_PREVIOUS:-}
+  WASILA_OPERATOR_EMAIL: ${WASILA_OPERATOR_EMAIL:-}
+  WASILA_WORKER_CONCURRENCY: ${WASILA_WORKER_CONCURRENCY:-4}
 
 services:
   postgres:
@@ -60,9 +60,9 @@ services:
     image: postgres:17
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-raisebook}
+      POSTGRES_USER: ${POSTGRES_USER:-wasila}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in deploy/.env}
-      POSTGRES_DB: ${POSTGRES_DB:-raisebook}
+      POSTGRES_DB: ${POSTGRES_DB:-wasila}
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -79,7 +79,7 @@ services:
       dockerfile: ../deploy/api.Dockerfile
       args:
         GIT_SHA: ${GIT_SHA:-}
-    image: raisebook-api:local
+    image: wasila-api:local
     command: ["alembic", "upgrade", "head"]
     environment: *api-env
     depends_on:
@@ -90,7 +90,7 @@ services:
 
   api:
     logging: *logging
-    image: raisebook-api:local
+    image: wasila-api:local
     restart: unless-stopped
     environment: *api-env
     depends_on:
@@ -102,8 +102,8 @@ services:
     logging: *logging
     # Background job runner. Same image as the api, no ports. It serves no HTTP, so the
     # image's /healthz check is turned off here (it would always report unhealthy).
-    image: raisebook-api:local
-    command: ["rbctl", "worker"]
+    image: wasila-api:local
+    command: ["wasilactl", "worker"]
     healthcheck:
       disable: true
     restart: unless-stopped
@@ -111,7 +111,7 @@ services:
     depends_on:
       migrate:
         condition: service_completed_successfully
-    # SIGTERM gives running jobs RAISEBOOK_WORKER_GRACE_S (50 s), then hands them back.
+    # SIGTERM gives running jobs WASILA_WORKER_GRACE_S (50 s), then hands them back.
     stop_grace_period: 60s
     networks: [internal]
 
@@ -121,14 +121,14 @@ services:
       context: ../web
       dockerfile: ../deploy/web.Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: https://${API_HOST:-api.raisebook.org}
-        NEXT_PUBLIC_SITE_URL: https://${WEB_HOST:-raisebook.org}
-        NEXT_PUBLIC_PUBLIC_API_URL: https://${API_HOST:-api.raisebook.org}
-        NEXT_PUBLIC_REPO_URL: ${NEXT_PUBLIC_REPO_URL:-https://github.com/gumruyanzh/raisebook}
-        # Empty hides every "Support Raisebook" button (set it once GitHub Sponsors is live).
+        NEXT_PUBLIC_API_URL: https://${API_HOST:-api.wasila.app}
+        NEXT_PUBLIC_SITE_URL: https://${WEB_HOST:-wasila.app}
+        NEXT_PUBLIC_PUBLIC_API_URL: https://${API_HOST:-api.wasila.app}
+        NEXT_PUBLIC_REPO_URL: ${NEXT_PUBLIC_REPO_URL:-https://github.com/applied-biosciences/wasila}
+        # Empty hides every "Support Wasila" button (set it once GitHub Sponsors is live).
         NEXT_PUBLIC_SPONSOR_URL: ${NEXT_PUBLIC_SPONSOR_URL:-}
         GIT_SHA: ${GIT_SHA:-}
-    image: raisebook-web:local
+    image: wasila-web:local
     restart: unless-stopped
     environment:
       # Server components reach the API over the compose network, not the public internet.
@@ -146,8 +146,8 @@ services:
       - "443:443"
       - "443:443/udp"
     environment:
-      WEB_HOST: ${WEB_HOST:-raisebook.org}
-      API_HOST: ${API_HOST:-api.raisebook.org}
+      WEB_HOST: ${WEB_HOST:-wasila.app}
+      API_HOST: ${API_HOST:-api.wasila.app}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data

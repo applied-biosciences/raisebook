@@ -10,7 +10,7 @@ export type Section = "home" | "product" | "compare" | "guide" | "docs" | "about
 
 export interface PublicPage {
   path: string;
-  /** <title> (the root template adds " · Raisebook"; docs add " · Raisebook docs"). */
+  /** <title> (the root template adds " · Wasila"; docs add " · Wasila docs"). */
   title: string;
   /** A full title used as is (home only). */
   absoluteTitle?: string;
@@ -27,173 +27,18 @@ export interface PublicPage {
 export const PAGES: PublicPage[] = [
   {
     path: "/",
-    title: "Free investor CRM and fundraising pipeline tracker for founders",
-    absoluteTitle: "Raisebook · Free investor CRM and fundraising tracker",
+    title: "Investor CRM and Funding Room for US, UK and Saudi raises",
+    absoluteTitle: "Wasila · Investor CRM and Funding Room",
     description:
-      "Raisebook is a free, open-source investor CRM for founders: track investors through every round, with follow-ups, meetings and an MCP server for AI agents.",
+      "Wasila keeps your investor master list, round pipeline, Funding Room, outreach and funding costs in one place, with Claude and an MCP server for agents.",
     section: "home",
-    updated: "2026-10-15",
+    updated: "2026-11-06",
     crumb: "Home",
     og: {
-      eyebrow: "Free forever · Open source · MCP",
-      title: "The free investor CRM for founders.",
-      subtitle: "Stages, follow-ups, meetings and commitments. Built for founders and their agents.",
+      eyebrow: "Wasila · v1.0.0.0",
+      title: "Your raise, in one place.",
+      subtitle: "Master list, pipeline, Funding Room, outreach and costs, for US, UK and Saudi rounds.",
     },
-    llms: true,
-  },
-  {
-    path: "/investor-crm",
-    title: "Investor CRM for founders",
-    description:
-      "What an investor CRM does for a startup raise, what to track per investor, and how Raisebook, a free open-source investor CRM, handles it.",
-    section: "product",
-    updated: "2026-10-15",
-    og: {
-      eyebrow: "Investor CRM",
-      title: "An investor CRM built for founders.",
-      subtitle: "Track every investor through every round, free and open source.",
-    },
-    llms: true,
-  },
-  {
-    path: "/free-investor-crm",
-    title: "Free, open-source investor CRM",
-    description:
-      "Raisebook is a free investor CRM with no paid tier, no seat price and no investor cap below 20,000 per workspace. Open source under AGPL-3.0 and self-hostable.",
-    section: "product",
-    updated: "2026-10-15",
-    og: {
-      eyebrow: "$0 · AGPL-3.0",
-      title: "A free investor CRM. Actually free.",
-      subtitle: "No paid tier, no seat price, no investor database built from your list.",
-    },
-    llms: true,
-  },
-  {
-    path: "/pricing",
-    title: "Pricing",
-    description:
-      "Raisebook costs $0: no paid tier, no seat price, every feature. Limits per workspace: 50 rounds, 20,000 investors, 20 members, 20 API keys. How it stays free.",
-    section: "product",
-    updated: "2026-10-15",
-    og: {
-      eyebrow: "Pricing",
-      title: "$0. Every feature. Same limits for everyone.",
-      subtitle: "50 rounds, 20,000 investors and 20 members per workspace.",
-    },
-    llms: true,
-  },
-  {
-    path: "/seed-round-tracker",
-    title: "Track your seed round",
-    description:
-      "How to track investors for a pre-seed or seed round: pipeline stages, fields to keep, follow-ups and meetings, and how to run it free in Raisebook.",
-    section: "guide",
-    updated: "2026-10-15",
-    og: {
-      eyebrow: "Guide · Seed round",
-      title: "Track your seed round.",
-      subtitle: "Stages, fields, follow-ups and meetings for a pre-seed or seed raise.",
-    },
-    llms: true,
-  },
-  {
-    path: "/ai-investor-research",
-    title: "Investor research with AI",
-    description:
-      "Raisebook researches investors in your pipeline on your own OpenRouter key and writes short, cited dossiers: recent deals, thesis, a way in and a risk.",
-    section: "guide",
-    updated: "2026-10-15",
-    og: {
-      eyebrow: "Investor research",
-      title: "Cited investor dossiers, on your own key.",
-      subtitle: "Recent deals, thesis, a way in, an opener and a risk. No markup.",
-    },
-    llms: true,
-  },
-  {
-    path: "/fundraising-crm-mcp",
-    title: "Use Raisebook from Claude Code, Codex or Cursor (MCP)",
-    absoluteTitle: "Fundraising CRM for Claude Code, Codex, Cursor · Raisebook",
-    crumb: "Raisebook for AI agents",
-    description:
-      "A fundraising CRM with an MCP server: Claude Code, Codex or Cursor can log calls, move stages, set follow-ups and schedule meetings. Free, no delete tools.",
-    section: "guide",
-    updated: "2026-10-15",
-    og: {
-      eyebrow: "MCP · Agents",
-      title: "Your agent can work the round.",
-      subtitle: "Claude Code, Codex and Cursor over MCP. Free, no deletes, every write on the timeline.",
-    },
-    llms: true,
-  },
-  {
-    path: "/compare",
-    title: "Compare investor CRMs",
-    description:
-      "Raisebook compared with Foundersuite, Visible, Affinity, Attio, folk and spreadsheets for a fundraise: price, free-plan limits, open source, MCP and data.",
-    section: "compare",
-    updated: "2026-10-15",
-    og: {
-      eyebrow: "Compare",
-      title: "Raisebook compared.",
-      subtitle: "Foundersuite, Visible, Affinity, Attio, folk and spreadsheets.",
-    },
-    llms: true,
-  },
-  {
-    path: "/compare/foundersuite",
-    title: "Raisebook vs Foundersuite",
-    absoluteTitle: "Raisebook vs Foundersuite: a free Foundersuite alternative",
-    description:
-      "A free Foundersuite alternative: Raisebook vs Foundersuite on price, investor limits, investor database, open source and MCP, from public pages.",
-    section: "compare",
-    updated: "2026-10-15",
-    og: { eyebrow: "Compare", title: "Raisebook vs Foundersuite", subtitle: "Price, limits, open source and MCP, side by side." },
-    llms: true,
-  },
-  {
-    path: "/compare/visible",
-    title: "Raisebook vs Visible",
-    absoluteTitle: "Raisebook vs Visible: a free Visible.vc alternative",
-    description:
-      "A Visible.vc alternative for the investor pipeline: Raisebook vs Visible on price, free-plan limits, scope, open source and MCP, from public pages.",
-    section: "compare",
-    updated: "2026-10-15",
-    og: { eyebrow: "Compare", title: "Raisebook vs Visible", subtitle: "Price, limits, scope and MCP, side by side." },
-    llms: true,
-  },
-  {
-    path: "/compare/affinity",
-    title: "Raisebook vs Affinity",
-    absoluteTitle: "Raisebook vs Affinity: an Affinity alternative for founders",
-    description:
-      "An Affinity alternative for founders: Raisebook vs Affinity on price, who each is built for, open source and data, from each product's public pages.",
-    section: "compare",
-    updated: "2026-10-15",
-    og: { eyebrow: "Compare", title: "Raisebook vs Affinity", subtitle: "A founder's pipeline vs a firm's deal-flow CRM." },
-    llms: true,
-  },
-  {
-    path: "/compare/attio-folk",
-    title: "Raisebook vs Attio and folk",
-    absoluteTitle: "Raisebook vs Attio and folk: a CRM built for fundraising",
-    description:
-      "Attio or folk for fundraising? Raisebook vs Attio vs folk on price, seats, setup for a raise, open source and MCP, from each product's public pages.",
-    section: "compare",
-    updated: "2026-10-15",
-    og: { eyebrow: "Compare", title: "Raisebook vs Attio and folk", subtitle: "A ready-made fundraising pipeline vs a general CRM." },
-    llms: true,
-  },
-  {
-    path: "/compare/spreadsheet",
-    title: "Investor CRM vs spreadsheet or Notion template",
-    absoluteTitle: "Investor CRM vs spreadsheet or Notion template · Raisebook",
-    description:
-      "When an investor spreadsheet or Notion or Airtable template stops working, and what a free investor CRM adds: stages, follow-ups, timeline and dedupe.",
-    section: "compare",
-    updated: "2026-10-15",
-    og: { eyebrow: "Compare", title: "Spreadsheet vs investor CRM", subtitle: "When the sheet stops keeping up, and what to move to." },
     llms: true,
   },
   {
@@ -201,10 +46,10 @@ export const PAGES: PublicPage[] = [
     title: "Questions founders ask",
     crumb: "FAQ",
     description:
-      "Answers about Raisebook, the free investor CRM: pricing, privacy, AI agents and MCP, research, meetings, importing a spreadsheet and how it compares.",
+      "Answers about Wasila: the Funding Room, outreach, Claude, SEIS and EIS, Saudi rounds, importing investor lists, agents and MCP, privacy and leaving.",
     section: "about",
     updated: "2026-10-15",
-    og: { eyebrow: "FAQ", title: "Questions founders ask.", subtitle: "Pricing, privacy, agents, research, meetings and more." },
+    og: { eyebrow: "FAQ", title: "Questions founders ask.", subtitle: "Funding Room, outreach, Claude, SEIS/EIS and Saudi rounds." },
     llms: true,
   },
   {
@@ -212,11 +57,11 @@ export const PAGES: PublicPage[] = [
     title: "Getting started",
     crumb: "Docs",
     description:
-      "Set up Raisebook in a few minutes: sign in, create a workspace and a round, bring your investors, and work the pipeline from the board, the table or your agent.",
+      "Set up Wasila in a few minutes: sign in, create a workspace and a round, bring your investors, and work the pipeline from the board, the table or your agent.",
     section: "docs",
     updated: "2026-10-13",
     og: {
-      eyebrow: "Raisebook docs",
+      eyebrow: "Wasila docs",
       title: "Connect your agent. Import your sheet.",
       subtitle: "MCP setup for Claude Code, Codex and Cursor. REST API. CSV format.",
     },
@@ -226,7 +71,7 @@ export const PAGES: PublicPage[] = [
     path: "/docs/mcp",
     title: "Connect an agent (MCP)",
     description:
-      "Connect Claude Code, Codex, Cursor or any MCP client to Raisebook with a workspace API key. Copy-ready setup for each client.",
+      "Connect Claude Code, Codex, Cursor or any MCP client to Wasila with a workspace API key. Copy-ready setup for each client.",
     section: "docs",
     updated: "2026-10-14",
     og: { eyebrow: "Docs · MCP", title: "Connect an agent.", subtitle: "Claude Code, Codex, Cursor and any MCP client." },
@@ -236,7 +81,7 @@ export const PAGES: PublicPage[] = [
     path: "/docs/mcp-tools",
     title: "MCP tools reference",
     description:
-      "The 23 core Raisebook MCP tools and the 5 research tools: what each one does, its parameters, what it returns, and which ones are safe to repeat.",
+      "The 26 core Wasila MCP tools and the 5 research tools: what each one does, its parameters, what it returns, and which ones are safe to repeat.",
     section: "docs",
     updated: "2026-10-14",
     og: { eyebrow: "Docs · MCP", title: "MCP tools reference.", subtitle: "Every tool, its parameters and what it returns." },
@@ -246,7 +91,7 @@ export const PAGES: PublicPage[] = [
     path: "/docs/api",
     title: "REST API",
     description:
-      "The Raisebook REST API under /v1: authentication with workspace API keys, conventions, errors, rate limits and every endpoint.",
+      "The Wasila REST API under /v1: authentication with workspace API keys, conventions, errors, rate limits and every endpoint.",
     section: "docs",
     updated: "2026-10-13",
     og: { eyebrow: "Docs · API", title: "REST API.", subtitle: "Rounds, investors, activity, meetings and exports under /v1." },
@@ -256,7 +101,7 @@ export const PAGES: PublicPage[] = [
     path: "/docs/meetings",
     title: "Meetings and the calendar feed",
     description:
-      "Schedule investor meetings in Raisebook, record outcomes and next steps, download .ics files, and subscribe from Google, Apple or Outlook calendars.",
+      "Schedule investor meetings in Wasila, record outcomes and next steps, download .ics files, and subscribe from Google, Apple or Outlook calendars.",
     section: "docs",
     updated: "2026-10-15",
     og: { eyebrow: "Docs · Meetings", title: "Meetings and the calendar feed.", subtitle: "Schedule, record outcomes, subscribe from any calendar." },
@@ -266,7 +111,7 @@ export const PAGES: PublicPage[] = [
     path: "/docs/csv",
     title: "CSV import format",
     description:
-      "How Raisebook reads a spreadsheet: accepted column names, list, date and money formats, dedupe and what happens to each row.",
+      "How Wasila reads a spreadsheet: accepted column names, list, date and money formats, dedupe and what happens to each row.",
     section: "docs",
     updated: "2026-10-13",
     og: { eyebrow: "Docs · CSV", title: "Bring your spreadsheet.", subtitle: "Column names, mapping, preview and dedupe." },
@@ -276,7 +121,7 @@ export const PAGES: PublicPage[] = [
     path: "/docs/research",
     title: "Investor research",
     description:
-      "How Raisebook's investor research works: your own OpenRouter key, identity first, cited dossiers, presets and costs, the monthly limit, and save_dossier.",
+      "How Wasila's investor research works: your own OpenRouter key, identity first, cited dossiers, presets and costs, the monthly limit, and save_dossier.",
     section: "docs",
     updated: "2026-10-13",
     og: { eyebrow: "Docs · Research", title: "Investor research.", subtitle: "Cited dossiers on your own OpenRouter key." },
@@ -285,7 +130,7 @@ export const PAGES: PublicPage[] = [
   {
     path: "/docs/export",
     title: "Export and delete",
-    description: "Take your data out of Raisebook as CSV or JSON at any time, and delete an investor, a round, a workspace or your account permanently.",
+    description: "Take your data out of Wasila as CSV or JSON at any time, and delete an investor, a round, a workspace or your account permanently.",
     section: "docs",
     updated: "2026-10-13",
     og: { eyebrow: "Docs · Export", title: "Export and delete.", subtitle: "CSV and JSON, any time. Hard delete, effective immediately." },
@@ -294,17 +139,17 @@ export const PAGES: PublicPage[] = [
   {
     path: "/docs/self-hosting",
     title: "Self-hosting",
-    description: "Run Raisebook on your own server with Docker Compose: Postgres, the API and MCP server, the web app and Caddy for TLS, all from one open-source repository.",
+    description: "Run Wasila on your own server with Docker Compose: Postgres, the API and MCP server, the web app and Caddy for TLS, all from one open-source repository.",
     section: "docs",
     updated: "2026-10-13",
-    og: { eyebrow: "Docs · Self-hosting", title: "Run your own Raisebook.", subtitle: "Docker Compose: Postgres, API, web and Caddy." },
+    og: { eyebrow: "Docs · Self-hosting", title: "Run your own Wasila.", subtitle: "Docker Compose: Postgres, API, web and Caddy." },
     llms: true,
   },
   {
     path: "/privacy",
     title: "Privacy",
     description:
-      "Raisebook's privacy promise and the details behind it: what is stored, what is never collected, cookies, logs, email, backups and deletion.",
+      "Wasila's privacy promise and the details behind it: what is stored, what is never collected, cookies, logs, email, backups and deletion.",
     section: "about",
     updated: "2026-10-13",
     og: { eyebrow: "Privacy", title: "The privacy promise.", subtitle: "Never pooled, sold or mined. No trackers. Leave any time." },
@@ -314,7 +159,7 @@ export const PAGES: PublicPage[] = [
     path: "/research-policy",
     title: "Research Policy",
     description:
-      "What Raisebook's investor research does, who starts it, what it collects and never collects, who can see it, how long it is kept, and how to ask for removal.",
+      "What Wasila's investor research does, who starts it, what it collects and never collects, who can see it, how long it is kept, and how to ask for removal.",
     section: "about",
     updated: "2026-10-13",
     og: { eyebrow: "Research Policy", title: "What research collects, and what it never does.", subtitle: "Professional information only. Removal on request." },
@@ -323,28 +168,28 @@ export const PAGES: PublicPage[] = [
   {
     path: "/terms",
     title: "Terms",
-    description: "The terms for using raisebook.org, the free hosted investor CRM, in plain language: your data stays yours, fair use, and how the hosted service is run.",
+    description: "The terms for using Wasila, the investor CRM and Funding Room, in plain language: your data stays yours, fair use, and how the service is run.",
     section: "about",
     updated: "2026-10-13",
-    og: { eyebrow: "Terms", title: "Terms of service.", subtitle: "For the hosted service at raisebook.org." },
+    og: { eyebrow: "Terms", title: "Terms of service.", subtitle: "For the hosted service at wasila.app." },
   },
   {
     path: "/support",
     title: "Support",
     description:
-      "Raisebook, the free investor CRM, is free forever. If it helps your raise, you can help pay for its hosting. Donations never buy features.",
+      "How to get help with Wasila: where to report a problem, how to reach Applied Biosciences, and what to include so we can fix it quickly for your team.",
     section: "about",
     updated: "2026-10-13",
-    og: { eyebrow: "Support", title: "Keep Raisebook free.", subtitle: "Donations pay for hosting and never buy features." },
+    og: { eyebrow: "Support", title: "Get help with Wasila.", subtitle: "Report a problem or ask a question." },
     llms: true,
   },
   {
     path: "/changelog",
     title: "Changelog",
-    description: "What changed in Raisebook, the free and open-source investor CRM, newest first: features, fixes and changes to the API and MCP server.",
+    description: "What changed in Wasila, the investor CRM and Funding Room, newest first: features, fixes and changes to the API and MCP server, from v1.0.0.0.",
     section: "about",
     updated: "2026-10-14",
-    og: { eyebrow: "Changelog", title: "What changed.", subtitle: "Raisebook, release by release." },
+    og: { eyebrow: "Changelog", title: "What changed.", subtitle: "Wasila, release by release." },
     llms: true,
   },
 ];

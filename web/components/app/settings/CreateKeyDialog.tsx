@@ -18,9 +18,9 @@ export interface KeyDraft {
 }
 
 export function scopesOf(d: Pick<KeyDraft, "write" | "admin">): Scope[] {
-  const s: Scope[] = ["raisebook:read"];
-  if (d.write || d.admin) s.push("raisebook:write");
-  if (d.admin) s.push("raisebook:admin");
+  const s: Scope[] = ["wasila:read"];
+  if (d.write || d.admin) s.push("wasila:write");
+  if (d.admin) s.push("wasila:admin");
   return s;
 }
 

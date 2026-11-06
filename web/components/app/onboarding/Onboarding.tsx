@@ -30,7 +30,7 @@ function possessive(name: string): string {
  * Whether the founder picked the default currency themselves (then the first round never
  * overrides it). Kept per workspace in sessionStorage so a reload between steps keeps it.
  */
-const TOUCHED_KEY = (slug: string) => `rb-onb-currency-touched:${slug}`;
+const TOUCHED_KEY = (slug: string) => `wsl-onb-currency-touched:${slug}`;
 function readTouched(slug: string | null): boolean {
   if (!slug) return false;
   try {

@@ -18,7 +18,7 @@ export type DateString = string;
 /* ============================== enums ============================== */
 
 export type Role = "owner" | "editor" | "viewer";
-export type Scope = "raisebook:read" | "raisebook:write" | "raisebook:admin";
+export type Scope = "wasila:read" | "wasila:write" | "wasila:admin";
 export type KeyMode = "live" | "test";
 export type StageColor =
   | "slate"
@@ -33,7 +33,10 @@ export type StageColor =
   | "sky";
 export type StageKind = "open" | "active" | "won" | "lost";
 export type RoundStatus = "open" | "closed";
-export type Instrument = "safe" | "priced" | "convertible_note" | "other";
+export type Instrument = "safe" | "priced" | "convertible_note" | "asa" | "other";
+/** Wasila: where the round is raised (US, UK, Saudi Arabia). */
+export type Jurisdiction = "us" | "uk" | "ksa" | "other";
+export type TaxRelief = "none" | "seis" | "eis" | "seis_eis";
 export type InvestorType =
   | "vc"
   | "angel"
@@ -94,7 +97,22 @@ export const INSTRUMENT_LABEL: Record<Instrument, string> = {
   safe: "SAFE",
   priced: "Priced round",
   convertible_note: "Convertible note",
+  asa: "Advance subscription (ASA)",
   other: "Other",
+};
+
+export const JURISDICTION_LABEL: Record<Jurisdiction, string> = {
+  us: "United States",
+  uk: "United Kingdom",
+  ksa: "Saudi Arabia",
+  other: "Elsewhere",
+};
+
+export const TAX_RELIEF_LABEL: Record<TaxRelief, string> = {
+  none: "None",
+  seis: "SEIS",
+  eis: "EIS",
+  seis_eis: "SEIS then EIS",
 };
 
 export const ROUND_STATUS_LABEL: Record<RoundStatus, string> = { open: "Open", closed: "Closed" };
@@ -120,9 +138,9 @@ export const PRIORITY_LABEL: Record<Priority, string> = {
 };
 
 export const SCOPE_LABEL: Record<Scope, string> = {
-  "raisebook:read": "Read",
-  "raisebook:write": "Write",
-  "raisebook:admin": "Admin",
+  "wasila:read": "Read",
+  "wasila:write": "Write",
+  "wasila:admin": "Admin",
 };
 
 /* ============================== errors and pages ============================== */
@@ -146,7 +164,7 @@ export interface DataList<T> {
 
 export interface Actor {
   type: ActorType;
-  /** Resolved display name: user name, agent name, or "Raisebook". */
+  /** Resolved display name: user name, agent name, or "Wasila". */
   label: string;
   user_id?: UUID | null;
   api_key_id?: UUID | null;
@@ -253,6 +271,9 @@ export interface Round {
   target_close_on?: DateString | null;
   closed_on?: DateString | null;
   notes?: string | null;
+  jurisdiction?: Jurisdiction;
+  tax_relief?: TaxRelief;
+  sharia_compliant?: boolean;
   stages: Stage[];
   committed_amount: number;
   participant_count: number;
@@ -299,6 +320,10 @@ export interface ParticipationBrief {
 }
 
 export interface Investor extends InvestorCompact, InvestorLinks {
+  /** Wasila master list: country, phone and custom field / AI column values by key. */
+  country?: string | null;
+  phone?: string | null;
+  custom?: Record<string, unknown>;
   website_url?: string | null;
   x_url?: string | null;
   location?: string | null;

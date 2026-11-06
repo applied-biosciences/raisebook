@@ -1,10 +1,10 @@
 /**
  * Theme preference (SYSTEM 3.27). "system" leaves <html data-theme> unset so the CSS follows
- * prefers-color-scheme; "light"/"dark" set it explicitly. Stored in localStorage["rb-theme"].
+ * prefers-color-scheme; "light"/"dark" set it explicitly. Stored in localStorage["wsl-theme"].
  */
 export type ThemePref = "light" | "dark" | "system";
 
-export const THEME_STORAGE_KEY = "rb-theme";
+export const THEME_STORAGE_KEY = "wsl-theme";
 
 /** Inline pre-paint script for <head>: applies the stored theme before first paint (no flash). */
 export const themeInitScript = `(function(){try{var t=localStorage.getItem("${THEME_STORAGE_KEY}");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t)}}catch(e){}})();`;

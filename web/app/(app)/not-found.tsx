@@ -4,7 +4,7 @@ import { WorkspaceTopBar } from "./_shell/WorkspaceTopBar";
 
 /**
  * A 404 inside the signed-in app (a round, investor or workspace you can't see) keeps the app
- * shell and the theme, so it reads as "not here", not as leaving Raisebook.
+ * shell and the theme, so it reads as "not here", not as leaving Wasila.
  */
 export default function AppNotFound() {
   return (

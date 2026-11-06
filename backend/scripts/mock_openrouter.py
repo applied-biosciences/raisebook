@@ -4,15 +4,15 @@ without a real key and without spending anything.
 Run from ``backend/``::
 
     uv run python scripts/mock_openrouter.py --port 8787
-    RAISEBOOK_OPENROUTER_BASE_URL=http://localhost:8787/api/v1 uv run rbctl worker
-    RAISEBOOK_OPENROUTER_BASE_URL=http://localhost:8787/api/v1 uv run uvicorn --factory \\
-        raisebook.main:create_app --reload
+    WASILA_OPENROUTER_BASE_URL=http://localhost:8787/api/v1 uv run wasilactl worker
+    WASILA_OPENROUTER_BASE_URL=http://localhost:8787/api/v1 uv run uvicorn --factory \\
+        wasila.main:create_app --reload
 
 It answers ``GET /api/v1/models`` (the recorded models list), ``GET /api/v1/key`` (any key
 is "valid") and ``POST /api/v1/chat/completions`` with the same canned, fictional answers the
 test suite uses (``tests/research/pipeline_mock.py``): every answer is about the fictional
 "Dana Whitfield of Harbor Light Ventures" on ``*.example`` pages, so research the sample
-workspace's Dana Whitfield (``rbctl seed-demo``) for a full dossier; other investors end
+workspace's Dana Whitfield (``wasilactl seed-demo``) for a full dossier; other investors end
 ``partial`` (no source matches their identity), which exercises that path too. It only ever
 returns made-up text.
 """

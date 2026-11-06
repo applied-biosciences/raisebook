@@ -54,7 +54,7 @@ export const SIGNIN_ERRORS: Record<string, string> = {
   google_email_missing:
     "Google did not share an email address for that account. Use the emailed sign-in link instead.",
   google_account_mismatch:
-    "This Raisebook account is linked to a different Google account. Sign in with that Google account, or use the emailed sign-in link.",
+    "This Wasila account is linked to a different Google account. Sign in with that Google account, or use the emailed sign-in link.",
   rate_limited:
     "Too many sign-ins to this account in the last 15 minutes. Wait a few minutes and try again.",
 };

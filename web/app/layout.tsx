@@ -1,32 +1,33 @@
 import type { Metadata, Viewport } from "next";
 
-import { ToastProvider } from "@/components/ui";
+import { GlobalChrome, ToastProvider } from "@/components/ui";
+import { localeInitScript } from "@/lib/i18n";
 import { themeInitScript } from "@/lib/theme";
 
 import { fontVariables } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://raisebook.org"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://wasila.app"),
   title: {
-    default: "Raisebook · Free, open-source investor CRM for founders",
-    template: "%s · Raisebook",
+    default: "Wasila · Investor CRM and Funding Room",
+    template: "%s · Wasila",
   },
   description:
-    "Raisebook is a free, open-source investor CRM (fundraising CRM) for startup founders. Track every investor through every round: stages, follow-ups, meetings, notes and commitments, with an MCP server for your coding agent.",
-  applicationName: "Raisebook",
-  authors: [{ name: "Zhirayr Gumruyan" }],
-  creator: "Zhirayr Gumruyan",
-  publisher: "Raisebook",
+    "Wasila is an investor CRM and Funding Room for founders raising in the US, UK and Saudi Arabia: every investor through every round, a document room for diligence, outreach and funding costs, with Claude and an MCP server for agentic work.",
+  applicationName: "Wasila",
+  authors: [{ name: "Applied Biosciences" }],
+  creator: "Applied Biosciences",
+  publisher: "Wasila",
   category: "business",
   openGraph: {
     type: "website",
-    siteName: "Raisebook",
+    siteName: "Wasila",
     locale: "en_US",
   },
   twitter: { card: "summary_large_image" },
   ...(process.env.NEXT_PUBLIC_GIT_SHA
-    ? { other: { "raisebook-commit": process.env.NEXT_PUBLIC_GIT_SHA } }
+    ? { other: { "wasila-commit": process.env.NEXT_PUBLIC_GIT_SHA } }
     : {}),
 };
 
@@ -35,8 +36,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F3F5F8" },
-    { media: "(prefers-color-scheme: dark)", color: "#0F141C" },
+    { media: "(prefers-color-scheme: light)", color: "#F4F8FB" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B1120" },
   ],
 };
 
@@ -46,6 +47,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {/* Applies the stored theme before first paint (SYSTEM 3.27). Inline, first-party. */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        {/* Applies the stored language (lang/dir) before first paint: bilingual scaffolding. */}
+        <script dangerouslySetInnerHTML={{ __html: localeInitScript }} />
       </head>
       <body>
         <a
@@ -55,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <ToastProvider>{children}</ToastProvider>
+        <GlobalChrome />
       </body>
     </html>
   );

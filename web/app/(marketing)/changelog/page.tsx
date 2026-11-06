@@ -20,6 +20,55 @@ interface Entry {
 /** Newest first. Add an entry for every release and for any change to the privacy page or terms. */
 const ENTRIES: Entry[] = [
   {
+    date: "2026-11-06",
+    version: "1.0.0.0",
+    title: "Wasila",
+    groups: [
+      {
+        label: "New name and brand",
+        items: [
+          "The app is now Wasila (وسيلة): new logo, favicon and colours, the version on every page, and a light/dark switch on every page.",
+          "Arabic and English are being prepared: Settings → Language switches the page to right-to-left. Translation comes in a later release.",
+        ],
+      },
+      {
+        label: "US, UK and Saudi raising",
+        items: [
+          "Each round names its market (US, UK, Saudi Arabia), with USD, GBP or SAR, the UK advance subscription agreement (ASA), SEIS/EIS relief for UK rounds and Sharia-compliant terms for Saudi rounds.",
+        ],
+      },
+      {
+        label: "Funding Room",
+        items: [
+          "A diligence repository with categories, every version kept, review status, confidentiality, US/UK/KSA checklists and an activity log.",
+          "Expiring share links to approved documents, with private view counts and one-click revoke.",
+        ],
+      },
+      {
+        label: "Master list, Claude and outreach",
+        items: [
+          "Import investor leads from CSV, Excel or Word tables into one master list with country, phone and interest tags; filter by market, type and contact state; save lists; add custom fields.",
+          "Claude on your own Anthropic key: Ask Wasila search, AI columns, warm-letter and investor-update drafts, and deck suggestions. It runs only on a click and sees public profile data only.",
+          "Email investors from your own mailbox with approved Funding Room documents attached by hand; every send is on the timeline. Campaigns create reviewed drafts; follow-ups list mail with no reply. Warm-intro connections show the best path to each investor.",
+        ],
+      },
+      {
+        label: "Deck editor and funding costs",
+        items: [
+          "Edit a PowerPoint deck's text, hide or reorder slides and save a new version in the Funding Room.",
+          "Use of funds, SEIS/EIS tranches and the 48-month cost plan, imported from your workbook and editable, with burn, runway and the funding gap.",
+        ],
+      },
+      {
+        label: "API and MCP",
+        items: [
+          "REST routes under /v1/funding-room, /v1/master-list, /v1/investor-fields, /v1/saved-lists, /v1/outreach, /v1/claude, /v1/decks and /v1/funding-costs.",
+          "Three MCP tools: list_funding_room, search_master_list and draft_outreach (26 tools in all). Agents can draft emails but never send them.",
+        ],
+      },
+    ],
+  },
+  {
     date: "2026-10-14",
     version: "0.3.0",
     status: "Unreleased",
@@ -71,7 +120,7 @@ const ENTRIES: Entry[] = [
         items: [
           "Continue with Google, next to the emailed sign-in link.",
           "A sample workspace with fictional investors, so you can try everything before importing your own.",
-          "Signed-in visitors to raisebook.org go straight to their workspace.",
+          "Signed-in visitors to wasila.app go straight to their workspace.",
           "An import review you can trust: rows with bad optional cells are kept, and every skipped row says why.",
         ],
       },
@@ -85,7 +134,7 @@ const ENTRIES: Entry[] = [
       {
         label: "Privacy and terms",
         items: [
-          "The privacy page and the terms are in effect: who runs raisebook.org, where it is hosted, the email provider and the contact address are filled in.",
+          "The privacy page and the terms are in effect: who runs wasila.app, where it is hosted, the email provider and the contact address are filled in.",
           "The privacy page now lists Google sign-in and every cookie and browser-storage key.",
         ],
       },

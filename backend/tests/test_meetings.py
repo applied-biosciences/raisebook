@@ -9,8 +9,6 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.models.meeting import Meeting, MeetingGuest
-from raisebook.services.ics import escape, fold
 from tests.api.helpers import activities_of, participant, world
 from tests.factories import (
     add_member,
@@ -20,6 +18,8 @@ from tests.factories import (
     make_workspace,
     owner_of,
 )
+from wasila.models.meeting import Meeting, MeetingGuest
+from wasila.services.ics import escape, fold
 
 AGENT = {"X-Agent-Name": "claude-code", "X-Agent-Model": "claude-opus-5-5"}
 
@@ -322,7 +322,7 @@ async def test_ics_and_feed(
     r = await c.get(f"/v1/meetings/{mid}/ics")
     assert r.status_code == 200 and r.headers["content-type"].startswith("text/calendar")
     text = r.text
-    assert "BEGIN:VEVENT" in text and f"UID:meeting-{mid}@raisebook.org" in text
+    assert "BEGIN:VEVENT" in text and f"UID:meeting-{mid}@wasila.app" in text
     assert "DTSTART:20261014T180000Z" in text and "DTEND:20261014T183000Z" in text
     assert "LOCATION:Pier 9\\, Suite 2\\; ask at desk" in text
     # The owner's feed covers both of their workspaces and nothing else.
@@ -341,7 +341,7 @@ async def test_ics_and_feed(
             ends_at=frozen_now.replace(hour=18),
             timezone="UTC",
             actor_type="system",
-            actor_label="raisebook",
+            actor_label="wasila",
             via="system",
         )
     )

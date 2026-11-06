@@ -203,7 +203,7 @@ export function PhoneFab({ onAdd, label = "Add investor" }: { onAdd: () => void;
     <div
       ref={ref}
       className="fixed right-16 z-30"
-      style={{ bottom: "calc(16px + max(env(safe-area-inset-bottom), var(--rb-tabbar)))" }}
+      style={{ bottom: "calc(16px + max(env(safe-area-inset-bottom), var(--wsl-tabbar)))" }}
     >
       <button
         type="button"
@@ -587,7 +587,7 @@ export function PipelinePhone({
                 ) : null}
                 <button
                   type="button"
-                  className={cn("flex h-full min-w-0 flex-1 flex-col justify-center gap-2 border-0 bg-transparent px-14 text-left", canWrite && selected && "rb-press")}
+                  className={cn("flex h-full min-w-0 flex-1 flex-col justify-center gap-2 border-0 bg-transparent px-14 text-left", canWrite && selected && "wsl-press")}
                   onPointerDown={() => {
                     pressed.current = false;
                     if (!canWrite || !selected) return;

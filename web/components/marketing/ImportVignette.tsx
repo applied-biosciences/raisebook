@@ -19,14 +19,14 @@ export function ImportVignette() {
       <TableScroll>
         <Table minWidth={460}>
           <caption className="sr-only">
-            Example column mapping from a spreadsheet to Raisebook fields
+            Example column mapping from a spreadsheet to Wasila fields
           </caption>
           <THead>
             <Tr>
               <Th>Your column</Th>
               <Th>Sample</Th>
               <Th aria-label="maps to" className="w-28 px-0" />
-              <Th>Raisebook field</Th>
+              <Th>Wasila field</Th>
             </Tr>
           </THead>
           <TBody>

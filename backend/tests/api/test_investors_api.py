@@ -7,11 +7,11 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.models.activity import Activity
-from raisebook.models.investor import Investor
-from raisebook.models.round import RoundParticipant
 from tests.api.helpers import activities_of, dana, world
 from tests.factories import make_investor, make_participant, make_round
+from wasila.models.activity import Activity
+from wasila.models.investor import Investor
+from wasila.models.round import RoundParticipant
 
 DANA = {
     "name": "Dana Whitfield",

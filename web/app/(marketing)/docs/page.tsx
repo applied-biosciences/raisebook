@@ -35,7 +35,7 @@ export default function GettingStarted() {
         title="Getting started"
         lede={
           <p>
-            Raisebook keeps your raise in one ledger: every investor, in every round, with stage,
+            Wasila keeps your raise in one ledger: every investor, in every round, with stage,
             fit, follow-up, notes and commitment. This page takes you from sign-in to a working
             pipeline in about ten minutes.
           </p>
@@ -44,7 +44,7 @@ export default function GettingStarted() {
 
       <H2>1. Sign in</H2>
       <P>
-        Enter your email at <A href="/signin">raisebook.org/signin</A>. Raisebook sends a sign-in
+        Enter your email at <A href="/signin">wasila.app/signin</A>. Wasila sends a sign-in
         link that works once and expires in 15 minutes. There is no password. The first sign-in
         creates your account.
       </P>
@@ -99,7 +99,7 @@ export default function GettingStarted() {
         </li>
         <li>
           <b>Add them one at a time.</b> &ldquo;Add investor&rdquo; on the pipeline. If the person
-          is already in your contacts (same email, LinkedIn profile, or name and firm), Raisebook
+          is already in your contacts (same email, LinkedIn profile, or name and firm), Wasila
           tells you and offers to add the existing contact to the round.
         </li>
         <li>
@@ -180,7 +180,7 @@ export default function GettingStarted() {
       <Note label="Limits">
         <p>
           Per workspace: 50 rounds, 20,000 investors, 20 members (pending invites included), 20
-          active API keys and 1,000,000 timeline entries. Raisebook returns{" "}
+          active API keys and 1,000,000 timeline entries. Wasila returns{" "}
           <C>limit_reached</C> past a limit. The limits are the same for everyone, and there is no
           paid tier.
         </p>

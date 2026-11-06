@@ -4,18 +4,18 @@ from __future__ import annotations
 
 from decimal import Decimal
 
-from raisebook.models.enums import AiPreset, ResearchKind
-from raisebook.services import ai_settings
-from raisebook.services.openrouter import ModelInfo
-from raisebook.services.research_cost import (
+from tests.research.fixtures_models import PRESET_IDS
+from tests.research.openrouter_mock import models_fixture
+from wasila.models.enums import AiPreset, ResearchKind
+from wasila.services import ai_settings
+from wasila.services.openrouter import ModelInfo
+from wasila.services.research_cost import (
     PRICE_SNAPSHOT,
     RunModels,
     estimate_micros,
     micros_to_usd,
     usd_to_micros,
 )
-from tests.research.fixtures_models import PRESET_IDS
-from tests.research.openrouter_mock import models_fixture
 
 
 def fixture_models() -> dict[str, ModelInfo]:

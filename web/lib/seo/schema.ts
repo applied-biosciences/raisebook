@@ -1,6 +1,6 @@
 /**
  * schema.org structured data (JSON-LD) for the public pages. Facts only: no ratings, reviews,
- * user counts or awards, because Raisebook has none to cite.
+ * user counts or awards, because Wasila has none to cite.
  */
 
 import { REPO_URL, SITE_URL } from "@/components/marketing/site";
@@ -22,12 +22,12 @@ export function organization(): Json {
   return {
     "@type": "Organization",
     "@id": ORG_ID,
-    name: "Raisebook",
+    name: "Wasila",
     url: SITE_URL,
     logo: `${SITE_URL}/apple-icon.png`,
     email: OPERATOR.email,
     sameAs: [REPO_URL],
-    founder: { "@type": "Person", name: OPERATOR.name },
+    parentOrganization: { "@type": "Organization", name: OPERATOR.name },
     contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: OPERATOR.email },
   };
 }
@@ -36,7 +36,7 @@ export function website(): Json {
   return {
     "@type": "WebSite",
     "@id": SITE_ID,
-    name: "Raisebook",
+    name: "Wasila",
     url: SITE_URL,
     description: DEFINITION,
     publisher: { "@id": ORG_ID },
@@ -48,17 +48,15 @@ export function softwareApplication(): Json {
   return {
     "@type": "SoftwareApplication",
     "@id": APP_ID,
-    name: "Raisebook",
+    name: "Wasila",
     url: SITE_URL,
     description: DEFINITION,
     applicationCategory: "BusinessApplication",
     applicationSubCategory: "Investor CRM",
     operatingSystem: "Web",
-    isAccessibleForFree: true,
     license: LICENSE,
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD", availability: "https://schema.org/InStock" },
     featureList: FEATURES.map((f) => f.name),
-    keywords: "investor CRM, fundraising CRM, investor pipeline tracker, seed round tracker, open source CRM, MCP server",
+    keywords: "investor CRM, fundraising CRM, Funding Room, data room, SEIS, EIS, Saudi fundraising, investor outreach, MCP server",
     publisher: { "@id": ORG_ID },
     author: { "@id": ORG_ID },
     sameAs: [REPO_URL],
@@ -68,7 +66,7 @@ export function softwareApplication(): Json {
 export function sourceCode(): Json {
   return {
     "@type": "SoftwareSourceCode",
-    name: "Raisebook",
+    name: "Wasila",
     codeRepository: REPO_URL,
     license: LICENSE,
     programmingLanguage: ["Python", "TypeScript"],

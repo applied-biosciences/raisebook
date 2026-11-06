@@ -1,4 +1,4 @@
-# Raisebook: file ownership for parallel builders
+# Wasila: file ownership for parallel builders
 
 Each phase has builders working at the same time. **A builder edits only the files it owns.**
 If you need a change in a file you do not own, do not edit it. Write the request in your phase
@@ -39,24 +39,24 @@ Owns:
 - `backend/pyproject.toml`, `backend/uv.lock`, `backend/alembic.ini`, `backend/.env.example`
 - `backend/alembic/env.py`, `backend/alembic/versions/0001_init.py` (all of SPEC §3: tables,
   CHECKs, indexes, the composite FKs, the `activities_guard_update` trigger)
-- `backend/raisebook/__init__.py`, `config.py`, `main.py`, `cli.py`
-- `backend/raisebook/core/*` (`database`, `errors` with every error code in SPEC §5.2 as a
+- `backend/wasila/__init__.py`, `config.py`, `main.py`, `cli.py`
+- `backend/wasila/core/*` (`database`, `errors` with every error code in SPEC §5.2 as a
   class or helper, `clock`, `request_id`, `logging` with no-PII rules, `ratelimit` with
   postgres/memory/off backends, `actor`)
-- `backend/raisebook/core/refs.py`: **stub only** (the signatures below); AM fills it in.
-- `backend/raisebook/auth/*` (`scopes`, `api_keys`, `session`, `magic_link`, `principal` with
+- `backend/wasila/core/refs.py`: **stub only** (the signatures below); AM fills it in.
+- `backend/wasila/auth/*` (`scopes`, `api_keys`, `session`, `magic_link`, `principal` with
   `WorkspaceContext`, `require_scopes`, `require_owner_session`)
-- `backend/raisebook/models/*` (every table)
-- `backend/raisebook/schemas/common.py`, `auth.py`, `workspaces.py`, `members.py`,
+- `backend/wasila/models/*` (every table)
+- `backend/wasila/schemas/common.py`, `auth.py`, `workspaces.py`, `members.py`,
   `api_keys.py`
-- `backend/raisebook/services/users.py`, `auth.py`, `workspaces.py` (create, including default
+- `backend/wasila/services/users.py`, `auth.py`, `workspaces.py` (create, including default
   currency and timezone; `sample=True` calls `services.sample_data.create_sample_workspace`),
   `members.py`, `invites.py`, `api_keys.py`, `email.py` (log/smtp/memory backends),
   `deletion.py` (workspace and account hard delete)
-- `backend/raisebook/api/router.py` (with **all** module names from SPEC §2.1 registered),
+- `backend/wasila/api/router.py` (with **all** module names from SPEC §2.1 registered),
   `api/deps.py`, `api/health.py`, `api/auth.py`, `api/me.py`, `api/workspaces.py`,
   `api/members.py`, `api/invites.py`, `api/api_keys.py`
-- `backend/raisebook/mcp/server.py` (server instructions from SPEC §6.3 verbatim),
+- `backend/wasila/mcp/server.py` (server instructions from SPEC §6.3 verbatim),
   `mcp/auth.py`, `mcp/annotations.py`, `mcp/tools/__init__.py` (imports and registers
   `workspace, rounds, investors, pipeline, data`), `mcp/tools/_common.py` (`tool_call(ctx,
   *scopes)`, `ToolError` mapping, MCP `Clock`, agent-header extraction)
@@ -123,14 +123,14 @@ Owns:
 
 ### API+MCP (AM)
 Owns:
-- `backend/raisebook/core/refs.py` (replaces the stub)
-- `backend/raisebook/schemas/rounds.py`, `investors.py`, `participants.py`, `activities.py`
-- `backend/raisebook/services/normalize.py`, `rounds.py`, `stages.py`, `investors.py`,
+- `backend/wasila/core/refs.py` (replaces the stub)
+- `backend/wasila/schemas/rounds.py`, `investors.py`, `participants.py`, `activities.py`
+- `backend/wasila/services/normalize.py`, `rounds.py`, `stages.py`, `investors.py`,
   `participants.py`, `activities.py`, `followups.py`, `summary.py`, `search.py`
-- `backend/raisebook/api/rounds.py`, `investors.py`, `participants.py`, `activities.py`,
+- `backend/wasila/api/rounds.py`, `investors.py`, `participants.py`, `activities.py`,
   `follow_ups.py` (replace the stubs; the export route `GET /v1/rounds/{round}/export` lives
   in IE's `api/exports.py`)
-- `backend/raisebook/mcp/shaping.py`, `mcp/tools/workspace.py` (`get_workspace`),
+- `backend/wasila/mcp/shaping.py`, `mcp/tools/workspace.py` (`get_workspace`),
   `mcp/tools/rounds.py` (`list_rounds`, `get_round_summary`), `mcp/tools/investors.py`
   (`search_investors`, `get_investor`, `add_investor`, `update_investor`),
   `mcp/tools/pipeline.py` (`add_to_round`, `move_stage`, `log_activity`, `set_follow_up`,
@@ -175,11 +175,11 @@ Owns:
 
 ### Import-Export+Ops (IE)
 Owns:
-- `backend/raisebook/schemas/data.py`, `services/csv_io.py`, `services/imports.py`,
+- `backend/wasila/schemas/data.py`, `services/csv_io.py`, `services/imports.py`,
   `services/exports.py`, `services/sample_data.py` (replaces the stub)
-- `backend/raisebook/api/imports.py`, `api/exports.py` (replace the stubs; these include
+- `backend/wasila/api/imports.py`, `api/exports.py` (replace the stubs; these include
   `GET /v1/export`, `GET /v1/investors/export`, `GET /v1/rounds/{round}/export`)
-- `backend/raisebook/mcp/tools/data.py` (`import_investors_csv`, `export_round`)
+- `backend/wasila/mcp/tools/data.py` (`import_investors_csv`, `export_round`)
 - `backend/tests/services/test_csv_io.py`, `test_imports.py`, `test_exports.py`,
   `test_sample_data.py`, `backend/tests/api/test_imports_api.py`, `test_exports_api.py`,
   `backend/tests/mcp/test_data_tools.py`, `backend/tests/fixtures/*.csv` and `*.json`
@@ -216,7 +216,7 @@ same areas stay with the same roles. Files that pass added:
   `web/lib/{hotkeys,commands,keys,match}.ts`, `web/components/app/TodayQueue.tsx`,
   `web/app/(app)/_shell/AppKeyboard.tsx`.
 - WS-D: `web/public/templates/**`, the import preview additions in `schemas/data.py`.
-- WS-G: `backend/raisebook/services/google_auth.py`, the `/v1/auth/google/*` and
+- WS-G: `backend/wasila/services/google_auth.py`, the `/v1/auth/google/*` and
   `/v1/auth/providers` routes in `api/auth.py`, `alembic/versions/0002_*.py`,
   `backend/tests/test_google_signin.py`, `web/components/app/auth/GoogleButton.tsx`,
   `web/lib/api/auth-providers.ts`.

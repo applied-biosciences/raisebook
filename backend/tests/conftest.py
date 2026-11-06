@@ -1,9 +1,9 @@
 """Test harness: real Postgres 17, one throwaway schema per pytest session (copied from smmist).
 
-* Connects to ``RAISEBOOK_TEST_DATABASE_URL`` (default ``postgresql://localhost/raisebook_test``).
+* Connects to ``WASILA_TEST_DATABASE_URL`` (default ``postgresql://localhost/wasila_test``).
 * Creates schema ``t_<pid>_<hex>`` so concurrent runs never collide, runs ``alembic upgrade
   head`` into it (the real trigger, CHECKs and partial indexes) and drops it at exit
-  (``RAISEBOOK_TEST_KEEP_SCHEMA=1`` keeps it).
+  (``WASILA_TEST_KEEP_SCHEMA=1`` keeps it).
 * ``db``: a session inside an outer transaction rolled back after each test; ``commit()``
   only releases a SAVEPOINT. The ``app`` shares it for REST and MCP requests.
 
@@ -31,35 +31,38 @@ import httpx
 import pytest
 import pytest_asyncio
 
-TEST_DB_URL = os.environ.get("RAISEBOOK_TEST_DATABASE_URL", "postgresql://localhost/raisebook_test")
+TEST_DB_URL = os.environ.get("WASILA_TEST_DATABASE_URL", "postgresql://localhost/wasila_test")
 SCHEMA = f"t_{os.getpid()}_{secrets.token_hex(4)}"
 
 # Must happen before anything reads settings.
 os.environ.update(
     {
-        "RAISEBOOK_ENVIRONMENT": "test",
-        "RAISEBOOK_DATABASE_URL": TEST_DB_URL,
-        "RAISEBOOK_DB_SCHEMA": SCHEMA,
-        "RAISEBOOK_LOG_JSON": "false",
-        "RAISEBOOK_LOG_LEVEL": "WARNING",
-        "RAISEBOOK_EMAIL_BACKEND": "memory",
-        "RAISEBOOK_RATE_LIMIT_BACKEND": "memory",
-        "RAISEBOOK_SESSION_COOKIE_SECURE": "false",
-        "RAISEBOOK_PUBLIC_BASE_URL": "http://localhost:8000",
-        "RAISEBOOK_APP_URL": "http://localhost:3000",
+        "WASILA_ENVIRONMENT": "test",
+        "WASILA_DATABASE_URL": TEST_DB_URL,
+        "WASILA_DB_SCHEMA": SCHEMA,
+        "WASILA_LOG_JSON": "false",
+        "WASILA_LOG_LEVEL": "WARNING",
+        "WASILA_EMAIL_BACKEND": "memory",
+        "WASILA_RATE_LIMIT_BACKEND": "memory",
+        "WASILA_SESSION_COOKIE_SECURE": "false",
+        "WASILA_PUBLIC_BASE_URL": "http://localhost:8000",
+        "WASILA_APP_URL": "http://localhost:3000",
         # The research suites need the (off-by-default) feature on; test_research_flag.py
         # builds an app with it off.
-        "RAISEBOOK_RESEARCH_ENABLED": "true",
+        "WASILA_RESEARCH_ENABLED": "true",
         # A throwaway KEK per test run (never a real one): seals OpenRouter keys in tests.
-        "RAISEBOOK_SECRETS_KEK": "k1:" + base64.urlsafe_b64encode(os.urandom(32)).decode(),
-        "RAISEBOOK_OPENROUTER_BASE_URL": "https://openrouter.ai/api/v1",
+        "WASILA_SECRETS_KEK": "k1:" + base64.urlsafe_b64encode(os.urandom(32)).decode(),
+        "WASILA_OPENROUTER_BASE_URL": "https://openrouter.ai/api/v1",
+        # Wasila: Claude and investor email never leave the process in tests.
+        "WASILA_ANTHROPIC_BASE_URL": "https://api.anthropic.com",
+        "WASILA_OUTREACH_BACKEND": "memory",
     }
 )
 for _k in (
-    "RAISEBOOK_SESSION_SECRET",
-    "RAISEBOOK_SESSION_COOKIE_DOMAIN",
-    "RAISEBOOK_ENV",
-    "RAISEBOOK_SECRETS_KEK_PREVIOUS",
+    "WASILA_SESSION_SECRET",
+    "WASILA_SESSION_COOKIE_DOMAIN",
+    "WASILA_ENV",
+    "WASILA_SECRETS_KEK_PREVIOUS",
 ):
     os.environ.pop(_k, None)
 
@@ -67,9 +70,9 @@ from alembic.config import Config  # noqa: E402
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker  # noqa: E402
 
 from alembic import command  # noqa: E402
-from raisebook.config import get_settings, reset_settings_cache  # noqa: E402
-from raisebook.core import clock, ratelimit  # noqa: E402
-from raisebook.core.database import build_engine, get_session, set_engine  # noqa: E402
+from wasila.config import get_settings, reset_settings_cache  # noqa: E402
+from wasila.core import clock, ratelimit  # noqa: E402
+from wasila.core.database import build_engine, get_session, set_engine  # noqa: E402
 
 reset_settings_cache()
 
@@ -110,7 +113,7 @@ async def migrated_schema() -> AsyncIterator[str]:
         await asyncio.to_thread(_alembic_upgrade)
         yield SCHEMA
     finally:
-        if os.environ.get("RAISEBOOK_TEST_KEEP_SCHEMA") != "1":
+        if os.environ.get("WASILA_TEST_KEEP_SCHEMA") != "1":
             conn = await asyncpg.connect(_pg_dsn())
             try:
                 await conn.execute(f'DROP SCHEMA IF EXISTS "{SCHEMA}" CASCADE')
@@ -150,7 +153,7 @@ def committing_sessionmaker(engine: AsyncEngine) -> async_sessionmaker[AsyncSess
 
 @pytest.fixture(autouse=True)
 def _reset_globals() -> Any:
-    from raisebook.services.email import OUTBOX
+    from wasila.services.email import OUTBOX
 
     ratelimit.memory_backend().reset()
     ratelimit.set_backend(None)
@@ -165,8 +168,8 @@ def _reset_globals() -> Any:
 @pytest.fixture(autouse=True)
 def _no_openrouter_network() -> Any:
     """No test reaches OpenRouter: an unmocked request fails the test (no real spend)."""
-    from raisebook.services import openrouter
     from tests.research.openrouter_mock import refusing_transport
+    from wasila.services import openrouter
 
     attempts: list[str] = []
     openrouter.set_transport(refusing_transport(attempts))
@@ -175,11 +178,64 @@ def _no_openrouter_network() -> Any:
     assert not attempts, f"unmocked OpenRouter requests: {attempts}"
 
 
+@pytest.fixture(autouse=True)
+def _no_claude_network() -> Any:
+    """No test reaches Anthropic: an unmocked Claude request fails the test."""
+    import httpx
+
+    from wasila.services import claude, outreach
+
+    attempts: list[str] = []
+
+    def refuse(request: httpx.Request) -> httpx.Response:
+        attempts.append(str(request.url))
+        return httpx.Response(599, json={"error": "network refused in tests"})
+
+    claude.set_transport(httpx.MockTransport(refuse))
+    outreach.SENT.clear()
+    yield
+    claude.set_transport(None)
+    outreach.SENT.clear()
+    assert not attempts, f"unmocked Claude requests: {attempts}"
+
+
+@pytest.fixture
+def claude_mock() -> Any:
+    """A fake Claude: ``claude_mock.replies`` is a list of texts returned in order (the last
+    repeats); ``claude_mock.requests`` records each request body."""
+    import json as _json
+
+    import httpx
+
+    from wasila.services import claude
+
+    class ClaudeMock:
+        def __init__(self) -> None:
+            self.replies: list[str] = ["OK"]
+            self.requests: list[dict[str, Any]] = []
+            self.status = 200
+
+        def handler(self, request: httpx.Request) -> httpx.Response:
+            self.requests.append(_json.loads(request.content))
+            if self.status != 200:
+                return httpx.Response(self.status, json={"error": {"type": "authentication_error"}})
+            text = self.replies.pop(0) if len(self.replies) > 1 else self.replies[0]
+            return httpx.Response(
+                200,
+                json={"type": "message", "content": [{"type": "text", "text": text}]},
+            )
+
+    mock = ClaudeMock()
+    claude.set_transport(httpx.MockTransport(mock.handler))
+    yield mock
+    claude.set_transport(None)
+
+
 @pytest.fixture
 def openrouter_mock() -> Any:
     """A fake OpenRouter (``tests/research/openrouter_mock.OpenRouterMock``)."""
-    from raisebook.services import openrouter
     from tests.research.openrouter_mock import OpenRouterMock
+    from wasila.services import openrouter
 
     mock = OpenRouterMock()
     openrouter.set_transport(mock.transport)
@@ -190,7 +246,7 @@ def openrouter_mock() -> Any:
 @pytest.fixture
 def outbox() -> list[Any]:
     """Emails sent during the test (``OutboundEmail``: to, subject, text, link)."""
-    from raisebook.services.email import OUTBOX
+    from wasila.services.email import OUTBOX
 
     return OUTBOX
 
@@ -210,7 +266,7 @@ def now() -> datetime:
 
 @pytest.fixture
 def app(db: AsyncSession) -> Any:
-    from raisebook.main import create_app
+    from wasila.main import create_app
 
     application = create_app()
 
@@ -251,9 +307,9 @@ SessionClientFactory = Callable[..., Awaitable[httpx.AsyncClient]]
 @pytest_asyncio.fixture(loop_scope="session")
 async def session_client(app: Any, db: AsyncSession) -> AsyncIterator[SessionClientFactory]:
     """``await session_client(user, ws)``: a client signed in as ``user`` (real session row,
-    signed ``rb_session`` cookie), sending ``X-CSRF-Token`` and ``X-Workspace: <slug>``.
+    signed ``wsl_session`` cookie), sending ``X-CSRF-Token`` and ``X-Workspace: <slug>``.
     Pass ``ws=None`` to omit X-Workspace and ``csrf=False`` to omit the CSRF header."""
-    from raisebook.auth.session import (
+    from wasila.auth.session import (
         CSRF_HEADER,
         SESSION_COOKIE,
         WORKSPACE_HEADER,
@@ -339,7 +395,7 @@ def tool_error_text(text: str) -> str:
 async def _mcp_post(
     app: Any, raw_key: str | None, payload: dict[str, Any], headers: dict[str, str] | None
 ) -> httpx.Response:
-    from raisebook.mcp.server import create_mcp_server
+    from wasila.mcp.server import create_mcp_server
 
     server = create_mcp_server()
     server.streamable_http_app()

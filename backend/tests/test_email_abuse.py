@@ -8,9 +8,9 @@ from typing import Any
 import httpx
 import pytest
 
-from raisebook.auth.magic_link import mailbox_key
-from raisebook.core.ratelimit import LIMITS, Limit
-from raisebook.services.email import invite_email
+from wasila.auth.magic_link import mailbox_key
+from wasila.core.ratelimit import LIMITS, Limit
+from wasila.services.email import invite_email
 
 
 async def request_link(client: httpx.AsyncClient, email: str) -> httpx.Response:
@@ -51,7 +51,7 @@ async def test_global_cap_answers_503(
 
 
 async def test_provider_failure_answers_503(client: httpx.AsyncClient, app: Any) -> None:
-    from raisebook.services.email import get_email_sender
+    from wasila.services.email import get_email_sender
 
     class Broken:
         async def send(self, message: Any) -> None:

@@ -123,7 +123,7 @@ export function RoundSettings({ round: initial }: { round: Round }) {
         <div className="flex flex-wrap items-center gap-12 rounded-md border border-line bg-surface p-16">
           <p className="min-w-0 flex-1">
             {round.status === "open"
-              ? "Close the round when it's done. It stays in Raisebook with its full history, and agents stop defaulting to it."
+              ? "Close the round when it's done. It stays in Wasila with its full history, and agents stop defaulting to it."
               : `Closed${round.closed_on ? ` on ${round.closed_on}` : ""}. Reopen it to keep working the pipeline.`}
           </p>
           <Button disabled={!canWrite} busy={statusBusy ? "Saving…" : false} onClick={() => void toggleStatus()}>

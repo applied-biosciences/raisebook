@@ -8,7 +8,6 @@ from typing import Any
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.core import ratelimit
 from tests.factories import (
     add_member,
     make_api_key,
@@ -19,6 +18,7 @@ from tests.factories import (
     owner_of,
 )
 from tests.matrix import ALL, PRINCIPALS, Ctx, Row, run_row
+from wasila.core import ratelimit
 
 
 async def _round_setup(db: AsyncSession, ctx: Ctx) -> dict[str, Any]:
@@ -59,7 +59,7 @@ async def test_files_and_headers(db: AsyncSession, session_client: Any, frozen_n
     assert r.status_code == 200
     assert r.headers["content-type"].startswith("text/csv")
     assert r.headers["content-disposition"] == (
-        f'attachment; filename="raisebook-{ws.slug}-seed-20261012.csv"'
+        f'attachment; filename="wasila-{ws.slug}-seed-20261012.csv"'
     )
     assert r.headers["cache-control"] == "no-store"
     assert r.headers["x-row-count"] == "1"
@@ -69,10 +69,10 @@ async def test_files_and_headers(db: AsyncSession, session_client: Any, frozen_n
     r = await c.get(f"/v1/rounds/{rnd.id}/export?format=json&include_activities=true")
     assert r.status_code == 200 and r.headers["content-type"].startswith("application/json")
     doc = r.json()
-    assert doc["format"] == "raisebook.round" and doc["participants"][0]["timeline"] == []
+    assert doc["format"] == "wasila.round" and doc["participants"][0]["timeline"] == []
 
     r = await c.get("/v1/export?format=json")
-    assert r.status_code == 200 and json.loads(r.text)["format"] == "raisebook.export"
+    assert r.status_code == 200 and json.loads(r.text)["format"] == "wasila.export"
     r = await c.get("/v1/investors/export")
     assert r.status_code == 200 and "rounds" in r.text.splitlines()[0]
     r = await c.get(f"/v1/investors/export?ids={inv.id}")

@@ -6,7 +6,6 @@ from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.models.workspace import Membership
 from tests.factories import (
     add_member,
     make_api_key,
@@ -16,6 +15,7 @@ from tests.factories import (
     make_workspace,
     owner_of,
 )
+from wasila.models.workspace import Membership
 
 
 async def test_list_members(db: AsyncSession, session_client: Any, key_client: Any) -> None:

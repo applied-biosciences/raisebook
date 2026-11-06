@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from raisebook.services.privacy_filter import (
+from wasila.services.privacy_filter import (
     REMOVED,
     is_sensitive,
     scrub,

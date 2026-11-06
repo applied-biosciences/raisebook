@@ -9,10 +9,10 @@ import httpx
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.auth.session import SESSION_COOKIE, create_user_session, encode_cookie
-from raisebook.core import clock
-from raisebook.models.user import UserSession
 from tests.factories import add_member, make_api_key, make_user, make_workspace
+from wasila.auth.session import SESSION_COOKIE, create_user_session, encode_cookie
+from wasila.core import clock
+from wasila.models.user import UserSession
 
 
 async def test_session_endpoint_requires_sign_in(client: httpx.AsyncClient) -> None:
@@ -87,7 +87,7 @@ async def test_signout_revokes_session(db: AsyncSession, session_client: Any) ->
     c = await session_client(user)
     r = await c.post("/v1/auth/signout")
     assert r.status_code == 204
-    assert any(h.startswith("rb_session=") for h in r.headers.get_list("set-cookie"))
+    assert any(h.startswith("wsl_session=") for h in r.headers.get_list("set-cookie"))
     row = await db.get(UserSession, c.session_id)
     assert row is not None and row.revoked_at is not None
     assert (await c.get("/v1/auth/session")).status_code == 401
@@ -118,10 +118,10 @@ async def test_session_expiry_slides(
     clock.freeze(frozen_now + timedelta(days=20))
     r = await c.get("/v1/me")  # touch extends to day 50 and refreshes the cookies
     assert r.status_code == 200
-    refreshed = [h for h in r.headers.get_list("set-cookie") if h.startswith("rb_session=")]
+    refreshed = [h for h in r.headers.get_list("set-cookie") if h.startswith("wsl_session=")]
     assert refreshed and "01 Dec 2026" in refreshed[0]  # day 20 + 30 days
     again = await c.get("/v1/me")  # within 5 minutes: no touch, no cookie
-    assert not [h for h in again.headers.get_list("set-cookie") if h.startswith("rb_session=")]
+    assert not [h for h in again.headers.get_list("set-cookie") if h.startswith("wsl_session=")]
     clock.freeze(frozen_now + timedelta(days=45))
     assert (await c.get("/v1/me")).status_code == 200
     row = await db.scalar(select(UserSession).where(UserSession.id == c.session_id))

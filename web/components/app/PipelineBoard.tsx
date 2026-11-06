@@ -869,7 +869,7 @@ function StageColumn({
         return (
           <div
             key={id}
-            className={cn("group/card relative min-w-0 shrink-0", onLongPress && "rb-press")}
+            className={cn("group/card relative min-w-0 shrink-0", onLongPress && "wsl-press")}
             style={{ height: dealCardHeight(view.rows) + CARD_GAP, paddingBottom: CARD_GAP }}
           >
             {selectable ? (

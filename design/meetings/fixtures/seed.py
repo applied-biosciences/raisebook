@@ -67,7 +67,7 @@ def main() -> None:
         "POST",
         "/v1/api-keys",
         ws,
-        json={"name": "Claude Code", "agent_name": "claude-code", "scopes": ["raisebook:read", "raisebook:write"]},
+        json={"name": "Claude Code", "agent_name": "claude-code", "scopes": ["wasila:read", "wasila:write"]},
     )["secret"]
     agent = httpx.Client(
         base_url=a.api,

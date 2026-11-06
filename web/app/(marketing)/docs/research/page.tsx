@@ -68,7 +68,7 @@ export default function ResearchDocs() {
           what it cannot cite goes to a collapsed &ldquo;Unverified&rdquo; section.
         </li>
         <li>
-          <b>Check.</b> Raisebook checks every citation again and strips phones, addresses and private topics before anything is
+          <b>Check.</b> Wasila checks every citation again and strips phones, addresses and private topics before anything is
           saved.
         </li>
       </Ul>
@@ -97,7 +97,7 @@ export default function ResearchDocs() {
 
       <H2>The monthly limit</H2>
       <P>
-        Each workspace has a monthly limit, $25 by default; owners change it. Before every model call Raisebook sets aside that
+        Each workspace has a monthly limit, $25 by default; owners change it. Before every model call Wasila sets aside that
         call&apos;s worst case under the limit, and settles the real cost afterwards, so parallel runs never go over it. A run that
         reaches the limit stops cleanly, keeps what it gathered, and can be resumed. Bulk research shows the count, who is left out
         and the total before you confirm, and offers the part that fits.
@@ -135,7 +135,7 @@ export default function ResearchDocs() {
       </P>
       <Note label="Self-hosting">
         <p>
-          Research needs <C>RAISEBOOK_SECRETS_KEK</C> set on the API and the worker (<C>rbctl secrets gen-kek</C>), and the{" "}
+          Research needs <C>WASILA_SECRETS_KEK</C> set on the API and the worker (<C>wasilactl secrets gen-kek</C>), and the{" "}
           <C>worker</C> service running. Without the key the app works and research says it is unavailable.
         </p>
       </Note>

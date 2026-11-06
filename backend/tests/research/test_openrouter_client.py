@@ -8,10 +8,10 @@ from typing import Any
 import httpx
 import pytest
 
-from raisebook.schemas.dossier import WriterDoc, response_format
-from raisebook.services import openrouter
 from tests.research.openrouter_mock import FAKE_KEY
 from tests.research.pipeline_mock import chat, page
+from wasila.schemas.dossier import WriterDoc, response_format
+from wasila.services import openrouter
 
 
 async def test_search_request_shape_and_annotations(openrouter_mock: Any) -> None:
@@ -40,8 +40,8 @@ async def test_search_request_shape_and_annotations(openrouter_mock: Any) -> Non
     body = json.loads(call.body)
     assert call.path == "/api/v1/chat/completions"
     assert call.headers["authorization"] == f"Bearer {FAKE_KEY}"
-    assert call.headers["x-title"] == "Raisebook"
-    assert call.headers["http-referer"] == "https://raisebook.org"
+    assert call.headers["x-title"] == "Wasila"
+    assert call.headers["http-referer"] == "https://wasila.app"
     assert body["web_search_options"] == {"search_context_size": "medium"}
     assert "plugins" not in body and body["stream"] is False and body["max_tokens"] == 1200
     assert [s.url for s in res.sources] == ["https://harborlight.example/a"]
@@ -65,11 +65,11 @@ async def test_writer_request_shape(openrouter_mock: Any) -> None:
         "anthropic/claude-opus-5.5",
         [{"role": "user", "content": "x"}],
         max_tokens=6000,
-        response_format=response_format("raisebook_dossier_v1", WriterDoc),
+        response_format=response_format("wasila_dossier_v1", WriterDoc),
         temperature=0.2,
     )
     body = json.loads(openrouter_mock.calls[-1].body)
-    assert body["response_format"]["json_schema"]["name"] == "raisebook_dossier_v1"
+    assert body["response_format"]["json_schema"]["name"] == "wasila_dossier_v1"
     assert body["response_format"]["json_schema"]["strict"] is True
     assert body["temperature"] == 0.2 and body["usage"] == {"include": True}
     assert res.usage.cost_micros is None  # the caller prices it and flags it estimated

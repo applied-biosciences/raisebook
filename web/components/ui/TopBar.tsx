@@ -157,7 +157,7 @@ export function TopBar(p: TopBarProps) {
       }
     : null;
 
-  // SANDBOX (fictional data, rb_test_ keys) and VIEW ONLY (viewer role) stay visible at every
+  // SANDBOX (fictional data, wsl_test_ keys) and VIEW ONLY (viewer role) stay visible at every
   // width: beside the workspace name from 640px, on the second row on phones.
   const modeChips =
     ws && (ws.is_sandbox || ws.role === "viewer") ? (
@@ -215,7 +215,7 @@ export function TopBar(p: TopBarProps) {
 
           <div className="ml-auto flex shrink-0 items-center gap-14 2xl:gap-18">
             {nav.length ? (
-              <nav aria-label="Workspace" className="hidden items-center gap-14 lg:flex 2xl:gap-18">
+              <nav aria-label="Workspace" className="hidden items-center gap-12 2xl:flex 2xl:gap-16">
                 {nav.map((n) => {
                   const on = n.key === p.activeNav;
                   return (
@@ -237,7 +237,7 @@ export function TopBar(p: TopBarProps) {
               <Menu
                 label="Navigation"
                 align="end"
-                className="lg:hidden"
+                className="2xl:hidden"
                 trigger="Menu"
                 triggerClassName="inline-flex h-32 items-center rounded-sm border border-line bg-surface px-10 font-medium touch:h-44 touch:px-14"
                 items={[
@@ -342,6 +342,19 @@ function Icon({ d, className }: { d: ReactNode; className?: string }) {
 }
 
 const TAB_ICONS: Record<string, ReactNode> = {
+  // An envelope: outreach.
+  outreach: (
+    <>
+      <rect x="3.5" y="5.5" width="17" height="13" rx="2" />
+      <path d="m4.5 7 7.5 6 7.5-6" />
+    </>
+  ),
+  // A folder: the Funding Room.
+  room: (
+    <>
+      <path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z" />
+    </>
+  ),
   // Columns of a board.
   pipeline: (
     <>
@@ -379,7 +392,7 @@ const TAB_ICONS: Record<string, ReactNode> = {
   ),
 };
 
-const PHONE_TABS = ["pipeline", "overview", "investors", "meetings"];
+const PHONE_TABS = ["pipeline", "investors", "outreach", "room"];
 
 /**
  * The phone chrome (under 640px wide, or under 500px tall): one 48px bar (workspace and round
@@ -415,7 +428,7 @@ function PhoneBar(
 
   // The mode line: dismissible for the sample (the name says "(sample)" anyway), never for
   // View only.
-  const lineKey = ws ? `rb-mode-line:${ws.slug}` : "";
+  const lineKey = ws ? `wsl-mode-line:${ws.slug}` : "";
   const [lineHidden, setLineHidden] = useState(true);
   useEffect(() => {
     try {
@@ -620,7 +633,7 @@ export function AppShell({
       <main
         id="main"
         className={cn(
-          "gutter mx-auto w-full max-w-app pt-16 pb-40 phone:pt-12 tab:pb-[calc(var(--rb-tabbar)+32px)]",
+          "gutter mx-auto w-full max-w-app pt-16 pb-40 phone:pt-12 tab:pb-[calc(var(--wsl-tabbar)+32px)]",
           // A phone on its side: clear of the notch.
           "short:pr-[max(16px,env(safe-area-inset-right))] short:pl-[max(16px,env(safe-area-inset-left))]",
           className,

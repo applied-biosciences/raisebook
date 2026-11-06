@@ -1,5 +1,5 @@
 name: Bug report
-description: Something in Raisebook is broken or behaves unexpectedly.
+description: Something in Wasila is broken or behaves unexpectedly.
 labels: [bug]
 body:
   - type: markdown
@@ -26,7 +26,7 @@ body:
     attributes:
       label: Where
       options:
-        - raisebook.org (web app)
+        - wasila.app (web app)
         - MCP server / agent
         - REST API
         - Self-hosted copy

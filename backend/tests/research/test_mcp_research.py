@@ -10,9 +10,9 @@ from typing import Any
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.models.research import Dossier
 from tests.research.helpers import AGENT, agent_doc, research_world, run_jobs
 from tests.research.pipeline_mock import AMBIGUOUS, LINKEDIN, NAME, SITE, Script
+from wasila.models.research import Dossier
 
 
 async def test_research_investor_runs_and_reports(

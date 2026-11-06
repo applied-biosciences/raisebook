@@ -8,18 +8,18 @@ from typing import Any
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.models.activity import Activity
-from raisebook.models.investor import Investor
-from raisebook.models.round import Round, RoundParticipant, RoundStage
-from raisebook.models.workspace import Membership, Workspace
-from raisebook.services.workspaces import (
+from tests.factories import add_member, make_api_key, make_user, make_workspace, owner_of
+from wasila.models.activity import Activity
+from wasila.models.investor import Investor
+from wasila.models.round import Round, RoundParticipant, RoundStage
+from wasila.models.workspace import Membership, Workspace
+from wasila.services.workspaces import (
     LEGACY_ZONES,
     canonical_timezone,
     clean_timezone,
     new_workspace_slug,
     slugify,
 )
-from tests.factories import add_member, make_api_key, make_user, make_workspace, owner_of
 
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{1,46}[a-z0-9]$")
 
@@ -83,7 +83,7 @@ async def test_get_workspace_for_session_and_key(
     assert body["you"] == {
         "type": "user",
         "role": "owner",
-        "scopes": ["raisebook:read", "raisebook:write", "raisebook:admin"],
+        "scopes": ["wasila:read", "wasila:write", "wasila:admin"],
         "agent_name": None,
         "key_prefix": None,
     }
@@ -91,7 +91,7 @@ async def test_get_workspace_for_session_and_key(
     _, raw = await make_api_key(db, ws, scopes="read", name="Reader", agent_name="cursor")
     body = (await key_client(raw).get("/v1/workspace")).json()
     assert body["you"]["type"] == "agent" and body["you"]["agent_name"] == "cursor"
-    assert body["you"]["scopes"] == ["raisebook:read"] and body["role"] is None
+    assert body["you"]["scopes"] == ["wasila:read"] and body["role"] is None
 
 
 async def test_update_workspace(db: AsyncSession, session_client: Any) -> None:
@@ -159,9 +159,9 @@ async def test_editor_cannot_update_workspace(db: AsyncSession, session_client: 
     r = await (await session_client(editor, ws)).patch("/v1/workspace", json={"name": "No"})
     assert r.status_code == 403 and r.json()["error"]["code"] == "forbidden_role"
     assert r.json()["error"]["details"]["required"] == [
-        "raisebook:read",
-        "raisebook:write",
-        "raisebook:admin",
+        "wasila:read",
+        "wasila:write",
+        "wasila:admin",
     ]
 
 
@@ -226,10 +226,10 @@ async def test_sample_workspace(db: AsyncSession, session_client: Any, frozen_no
     )
     assert ("agent", "claude-code", "claude-opus-4-5") in actors
     assert ("user", None, None) in actors
-    # A sandbox gets rb_test_ keys.
+    # A sandbox gets wsl_test_ keys.
     owner_c = await session_client(user, ws["slug"])
     key = (await owner_c.post("/v1/api-keys", json={"name": "demo"})).json()
-    assert key["secret"].startswith("rb_test_")
+    assert key["secret"].startswith("wsl_test_")
 
 
 async def test_workspace_row_counts_only_for_members(db: AsyncSession) -> None:

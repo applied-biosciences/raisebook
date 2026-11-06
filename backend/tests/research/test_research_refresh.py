@@ -10,12 +10,12 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.core import clock
-from raisebook.models.round import RoundParticipant
-from raisebook.services.dossiers import fact_ids, is_stale, meeting_refresh_offer
 from tests.factories import stages_of
 from tests.research.helpers import research_world, run_jobs
 from tests.research.pipeline_mock import LINKEDIN, SITE, Script, page
+from wasila.core import clock
+from wasila.models.round import RoundParticipant
+from wasila.services.dossiers import fact_ids, is_stale, meeting_refresh_offer
 
 
 def test_diff_keys_match_rewordings_of_the_same_page() -> None:

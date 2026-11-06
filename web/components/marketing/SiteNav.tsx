@@ -10,8 +10,8 @@ import { REPO_URL } from "./site";
 const LINKS: { href: string; label: string; match: (p: string) => boolean; wide?: boolean }[] = [
   { href: "/docs", label: "Docs", match: (p: string) => p === "/docs" || (p.startsWith("/docs/") && !p.startsWith("/docs/mcp")) },
   { href: "/docs/mcp", label: "MCP", match: (p: string) => p.startsWith("/docs/mcp") },
-  { href: "/compare", label: "Compare", match: (p: string) => p.startsWith("/compare") },
-  { href: "/pricing", label: "Pricing", match: (p: string) => p === "/pricing" },
+  { href: "/faq", label: "FAQ", match: (p: string) => p === "/faq" },
+  { href: "/changelog", label: "Changelog", match: (p: string) => p === "/changelog" },
   { href: "/privacy", label: "Privacy", match: (p: string) => p === "/privacy", wide: true },
 ];
 

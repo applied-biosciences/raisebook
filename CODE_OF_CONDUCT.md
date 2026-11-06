@@ -1,6 +1,6 @@
 # Code of Conduct
 
-Raisebook is built by founders and developers who want a useful tool to stay free. Everyone
+Wasila is built by founders and developers who want a useful tool to stay free. Everyone
 taking part in the project (issues, pull requests, discussions, reviews and any other project
 space) agrees to keep it a place where people can do good work together.
 
@@ -28,7 +28,7 @@ Maintainers may edit or remove comments, commits, issues and pull requests that 
 code, and may warn, temporarily ban or permanently ban anyone who breaks it, depending on what
 happened and whether it happened before.
 
-Report a problem to 0@raisebook.org. Reports are handled privately, and the reporter's
+Report a problem to hello@wasila.app. Reports are handled privately, and the reporter's
 identity is not shared without their consent. Maintainers who are involved in a report step
 away from handling it.
 

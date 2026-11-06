@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 /* =====================================================================
-   Raisebook "The Desk" tokens. Binding spec: design/SYSTEM.md §1.
+   Wasila "The Desk" tokens. Binding spec: design/SYSTEM.md §1.
+   Wasila brand palette (v1.0.0.0): primary #0000FF, light #B9D9EB, sky #00A1EB, gold #E5C100.
    Hex values live here and nowhere else. Components use the Tailwind
    utilities mapped below (bg-surface, text-muted, bg-stage-teal …).
    Tailwind's default palette does not exist (--color-*: initial).
@@ -11,17 +12,17 @@
 
 :root,
 [data-theme="light"] {
-  --canvas: #f3f5f8;
+  --canvas: #f4f8fb;
   --surface: #ffffff;
-  --sunk: #e8ecf2;
-  --line: #d5dce6;
-  --fg: #16202e;
+  --sunk: #e7f0f6;
+  --line: #cfdfea;
+  --fg: #0d1a33;
   --muted: #5b6778;
   /* faint is ~3:1. Placeholders, disabled, decorative dots only; never meaningful text. */
   --faint: #8994a5;
-  --accent: #2f55d4;
+  --accent: #0000ff;
   --accent-ink: #ffffff;
-  --accent-soft: #e3e9fb;
+  --accent-soft: #e1eef6;
 
   --hot: #c2410c;
   --hot-soft: #fde7db;
@@ -45,16 +46,23 @@
 
   --stage-slate: #8994a5;
   --stage-violet: #7c5cd6;
-  --stage-cobalt: #2f55d4;
+  --stage-cobalt: #0000ff;
   --stage-teal: #0e8a9e;
   --stage-amber: #b7791f;
   --stage-orange: #c2410c;
   --stage-green: #15803d;
   --stage-gray: #9aa3b0;
   --stage-olive: #65731a;
-  --stage-sky: #0369a1;
+  --stage-sky: #0077b0;
   /* Text on a funnel segment: white in light mode, canvas in dark mode. */
   --on-stage: #ffffff;
+
+  /* Brand (SYSTEM §1.1, Wasila): fills and marks only; text uses --accent / --fg. */
+  --brand-primary: #0000ff;
+  --brand-light: #b9d9eb;
+  --brand-sky: #00a1eb;
+  --brand-gold: #e5c100;
+  --brand-gold-ink: #6b5a00;
 
   --scrim: rgb(10 15 25 / 0.35);
   color-scheme: light;
@@ -62,16 +70,16 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --canvas: #0f141c;
-    --surface: #171e29;
-    --sunk: #1d2532;
-    --line: #2a3444;
+    --canvas: #0b1120;
+    --surface: #121a2e;
+    --sunk: #18223a;
+    --line: #26324d;
     --fg: #e6ebf2;
     --muted: #9aa6b8;
     --faint: #6e7a8c;
-    --accent: #7c9bff;
-    --accent-ink: #0f141c;
-    --accent-soft: #1f2a4a;
+    --accent: #00a1eb;
+    --accent-ink: #0b1120;
+    --accent-soft: #0d2a44;
 
     --hot: #ff8a5b;
     --hot-soft: #3a2218;
@@ -92,15 +100,21 @@
 
     --stage-slate: #8c98aa;
     --stage-violet: #a78bfa;
-    --stage-cobalt: #7c9bff;
+    --stage-cobalt: #5c7cff;
     --stage-teal: #38c6da;
     --stage-amber: #f0b54e;
     --stage-orange: #ff8a5b;
     --stage-green: #4ade80;
     --stage-gray: #5e6878;
     --stage-olive: #b5c752;
-    --stage-sky: #56b6f0;
-    --on-stage: #0f141c;
+    --stage-sky: #00a1eb;
+    --on-stage: #0b1120;
+
+    --brand-primary: #0000ff;
+    --brand-light: #b9d9eb;
+    --brand-sky: #00a1eb;
+    --brand-gold: #e5c100;
+    --brand-gold-ink: #e5c100;
 
     --scrim: rgb(0 0 0 / 0.55);
     color-scheme: dark;
@@ -111,16 +125,16 @@
    lets /design render a dark specimen next to a light one. */
 :root[data-theme="dark"],
 [data-theme="dark"] {
-  --canvas: #0f141c;
-  --surface: #171e29;
-  --sunk: #1d2532;
-  --line: #2a3444;
+  --canvas: #0b1120;
+  --surface: #121a2e;
+  --sunk: #18223a;
+  --line: #26324d;
   --fg: #e6ebf2;
   --muted: #9aa6b8;
   --faint: #6e7a8c;
-  --accent: #7c9bff;
-  --accent-ink: #0f141c;
-  --accent-soft: #1f2a4a;
+  --accent: #00a1eb;
+  --accent-ink: #0b1120;
+  --accent-soft: #0d2a44;
 
   --hot: #ff8a5b;
   --hot-soft: #3a2218;
@@ -141,17 +155,23 @@
 
   --stage-slate: #8c98aa;
   --stage-violet: #a78bfa;
-  --stage-cobalt: #7c9bff;
+  --stage-cobalt: #5c7cff;
   --stage-teal: #38c6da;
   --stage-amber: #f0b54e;
   --stage-orange: #ff8a5b;
   --stage-green: #4ade80;
   --stage-gray: #5e6878;
   --stage-olive: #b5c752;
-  --stage-sky: #56b6f0;
-  --on-stage: #0f141c;
+  --stage-sky: #00a1eb;
+  --on-stage: #0b1120;
 
-  --scrim: rgb(0 0 0 / 0.55);
+  --brand-primary: #0000ff;
+    --brand-light: #b9d9eb;
+    --brand-sky: #00a1eb;
+    --brand-gold: #e5c100;
+    --brand-gold-ink: #e5c100;
+
+    --scrim: rgb(0 0 0 / 0.55);
   color-scheme: dark;
 }
 
@@ -176,11 +196,11 @@
 
   /* Height of the phone's bottom tab bar (0 where there is none). Fixed things that sit at
      the bottom (the + button, toasts, the name banner) stand on it. */
-  --rb-tabbar: 0px;
+  --wsl-tabbar: 0px;
 }
 @media (max-width: 639px) and (min-height: 500px) {
   :root {
-    --rb-tabbar: calc(56px + env(safe-area-inset-bottom));
+    --wsl-tabbar: calc(56px + env(safe-area-inset-bottom));
   }
 }
 
@@ -198,7 +218,7 @@
 @custom-variant tab (@media (max-width: 639px) and (min-height: 500px));
 @custom-variant touch (@media (pointer: coarse));
 
-/* ---------- Tailwind theme: only Raisebook tokens exist ---------- */
+/* ---------- Tailwind theme: only Wasila tokens exist ---------- */
 @theme {
   --color-*: initial;
   --shadow-*: initial;
@@ -302,6 +322,11 @@
   --color-stage-olive: var(--stage-olive);
   --color-stage-sky: var(--stage-sky);
   --color-on-stage: var(--on-stage);
+  --color-brand: var(--brand-primary);
+  --color-brand-light: var(--brand-light);
+  --color-brand-sky: var(--brand-sky);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-gold-ink: var(--brand-gold-ink);
   --color-scrim: var(--scrim);
   --color-code-bg: var(--code-bg);
   --color-code-fg: var(--code-fg);
@@ -315,6 +340,7 @@
 
   --font-display: var(--f-display), "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
   --font-body: var(--f-body), "IBM Plex Sans", "Segoe UI", sans-serif;
+  --font-arabic: var(--f-arabic), "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
   --font-mono: var(--f-mono), "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 
@@ -532,7 +558,7 @@
 }
 
 /* ---------- motion (SYSTEM §1.7) ---------- */
-@keyframes rb-sheet-in {
+@keyframes wsl-sheet-in {
   from {
     transform: translateX(100%);
   }
@@ -540,7 +566,7 @@
     transform: translateX(0);
   }
 }
-@keyframes rb-sheet-up {
+@keyframes wsl-sheet-up {
   from {
     transform: translateY(100%);
   }
@@ -548,7 +574,7 @@
     transform: translateY(0);
   }
 }
-@keyframes rb-fade-in {
+@keyframes wsl-fade-in {
   from {
     opacity: 0;
   }
@@ -557,13 +583,13 @@
   }
 }
 @utility anim-sheet {
-  animation: rb-sheet-in 180ms var(--ease-sheet);
+  animation: wsl-sheet-in 180ms var(--ease-sheet);
 }
 @utility anim-sheet-up {
-  animation: rb-sheet-up 200ms var(--ease-sheet);
+  animation: wsl-sheet-up 200ms var(--ease-sheet);
 }
 @utility anim-fade {
-  animation: rb-fade-in 150ms ease-out;
+  animation: wsl-fade-in 150ms ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -581,7 +607,7 @@ dialog::backdrop {
 }
 
 /* Select chevron (SYSTEM 3.2): a CSS-drawn caret, no icon. */
-.rb-select {
+.wsl-select {
   appearance: none;
   background-image:
     linear-gradient(45deg, transparent 50%, var(--muted) 50%),
@@ -596,11 +622,11 @@ dialog::backdrop {
 }
 
 /* Tooltip (CSS only, see components/ui/Tooltip.tsx). */
-.rb-tip {
+.wsl-tip {
   position: relative;
   display: inline-flex;
 }
-.rb-tip > [role="tooltip"] {
+.wsl-tip > [role="tooltip"] {
   position: absolute;
   z-index: 60;
   left: 50%;
@@ -623,21 +649,21 @@ dialog::backdrop {
     opacity 120ms ease-out,
     visibility 0s linear 120ms;
 }
-.rb-tip[data-side="bottom"] > [role="tooltip"] {
+.wsl-tip[data-side="bottom"] > [role="tooltip"] {
   bottom: auto;
   top: calc(100% + 6px);
 }
-.rb-tip[data-align="end"] > [role="tooltip"] {
+.wsl-tip[data-align="end"] > [role="tooltip"] {
   left: auto;
   right: 0;
   transform: none;
 }
-.rb-tip[data-align="start"] > [role="tooltip"] {
+.wsl-tip[data-align="start"] > [role="tooltip"] {
   left: 0;
   transform: none;
 }
-.rb-tip:hover > [role="tooltip"],
-.rb-tip:focus-within > [role="tooltip"] {
+.wsl-tip:hover > [role="tooltip"],
+.wsl-tip:focus-within > [role="tooltip"] {
   opacity: 1;
   visibility: visible;
   transition-delay: 300ms, 300ms;
@@ -660,29 +686,29 @@ dialog::backdrop {
     min-height: 44px;
   }
   /* Form fields (Input/Select with the default tone and size) are 44px tall to the finger. */
-  .rb-field {
+  .wsl-field {
     min-height: 44px;
   }
   /* Editable fit pips: a 7x14 pip is too small for a finger. */
-  .rb-fit-pip {
+  .wsl-fit-pip {
     min-width: 36px;
     min-height: 44px;
   }
   /* ...and the pip inside grows with it: a 6x12 tick in a 36px slot read as five loose
      specks, not one meter. Wide bars with even gaps read as a five-step scale. */
-  .rb-fit-pip > i {
+  .wsl-fit-pip > i {
     width: 28px;
     height: 10px;
     border-radius: 3px;
   }
   /* Long-press targets (board cards, phone list rows): no text selection or iOS callout
      racing the "Move to…" sheet. */
-  .rb-press {
+  .wsl-press {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
   }
-  .rb-fit-clear {
+  .wsl-fit-clear {
     opacity: 1;
   }
 }
@@ -690,7 +716,7 @@ dialog::backdrop {
 /* A phone with the keyboard up: the sheet's Log / Follow-up / Move bar would sit on top of
    the keyboard and take a third of what is left. It steps aside while a field has focus. */
 @media (max-width: 639px), (max-height: 499px) {
-  .rb-sheet:has(:is(textarea, input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]), [contenteditable="true"]):focus) .rb-sheet-foot {
+  .wsl-sheet:has(:is(textarea, input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]), [contenteditable="true"]):focus) .wsl-sheet-foot {
     display: none;
   }
 }
@@ -698,27 +724,27 @@ dialog::backdrop {
 /* Tables that become cards on a phone (<Table stack>): no sideways scroll inside a 356px box.
    The first cell runs across the top; the rest sit in two columns under their column's name. */
 @media (max-width: 639px) {
-  table.rb-stack {
+  table.wsl-stack {
     display: block;
     min-width: 0 !important;
   }
-  table.rb-stack > thead {
+  table.wsl-stack > thead {
     display: none;
   }
-  table.rb-stack > tbody {
+  table.wsl-stack > tbody {
     display: block;
   }
-  table.rb-stack > tbody > tr {
+  table.wsl-stack > tbody > tr {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 8px 12px;
     padding: 12px 14px;
     border-bottom: 1px solid var(--line);
   }
-  table.rb-stack > tbody > tr:last-child {
+  table.wsl-stack > tbody > tr:last-child {
     border-bottom: 0;
   }
-  table.rb-stack > tbody > tr > td {
+  table.wsl-stack > tbody > tr > td {
     display: block;
     min-width: 0;
     border: 0 !important;
@@ -727,11 +753,11 @@ dialog::backdrop {
     white-space: normal;
     box-shadow: none !important;
   }
-  table.rb-stack > tbody > tr > td:first-child,
-  table.rb-stack > tbody > tr > td[colspan] {
+  table.wsl-stack > tbody > tr > td:first-child,
+  table.wsl-stack > tbody > tr > td[colspan] {
     grid-column: 1 / -1;
   }
-  table.rb-stack > tbody > tr > td:not(:first-child)[data-label]:not([data-label=""])::before {
+  table.wsl-stack > tbody > tr > td:not(:first-child)[data-label]:not([data-label=""])::before {
     content: attr(data-label);
     display: block;
     margin-bottom: 2px;
@@ -742,7 +768,7 @@ dialog::backdrop {
     text-transform: uppercase;
     color: var(--muted);
   }
-  table.rb-stack > tbody > tr > td:empty {
+  table.wsl-stack > tbody > tr > td:empty {
     display: none;
   }
 }
@@ -754,4 +780,15 @@ dialog::backdrop {
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
   text-decoration-color: color-mix(in oklab, currentColor 45%, transparent);
+}
+
+/* ---------- bilingual scaffolding (Wasila v1.0.0.0) ----------
+   <html lang dir> comes from the locale cookie (lib/i18n). Arabic text uses IBM Plex Sans
+   Arabic. Components should prefer logical properties (ms-/me-/ps-/pe-, start/end) so the
+   layout mirrors when dir="rtl"; translation itself is a later release. */
+:root[dir="rtl"] body {
+  font-family: var(--font-arabic);
+}
+:root[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
 }

@@ -13,15 +13,15 @@ import pytest
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.config import reset_settings_cache
-from raisebook.core import ratelimit, secrets
-from raisebook.core.errors import NoAiKey
-from raisebook.models.ai import WorkspaceAiSettings
-from raisebook.services import ai_settings as ai_svc
-from raisebook.services import jobs as jobs_svc
 from tests.factories import add_member, make_api_key, make_investor, make_workspace, owner_of
 from tests.research.fixtures_models import PRESET_IDS
 from tests.research.openrouter_mock import FAKE_KEY, OTHER_FAKE_KEY, OpenRouterMock
+from wasila.config import reset_settings_cache
+from wasila.core import ratelimit, secrets
+from wasila.core.errors import NoAiKey
+from wasila.models.ai import WorkspaceAiSettings
+from wasila.services import ai_settings as ai_svc
+from wasila.services import jobs as jobs_svc
 
 KEY_COLUMNS = (
     "key_ciphertext",
@@ -39,13 +39,11 @@ KEY_COLUMNS = (
 @contextmanager
 def kek_env(current: str | None, previous: str | None = None) -> Iterator[None]:
     """Swap the server KEK for the duration (settings are cached: reset around it)."""
-    saved = {
-        k: os.environ.get(k) for k in ("RAISEBOOK_SECRETS_KEK", "RAISEBOOK_SECRETS_KEK_PREVIOUS")
-    }
+    saved = {k: os.environ.get(k) for k in ("WASILA_SECRETS_KEK", "WASILA_SECRETS_KEK_PREVIOUS")}
     try:
         for k, v in (
-            ("RAISEBOOK_SECRETS_KEK", current),
-            ("RAISEBOOK_SECRETS_KEK_PREVIOUS", previous),
+            ("WASILA_SECRETS_KEK", current),
+            ("WASILA_SECRETS_KEK_PREVIOUS", previous),
         ):
             if v is None:
                 os.environ.pop(k, None)
@@ -127,7 +125,7 @@ async def test_save_key_validates_seals_and_shows_last4_only(
     # OpenRouter checked the key with it as a bearer token, then the models list.
     key_call = next(call for call in openrouter_mock.calls if call.path.endswith("/key"))
     assert key_call.headers["authorization"] == f"Bearer {FAKE_KEY}"
-    assert key_call.headers["x-title"] == "Raisebook"
+    assert key_call.headers["x-title"] == "Wasila"
     models_call = next(call for call in openrouter_mock.calls if call.path.endswith("/models"))
     assert "authorization" not in models_call.headers  # the public list needs no key
     row = await settings_row(db, ws)

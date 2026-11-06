@@ -37,7 +37,7 @@ export function HeroDesk({ className }: { className?: string }) {
       >
         {/* A miniature of the app top bar. */}
         <div className="flex h-44 items-center gap-14 border-b border-line px-14 whitespace-nowrap [&>*]:shrink-0">
-          <span className="font-display text-[17px] font-bold tracking-[-0.02em]">Raisebook</span>
+          <span className="font-display text-[17px] font-bold tracking-[-0.02em]">Wasila</span>
           <span className="text-sm text-muted">{WORKSPACE} ▾</span>
           <span className="inline-flex items-center gap-2 rounded-pill bg-sunk p-3 text-sm">
             <span className="rounded-pill bg-surface px-10 py-2 font-medium shadow-pill">Seed</span>

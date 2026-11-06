@@ -24,7 +24,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <Link href="/docs" className="hover:text-fg">
             Docs
           </Link>
-          <span>raisebook.org</span>
+          <span>wasila.app</span>
         </span>
       </footer>
     </div>

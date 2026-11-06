@@ -10,9 +10,9 @@ import structlog
 from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.core.actor import clean_agent_model, clean_agent_name
-from raisebook.core.logging import hash_email, redact_secrets, redact_text
 from tests.factories import make_user
+from wasila.core.actor import clean_agent_model, clean_agent_name
+from wasila.core.logging import hash_email, redact_secrets, redact_text
 
 
 async def test_validation_error_envelope(client: httpx.AsyncClient) -> None:
@@ -89,7 +89,7 @@ def test_redaction() -> None:
         None,
         "info",
         {
-            "event": "x Bearer rb_live_abcdefghijklmnop and a@example.com",
+            "event": "x Bearer wsl_live_abcdefghijklmnop and a@example.com",
             "token": "t",
             "email": "dana@example.com",
             "authorization": "Bearer x",
@@ -97,7 +97,7 @@ def test_redaction() -> None:
             "count": 3,
         },
     )
-    assert "rb_live_abcdef" not in event["event"] and "a@example.com" not in event["event"]
+    assert "wsl_live_abcdef" not in event["event"] and "a@example.com" not in event["event"]
     assert event["token"] == "[REDACTED]" and event["email"] == "[REDACTED]"
     assert event["nested"] == {"api_key": "[REDACTED]", "ok": "fine", "note": "[REDACTED]"}
     assert event["count"] == 3
@@ -112,7 +112,7 @@ async def test_access_log_has_no_pii(
 ) -> None:
     import logging
 
-    from raisebook.core.logging import configure_logging
+    from wasila.core.logging import configure_logging
 
     configure_logging("INFO", json=True)
     structlog.reset_defaults()

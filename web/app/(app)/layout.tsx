@@ -17,7 +17,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const result = await getSession();
 
   if (result.status === "signed_out") {
-    const path = (await headers()).get("x-rb-path");
+    const path = (await headers()).get("x-wsl-path");
     redirect(path && path.startsWith("/") && !path.startsWith("//") ? `/signin?next=${encodeURIComponent(path)}` : "/signin");
   }
 
@@ -27,7 +27,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <Wordmark size={22} href="/" />
         <EmptyState
           className="mt-32"
-          title="Raisebook can't reach its API right now"
+          title="Wasila can't reach its API right now"
           actions={<ButtonLink href="/app">Try again</ButtonLink>}
         >
           {result.error.message}{" "}
@@ -35,7 +35,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           {process.env.NODE_ENV !== "production" ? (
             <>
               {" "}
-              In development, start it with <code className="text-sm">uv run uvicorn --factory raisebook.main:create_app</code> (expected at{" "}
+              In development, start it with <code className="text-sm">uv run uvicorn --factory wasila.main:create_app</code> (expected at{" "}
               <code className="text-sm">{API_URL}</code>).
             </>
           ) : null}

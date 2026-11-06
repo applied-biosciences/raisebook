@@ -9,17 +9,17 @@ from typing import Any
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.auth.principal import Principal, WorkspaceContext, WorkspaceInfo
-from raisebook.auth.scopes import ROLE_SCOPES
-from raisebook.core.actor import user_actor
-from raisebook.core.errors import Duplicate, LimitReached
-from raisebook.core.refs import resolve_stage
-from raisebook.models.enums import ActorType, Role, Via
-from raisebook.models.imports import ImportRun
-from raisebook.services import activities, investors, participants
-from raisebook.services.stages import stages_for
 from tests.api.helpers import activities_of, participant
 from tests.factories import make_round, make_workspace, owner_of
+from wasila.auth.principal import Principal, WorkspaceContext, WorkspaceInfo
+from wasila.auth.scopes import ROLE_SCOPES
+from wasila.core.actor import user_actor
+from wasila.core.errors import Duplicate, LimitReached
+from wasila.core.refs import resolve_stage
+from wasila.models.enums import ActorType, Role, Via
+from wasila.models.imports import ImportRun
+from wasila.services import activities, investors, participants
+from wasila.services.stages import stages_for
 
 
 async def ctx_for(db: AsyncSession, **kw: Any) -> tuple[Any, WorkspaceContext]:
@@ -147,7 +147,7 @@ async def test_last_activity_bump(db: AsyncSession, frozen_now: Any) -> None:
 
 
 async def test_investor_limit(db: AsyncSession, frozen_now: Any, monkeypatch: Any) -> None:
-    from raisebook.services import workspaces
+    from wasila.services import workspaces
 
     _, ctx = await ctx_for(db)
     monkeypatch.setitem(workspaces.LIMITS, "investors", 1)

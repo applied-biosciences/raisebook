@@ -108,7 +108,7 @@ export const CARDS: SampleCard[] = [
 
 const agent = { type: "agent", label: "claude-code", agent_model: "claude-opus-4-5", via: "mcp" } as const;
 const user = { type: "user", label: "Sam Rivera", via: "web" } as const;
-const system = { type: "system", label: "Raisebook", via: "system" } as const;
+const system = { type: "system", label: "Wasila", via: "system" } as const;
 
 function act(
   id: string,
@@ -161,24 +161,24 @@ export const MCP_SNIPPETS = [
   {
     label: "Claude Code",
     lang: "shell" as const,
-    code: `claude mcp add --transport http raisebook https://api.raisebook.org/mcp \\
-  --header "Authorization: Bearer rb_live_…" --header "X-Agent-Name: claude-code"`,
-    caption: "Run in your terminal. Replace rb_live_… with your key.",
+    code: `claude mcp add --transport http wasila https://api.wasila.app/mcp \\
+  --header "Authorization: Bearer wsl_live_…" --header "X-Agent-Name: claude-code"`,
+    caption: "Run in your terminal. Replace wsl_live_… with your key.",
   },
   {
     label: "Codex",
     lang: "toml" as const,
-    code: `[mcp_servers.raisebook]
-url = "https://api.raisebook.org/mcp"
-bearer_token_env_var = "RAISEBOOK_API_KEY"
+    code: `[mcp_servers.wasila]
+url = "https://api.wasila.app/mcp"
+bearer_token_env_var = "WASILA_API_KEY"
 http_headers = { "X-Agent-Name" = "codex" }`,
     caption: "~/.codex/config.toml",
   },
   {
     label: "Cursor",
     lang: "json" as const,
-    code: `{"mcpServers": {"raisebook": {"url": "https://api.raisebook.org/mcp",
-  "headers": {"Authorization": "Bearer \${env:RAISEBOOK_API_KEY}", "X-Agent-Name": "cursor"}}}}`,
+    code: `{"mcpServers": {"wasila": {"url": "https://api.wasila.app/mcp",
+  "headers": {"Authorization": "Bearer \${env:WASILA_API_KEY}", "X-Agent-Name": "cursor"}}}}`,
     caption: ".cursor/mcp.json or ~/.cursor/mcp.json",
   },
 ];

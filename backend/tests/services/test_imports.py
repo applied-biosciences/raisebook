@@ -12,18 +12,6 @@ import pytest
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.auth.principal import Principal, WorkspaceContext, WorkspaceInfo
-from raisebook.auth.scopes import ROLE_SCOPES
-from raisebook.core.actor import user_actor
-from raisebook.core.errors import ImportInvalid, LimitReached, NotFound
-from raisebook.models.activity import Activity
-from raisebook.models.enums import ActorType, Role
-from raisebook.models.imports import ImportRun
-from raisebook.models.investor import Investor
-from raisebook.models.round import RoundParticipant, RoundStage
-from raisebook.schemas.data import ImportRequest, RoundMapEntry
-from raisebook.services import exports, imports
-from raisebook.services.workspaces import LIMITS
 from tests.factories import (
     add_member,
     make_investor,
@@ -32,6 +20,18 @@ from tests.factories import (
     make_workspace,
     owner_of,
 )
+from wasila.auth.principal import Principal, WorkspaceContext, WorkspaceInfo
+from wasila.auth.scopes import ROLE_SCOPES
+from wasila.core.actor import user_actor
+from wasila.core.errors import ImportInvalid, LimitReached, NotFound
+from wasila.models.activity import Activity
+from wasila.models.enums import ActorType, Role
+from wasila.models.imports import ImportRun
+from wasila.models.investor import Investor
+from wasila.models.round import RoundParticipant, RoundStage
+from wasila.schemas.data import ImportRequest, RoundMapEntry
+from wasila.services import exports, imports
+from wasila.services.workspaces import LIMITS
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures"
 

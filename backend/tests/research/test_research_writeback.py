@@ -9,11 +9,11 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.models.activity import Activity
-from raisebook.models.research import FieldSuggestion
-from raisebook.models.round import RoundParticipant
 from tests.factories import make_investor, make_participant
 from tests.research.helpers import AGENT, agent_doc, research_world
+from wasila.models.activity import Activity
+from wasila.models.research import FieldSuggestion
+from wasila.models.round import RoundParticipant
 
 
 def doc_with(suggestions: dict[str, Any], verdict: str = "possible") -> dict[str, Any]:

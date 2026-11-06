@@ -335,3 +335,38 @@ async def test_a_key_cannot_reach_b(
 
     await CASES[tool](call, t)
     assert await snapshot_b(db, t) == before
+
+
+# --- Wasila v1.0.0.0 tools --------------------------------------------------------------------
+
+
+@case("list_funding_room")
+async def _room(call: Call, t: Two) -> None:
+    res = await call("list_funding_room", {"jurisdiction": "ksa"})
+    clean(res, t)
+    assert res.data["documents"] == []
+
+
+@case("search_master_list")
+async def _master(call: Call, t: Two) -> None:
+    for q in ("Blake", "quill"):
+        res = await call("search_master_list", {"query": q})
+        clean(res, t)
+        assert res.data["total"] == 0
+    clean(await call("search_master_list", {}), t)
+
+
+@case("draft_outreach")
+async def _draft(call: Call, t: Two) -> None:
+    for ref in b_investor_refs(t):
+        not_found(await call("draft_outreach", {"investor": ref, "subject": "x", "body": "x"}))
+    res = await call(
+        "draft_outreach",
+        {
+            "investor": str(t.a_inv.id),
+            "subject": "x",
+            "body": "x",
+            "attachment_ids": [str(t.bw["doc"].id)],
+        },
+    )
+    assert not res.ok

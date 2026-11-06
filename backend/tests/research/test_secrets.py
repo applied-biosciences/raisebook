@@ -10,10 +10,10 @@ from dataclasses import replace
 
 import pytest
 
-from raisebook.config import Settings
-from raisebook.core import secrets
-from raisebook.core.logging import redact_secrets, redact_text
 from tests.research.openrouter_mock import FAKE_KEY
+from wasila.config import Settings
+from wasila.core import secrets
+from wasila.core.logging import redact_secrets, redact_text
 
 
 def kek(kek_id: str = "k1") -> secrets.Kek:
@@ -124,7 +124,7 @@ def test_keyring_from_settings() -> None:
 
 
 def test_malformed_kek_fails_app_startup(monkeypatch: pytest.MonkeyPatch) -> None:
-    from raisebook.main import create_app
+    from wasila.main import create_app
 
     with pytest.raises(secrets.SecretsConfigError):
         create_app(Settings(secrets_kek="k1:dG9vLXNob3J0"))
@@ -157,5 +157,5 @@ def test_openrouter_keys_redacted_from_logs(caplog: pytest.LogCaptureFixture) ->
     assert FAKE_KEY not in flat and "k1:abc" not in flat
     assert event["openrouter_key"] == "[REDACTED]"
     with caplog.at_level(logging.WARNING):
-        logging.getLogger("raisebook.test").warning("no key here")
+        logging.getLogger("wasila.test").warning("no key here")
     assert FAKE_KEY not in caplog.text

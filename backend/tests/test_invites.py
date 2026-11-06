@@ -9,9 +9,6 @@ import httpx
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.core import clock
-from raisebook.core.ratelimit import LIMITS, Limit
-from raisebook.models.workspace import Invite, Membership
 from tests.factories import (
     add_member,
     make_api_key,
@@ -20,6 +17,9 @@ from tests.factories import (
     make_workspace,
     owner_of,
 )
+from wasila.core import clock
+from wasila.core.ratelimit import LIMITS, Limit
+from wasila.models.workspace import Invite, Membership
 
 
 async def owner_client(db: AsyncSession, session_client: Any) -> tuple[Any, Any, Any]:
@@ -39,7 +39,7 @@ async def test_owner_invites_and_email_is_sent(
     assert body["invited_by"] == owner.name
     assert body["dev_link"].startswith("http://localhost:3000/invite/")
     assert len(outbox) == 1 and outbox[0].to == "cofounder@example.com"
-    assert outbox[0].subject == "You're invited to a workspace on Raisebook"
+    assert outbox[0].subject == "You're invited to a workspace on Wasila"
     assert '"Tallow"' in outbox[0].text and body["dev_link"] in outbox[0].text
     listed = (await c.get("/v1/invites")).json()["data"]
     assert [i["id"] for i in listed] == [body["id"]] and "dev_link" not in listed[0]

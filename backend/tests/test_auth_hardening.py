@@ -10,10 +10,10 @@ from urllib.parse import parse_qs, urlsplit
 import httpx
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.auth.session import SESSION_COOKIE
-from raisebook.core import clock
-from raisebook.core.ratelimit import LIMITS, Limit
 from tests.factories import make_user, make_workspace, owner_of
+from wasila.auth.session import SESSION_COOKIE
+from wasila.core import clock
+from wasila.core.ratelimit import LIMITS, Limit
 
 
 def token_of(link: str) -> str:
@@ -121,7 +121,7 @@ async def test_failed_keys_are_throttled_per_ip(
     client: httpx.AsyncClient, monkeypatch: Any
 ) -> None:
     monkeypatch.setitem(LIMITS, "auth_fail", Limit(3, 60))
-    bad = {"Authorization": "Bearer rb_live_" + "x" * 32}
+    bad = {"Authorization": "Bearer wsl_live_" + "x" * 32}
     codes = [(await client.get("/v1/investors", headers=bad)).status_code for _ in range(5)]
     assert codes == [401, 401, 401, 429, 429]
 
@@ -134,11 +134,11 @@ async def test_mcp_rejected_key_message_and_throttle(
     payload = {"jsonrpc": "2.0", "id": 1, "method": "tools/list"}
     hdrs = {"Accept": "application/json, text/event-stream"}
     r = await client.post("/mcp", json=payload, headers=hdrs)
-    assert r.status_code == 401 and "No Raisebook API key" in r.json()["error_description"]
-    bad = {**hdrs, "Authorization": "Bearer rb_live_" + "y" * 32}
+    assert r.status_code == 401 and "No Wasila API key" in r.json()["error_description"]
+    bad = {**hdrs, "Authorization": "Bearer wsl_live_" + "y" * 32}
     r = await client.post("/mcp", json=payload, headers=bad)
     assert r.status_code == 401
-    assert r.json()["error_description"].startswith("Invalid or revoked Raisebook API key")
+    assert r.json()["error_description"].startswith("Invalid or revoked Wasila API key")
     assert "Invalid or revoked" in r.headers["www-authenticate"]
     monkeypatch.setitem(LIMITS, "auth_fail", Limit(1, 60))
     r = await client.post("/mcp", json=payload, headers=bad)
@@ -173,7 +173,7 @@ async def test_new_accounts_get_a_tighter_invite_cap(
 async def test_workspace_count_is_capped_per_owner(
     db: AsyncSession, session_client: Any, monkeypatch: Any
 ) -> None:
-    from raisebook.config import get_settings
+    from wasila.config import get_settings
 
     monkeypatch.setattr(get_settings(), "max_workspaces_per_user", 2)
     me = await make_user(db)
@@ -187,7 +187,7 @@ async def test_workspace_count_is_capped_per_owner(
 async def test_exempt_owner_has_no_workspace_cap(
     db: AsyncSession, session_client: Any, monkeypatch: Any
 ) -> None:
-    from raisebook.config import get_settings
+    from wasila.config import get_settings
 
     me = await make_user(db)
     monkeypatch.setattr(get_settings(), "max_workspaces_per_user", 1)

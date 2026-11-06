@@ -63,7 +63,7 @@ export default function CsvFormat() {
         title="CSV import format"
         lede={
           <p>
-            Raisebook imports the spreadsheet you already keep. Export it as CSV from Google
+            Wasila imports the spreadsheet you already keep. Export it as CSV from Google
             Sheets, Excel, Airtable or Notion, then import it from the round page or the
             Investors page. You see a preview of every row before anything is written.
           </p>
@@ -102,7 +102,7 @@ export default function CsvFormat() {
         Headers are matched without regard to case, spaces or punctuation, so{" "}
         <C>E-mail</C>, <C>email</C> and <C>Email Address</C> all map to email. You can change any
         mapping, or ignore a column, before importing. The field names themselves are
-        recognized too, so a CSV exported from Raisebook imports back without any mapping.
+        recognized too, so a CSV exported from Wasila imports back without any mapping.
       </P>
       <DocTable
         caption="Contact fields"
@@ -111,7 +111,7 @@ export default function CsvFormat() {
         rows={CONTACT_FIELDS.map(([f, a, n]) => [f, <span key="a" className="text-muted">{a}</span>, n])}
       />
       <P>
-        These fields apply when you import into a round. Without a round, Raisebook imports
+        These fields apply when you import into a round. Without a round, Wasila imports
         contacts only and tells you which round columns it ignored.
       </P>
       <DocTable
@@ -165,7 +165,7 @@ export default function CsvFormat() {
         them, and you can download the rows with problems as a CSV to fix them later.
       </P>
       <P>
-        Your own pipeline words work too. When a stage or fit column has values Raisebook does
+        Your own pipeline words work too. When a stage or fit column has values Wasila does
         not know (&ldquo;Intro requested&rdquo;, &ldquo;Meeting booked&rdquo;), the review lists each one with a suggested
         stage you can change. Without a type column, the type is guessed from the title or firm
         (&ldquo;Angel&rdquo;, &ldquo;… Ventures&rdquo;, &ldquo;… Capital&rdquo;), and the row says so.
@@ -177,11 +177,11 @@ export default function CsvFormat() {
 
       <H2>Importing from the prototype</H2>
       <P>
-        If you kept your pipeline in the single-file Raisebook prototype, import its JSON
-        directly: an array of investor objects, or <C>{"{investors: [...]}"}</C>. Raisebook maps{" "}
+        If you kept your pipeline in the single-file Wasila prototype, import its JSON
+        directly: an array of investor objects, or <C>{"{investors: [...]}"}</C>. Wasila maps{" "}
         <C>industry</C>, <C>tags</C>, <C>check</C> and <C>stageFocus</C> to their fields, folds{" "}
         <C>summary</C>, <C>bio</C>, <C>notes</C>, <C>ig</C> and events into labelled paragraphs of
-        notes, and maps each round in <C>p</C> (stage, follow-up, amount, log) onto a Raisebook
+        notes, and maps each round in <C>p</C> (stage, follow-up, amount, log) onto a Wasila
         round you pick. LinkedIn search URLs are dropped with a warning.
       </P>
 

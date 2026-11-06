@@ -4,11 +4,11 @@
 #   deploy/indexnow.sh                      # every URL in the live sitemap
 #   deploy/indexnow.sh /pricing /compare    # just these paths
 # The key is public by design: IndexNow checks it at https://<host>/<key>.txt
-# (web/public/30f9d220d79978ac933e5b43f24fec12.txt). Self-hosters should make their own key file and set INDEXNOW_KEY.
+# (web/public/<key>.txt; Wasila ships without one). Operators should make their own key file and set INDEXNOW_KEY.
 set -euo pipefail
 
-SITE_URL="${SITE_URL:-https://raisebook.org}"
-KEY="${INDEXNOW_KEY:-30f9d220d79978ac933e5b43f24fec12}"
+SITE_URL="${SITE_URL:-https://wasila.app}"
+KEY="${INDEXNOW_KEY:?set INDEXNOW_KEY and publish web/public/$INDEXNOW_KEY.txt}"
 HOST="${SITE_URL#https://}"
 HOST="${HOST%%/*}"
 

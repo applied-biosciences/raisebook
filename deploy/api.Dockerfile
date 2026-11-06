@@ -1,11 +1,11 @@
-# Raisebook API image (FastAPI + /mcp). SPEC §11.
+# Wasila API image (FastAPI + /mcp). SPEC §11.
 #
 # Build context is backend/:
 #   docker build -f deploy/api.Dockerfile backend
 # One image, two uses:
-#   api (default):  uvicorn --factory raisebook.main:create_app
+#   api (default):  uvicorn --factory wasila.main:create_app
 #   migrate job:    alembic upgrade head
-#   ops:            rbctl --help   (seed-demo, housekeeping, apikey …)
+#   ops:            wasilactl --help   (seed-demo, housekeeping, apikey …)
 FROM python:3.12-slim-bookworm
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -28,18 +28,18 @@ RUN uv sync --frozen --no-dev --no-install-project
 
 COPY alembic.ini ./
 COPY alembic ./alembic
-COPY raisebook ./raisebook
+COPY wasila ./wasila
 RUN uv sync --frozen --no-dev
 
-RUN useradd --system --uid 10001 --home /app raisebook && chown -R raisebook /app
+RUN useradd --system --uid 10001 --home /app wasila && chown -R wasila /app
 USER 10001
 
 # The commit this image was built from; /healthz reports it ("commit").
 ARG GIT_SHA=""
 ENV PATH="/app/.venv/bin:$PATH" \
-    RAISEBOOK_ENVIRONMENT=production \
-    RAISEBOOK_LOG_JSON=true \
-    RAISEBOOK_GIT_SHA=$GIT_SHA
+    WASILA_ENVIRONMENT=production \
+    WASILA_LOG_JSON=true \
+    WASILA_GIT_SHA=$GIT_SHA
 
 EXPOSE 8000
 
@@ -51,4 +51,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
 # talks to the API. Never set it to "*" when the API port is reachable directly: anyone could
 # then spoof their IP and get around the per-IP limits (sign-in emails, failed keys).
 ENV FORWARDED_ALLOW_IPS=172.30.0.0/24
-CMD ["sh", "-c", "exec uvicorn --factory raisebook.main:create_app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips \"$FORWARDED_ALLOW_IPS\""]
+CMD ["sh", "-c", "exec uvicorn --factory wasila.main:create_app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips \"$FORWARDED_ALLOW_IPS\""]

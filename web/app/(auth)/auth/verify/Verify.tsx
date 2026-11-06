@@ -128,7 +128,7 @@ export function Verify({ token }: { token: string | null }) {
         </p>
         <div>
           <Link href="/app" className="link font-medium">
-            Open Raisebook →
+            Open Wasila →
           </Link>
         </div>
       </div>
@@ -209,7 +209,7 @@ function VerifyReady({
   return (
     <div className="flex flex-col gap-14">
       <h1 className="t-display-s">
-        {state.kind === "done" ? "Signed in" : "Sign in to Raisebook"}
+        {state.kind === "done" ? "Signed in" : "Sign in to Wasila"}
       </h1>
       <p className="text-muted" role="status">
         {state.kind === "done" ? (

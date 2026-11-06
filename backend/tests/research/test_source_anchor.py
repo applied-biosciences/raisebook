@@ -6,8 +6,8 @@ from __future__ import annotations
 
 import pytest
 
-from raisebook.services.research_anchor import OrgMentions, PersonName, org_mentions, same_org
-from raisebook.services.research_validate import (
+from wasila.services.research_anchor import OrgMentions, PersonName, org_mentions, same_org
+from wasila.services.research_validate import (
     Anchor,
     RawSource,
     SourceCheck,

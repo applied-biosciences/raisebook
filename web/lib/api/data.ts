@@ -99,7 +99,7 @@ export interface ImportRequest {
   on_duplicate?: OnDuplicate;
   source?: string | null;
   round_map?: RoundMapEntry[] | null;
-  /** Cell text → Raisebook value, per field: {stage: {"Intro requested": "contacted"}}. */
+  /** Cell text → Wasila value, per field: {stage: {"Intro requested": "contacted"}}. */
   value_map?: Record<string, Record<string, string>> | null;
 }
 
@@ -262,7 +262,7 @@ export async function downloadExport(c: ApiClient, e: ExportKind): Promise<strin
   const { path, query } = exportPath(e);
   const res = await c.raw(path, { query, headers: { Accept: "*/*" } });
   const blob = await res.blob();
-  const name = filenameOf(res, e.kind === "workspace" ? "raisebook-export.json" : "raisebook-export.csv");
+  const name = filenameOf(res, e.kind === "workspace" ? "wasila-export.json" : "wasila-export.csv");
   const url = URL.createObjectURL(blob);
   try {
     const a = document.createElement("a");

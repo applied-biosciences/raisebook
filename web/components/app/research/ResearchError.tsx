@@ -33,7 +33,7 @@ export function researchErrorText(err: unknown): { text: string; code: string | 
     case "identity_required":
       return { text: "Pick who this investor is first; research needs a confirmed identity.", code: err.code, action: "pick" };
     case "research_suppressed":
-      return { text: "This person asked not to be researched. Raisebook will not research them.", code: err.code, action: null };
+      return { text: "This person asked not to be researched. Wasila will not research them.", code: err.code, action: null };
     case "research_unavailable":
       return { text: "Research is not set up on this server (no encryption key). Ask whoever runs it.", code: err.code, action: null };
     default:

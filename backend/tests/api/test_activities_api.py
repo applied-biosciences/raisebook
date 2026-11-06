@@ -146,7 +146,7 @@ async def test_deleted_user_shows_as_former_member(
 ) -> None:
     from sqlalchemy import delete
 
-    from raisebook.models.user import User
+    from wasila.models.user import User
 
     w = await world(db)
     inv = await dana(db, w.ws)
@@ -241,8 +241,8 @@ async def test_collapse_runs_groups_a_bulk_change(
     db: AsyncSession, key_client: Any, frozen_now: Any
 ) -> None:
     """Activities that share ``data.bulk_id`` collapse the same way, keyed by that id."""
-    from raisebook.services import activities as act_svc
     from tests.services.test_imports import ctx_for
+    from wasila.services import activities as act_svc
 
     w = await world(db)
     invs = [

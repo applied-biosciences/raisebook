@@ -11,18 +11,6 @@ import pytest
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook import worker
-from raisebook.auth.principal import worker_context
-from raisebook.models.investor import Investor
-from raisebook.models.research import (
-    FieldSuggestion,
-    InvestorIdentity,
-    ResearchRemovalRequest,
-)
-from raisebook.models.round import RoundParticipant
-from raisebook.services import ai_settings as ai_svc
-from raisebook.services import openrouter, research_removal
-from raisebook.services.openrouter import OpenRouterClient
 from tests.factories import make_investor, make_participant
 from tests.research.helpers import (
     AGENT,
@@ -41,6 +29,18 @@ from tests.research.pipeline_mock import (
     SITE,
     Script,
 )
+from wasila import worker
+from wasila.auth.principal import worker_context
+from wasila.models.investor import Investor
+from wasila.models.research import (
+    FieldSuggestion,
+    InvestorIdentity,
+    ResearchRemovalRequest,
+)
+from wasila.models.round import RoundParticipant
+from wasila.services import ai_settings as ai_svc
+from wasila.services import openrouter, research_removal
+from wasila.services.openrouter import OpenRouterClient
 
 
 async def start(c: Any, inv_id: Any, kind: str = "dossier", **body: Any) -> Any:
@@ -201,7 +201,7 @@ async def test_a_worker_that_lost_its_lease_records_its_call_and_writes_nothing_
 async def test_settling_with_nothing_held_never_raises(
     db: AsyncSession, session_client: Any, frozen_now: Any
 ) -> None:
-    from raisebook.services import research, spend
+    from wasila.services import research, spend
 
     w = await research_world(db, linkedin_url=LINKEDIN, website_url=SITE)
     c = await session_client(w.owner, w.ws)

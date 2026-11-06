@@ -650,7 +650,7 @@ export function Combobox<V = string>({
         onClick={() => (open ? close(true) : doOpen())}
         onKeyDown={onTriggerKey}
         className={cn(
-          "rb-select flex w-full min-w-0 items-center gap-8 rounded-sm border text-left text-fg",
+          "wsl-select flex w-full min-w-0 items-center gap-8 rounded-sm border text-left text-fg",
           "transition-[border-color,background-color] duration-[120ms]",
           "focus-visible:border-accent focus-visible:outline-1 focus-visible:outline-offset-[-1px] focus-visible:outline-accent",
           "disabled:cursor-not-allowed disabled:opacity-60 data-[invalid=true]:border-bad",

@@ -77,7 +77,7 @@ Views: `triage | board | table` in `?view=`. On phones (<640px) the views are `l
 
 Resolution order, the first match wins:
 1. An explicit `?view=` in the URL.
-2. The viewer's stored choice for this round: `localStorage["rb-view:<ws>:<round>"]`, written
+2. The viewer's stored choice for this round: `localStorage["wsl-view:<ws>:<round>"]`, written
    only when the person clicks a view in the Segmented control, never by the auto rule
    (try/catch, as everywhere).
 3. **Auto rule**: `O` is the dominant stage **and** the viewer can write → `triage`.
@@ -449,7 +449,7 @@ Top to bottom:
 
 ## 8. Acceptance criteria
 
-Fixtures: add `uv run rbctl seed-demo --preset import411` (411 fictional investors all in New;
+Fixtures: add `uv run wasilactl seed-demo --preset import411` (411 fictional investors all in New;
 fit 5: 12, 4: 28, 3: 95, 0–2: 276 including 86 at fit 0; about 30% industry "Other"; mixed
 types including `other`; $2M target, 95 days; no notes or check sizes, as with a real CSV)
 and `--preset mature` (New 38 · Researching 64 · Contacted 52 · Replied 14 · Meeting 9 ·
@@ -540,7 +540,7 @@ move in the last 24h). Everything is fictional and uses example.com. Screenshots
 | 5 | Triage view: queue (windowed, groups, pills, tail offer), investor pane with prefetch and LRU, decision panel, rail, keys, undo stack, bulk selection pane, states | new `components/app/PipelineTriage.tsx` (+ `TriageQueue.tsx`) | L |
 | 6 | Phone: Sorted card, stage pills, grouped list, triage takeover | `Pipeline.tsx` (phone branch), `PipelineTriage.tsx` | M |
 | 7 | `follow=quiet` filter value; hide "Other" in the sheet header and the table | `Pipeline.tsx`, `InvestorSheet.tsx`, `PipelineTable.tsx` | S |
-| 8 | `seed-demo --preset import411|mature`, screenshots, the SYSTEM.md edits below | `backend/raisebook/cli…`, `design/` | S |
+| 8 | `seed-demo --preset import411|mature`, screenshots, the SYSTEM.md edits below | `backend/wasila/cli…`, `design/` | S |
 
 Order: 1 → (2, 3, 4 in parallel) → 5 → 6 → 7 → 8. The view is behind no flag; it ships with
 the auto rule on.

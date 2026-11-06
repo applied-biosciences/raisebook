@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { CurrencyPicker, DateField, Field, Input, Segmented, Textarea } from "@/components/ui";
 import type { InputProps } from "@/components/ui/Field";
 import type { RoundInput } from "@/lib/api/rounds";
-import type { Instrument, Round } from "@/lib/api/types";
+import type { Instrument, Jurisdiction, Round, TaxRelief } from "@/lib/api/types";
 import { cn } from "@/lib/cn";
 import { currencySymbol } from "@/lib/format";
 import { useOptionalWorkspace } from "@/lib/session";
@@ -22,6 +22,9 @@ export interface RoundDraft {
   preMoney: string;
   closeOn: string;
   notes: string;
+  jurisdiction: Jurisdiction;
+  taxRelief: TaxRelief;
+  sharia: boolean;
 }
 
 export function draftFromRound(r?: Partial<Round> | null, defaultCurrency = "USD"): RoundDraft {
@@ -35,6 +38,9 @@ export function draftFromRound(r?: Partial<Round> | null, defaultCurrency = "USD
     preMoney: moneyInput(r?.pre_money_valuation ?? null),
     closeOn: r?.target_close_on ?? "",
     notes: r?.notes ?? "",
+    jurisdiction: r?.jurisdiction ?? "uk",
+    taxRelief: r?.tax_relief ?? "none",
+    sharia: r?.sharia_compliant ?? false,
   };
 }
 
@@ -66,6 +72,9 @@ export function roundBody(
     pre_money_valuation: priced ? (pre || null) : null,
     target_close_on: d.closeOn || null,
     notes: d.notes.trim() ? d.notes : null,
+    jurisdiction: d.jurisdiction,
+    tax_relief: d.jurisdiction === "uk" ? d.taxRelief : "none",
+    sharia_compliant: d.sharia,
   };
   if (target !== null) body.target_amount = target;
   else if (update) body.target_amount = 0;
@@ -98,7 +107,15 @@ const INSTRUMENTS: { value: Instrument; label: string }[] = [
   { value: "safe", label: "SAFE" },
   { value: "priced", label: "Priced" },
   { value: "convertible_note", label: "Note" },
+  { value: "asa", label: "ASA (UK)" },
   { value: "other", label: "Other" },
+];
+
+const MARKETS: { value: Jurisdiction; label: string; currency: string }[] = [
+  { value: "uk", label: "UK", currency: "GBP" },
+  { value: "us", label: "US", currency: "USD" },
+  { value: "ksa", label: "Saudi Arabia", currency: "SAR" },
+  { value: "other", label: "Other", currency: "" },
 ];
 
 /** The round terms fields, shared by onboarding, "New round" and round settings. */
@@ -147,6 +164,41 @@ export function RoundFields({
       <Field label="Currency">
         <CurrencyPicker value={draft.currency} disabled={disabled} onChange={(c) => set("currency", c)} />
       </Field>
+      <div className="flex flex-col gap-4 sm:col-span-2">
+        <span className="text-[12px] text-muted">Where you are raising</span>
+        <Segmented
+          label="Where you are raising"
+          value={draft.jurisdiction}
+          onChange={(v) => {
+            if (disabled) return;
+            const m = MARKETS.find((x) => x.value === v);
+            onChange({ ...draft, jurisdiction: v, currency: m?.currency || draft.currency, taxRelief: v === "uk" ? draft.taxRelief : "none" });
+          }}
+          className="self-start"
+          options={MARKETS.map((m) => ({ value: m.value, label: m.label, disabled }))}
+        />
+      </div>
+      {draft.jurisdiction === "uk" ? (
+        <Field label="UK tax relief" hint="SEIS first (company lifetime limit), then EIS for the balance.">
+          <select
+            className="h-32 rounded-sm border border-line bg-surface px-10 text-base"
+            value={draft.taxRelief}
+            disabled={disabled}
+            onChange={(e) => set("taxRelief", e.target.value as TaxRelief)}
+          >
+            <option value="none">None</option>
+            <option value="seis">SEIS</option>
+            <option value="eis">EIS</option>
+            <option value="seis_eis">SEIS then EIS</option>
+          </select>
+        </Field>
+      ) : null}
+      {draft.jurisdiction === "ksa" ? (
+        <label className="flex items-center gap-8 self-end text-13">
+          <input type="checkbox" checked={draft.sharia} disabled={disabled} onChange={(e) => set("sharia", e.target.checked)} />
+          Sharia-compliant terms
+        </label>
+      ) : null}
       <div className="flex flex-col gap-4 sm:col-span-2">
         <span className="text-[12px] text-muted" id="instrument-label">
           Instrument

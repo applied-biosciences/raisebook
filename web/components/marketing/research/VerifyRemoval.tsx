@@ -41,7 +41,7 @@ export function VerifyRemoval({ token }: { token: string | null }) {
   return (
     <div className="flex flex-col gap-12">
       <p className="text-muted">
-        Confirm that you want Raisebook to delete the research it stores about you in every workspace, and to stop researching you.
+        Confirm that you want Wasila to delete the research it stores about you in every workspace, and to stop researching you.
       </p>
       <div>
         <Button

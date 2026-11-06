@@ -1,4 +1,4 @@
-"""The worker runner (raisebook/worker.py; RESEARCH-PLAN §3.2). Real commits, test-only kinds."""
+"""The worker runner (wasila/worker.py; RESEARCH-PLAN §3.2). Real commits, test-only kinds."""
 
 from __future__ import annotations
 
@@ -14,11 +14,11 @@ import pytest_asyncio
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from raisebook import worker as worker_mod
-from raisebook.core.clock import get_now
-from raisebook.services import jobs as jobs_svc
-from raisebook.services.jobs import PermanentJobError, RecoveredJob, TransientJobError
-from raisebook.worker import JobContext, LeaseLost, Worker, sessions_from
+from wasila import worker as worker_mod
+from wasila.core.clock import get_now
+from wasila.services import jobs as jobs_svc
+from wasila.services.jobs import PermanentJobError, RecoveredJob, TransientJobError
+from wasila.worker import JobContext, LeaseLost, Worker, sessions_from
 
 
 @pytest_asyncio.fixture(loop_scope="session")

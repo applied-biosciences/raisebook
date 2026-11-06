@@ -8,9 +8,6 @@ from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.core.actor import Actor
-from raisebook.models.enums import ActorType, Via
-from raisebook.services import csv_io, exports
 from tests.factories import (
     add_member,
     make_activity,
@@ -22,6 +19,9 @@ from tests.factories import (
     owner_of,
 )
 from tests.services.test_imports import ctx_for
+from wasila.core.actor import Actor
+from wasila.models.enums import ActorType, Via
+from wasila.services import csv_io, exports
 
 
 async def seeded(db: AsyncSession) -> dict[str, Any]:
@@ -64,7 +64,7 @@ async def seeded(db: AsyncSession) -> dict[str, Any]:
 async def test_round_csv(db: AsyncSession, frozen_now: Any) -> None:
     s = await seeded(db)
     f = await exports.export_round(db, s["ctx"], s["seed"], fmt="csv", now=frozen_now)
-    assert f.filename == f"raisebook-{s['ws'].slug}-seed-20261012.csv"
+    assert f.filename == f"wasila-{s['ws'].slug}-seed-20261012.csv"
     assert f.media_type.startswith("text/csv") and f.row_count == 2
     parsed = csv_io.parse_csv(f.content)
     assert tuple(parsed.columns) == exports.ROUND_CSV_COLUMNS
@@ -87,7 +87,7 @@ async def test_round_json_with_activities(db: AsyncSession, frozen_now: Any) -> 
         db, s["ctx"], s["seed"], fmt="json", now=frozen_now, include_activities=True
     )
     doc = json.loads(f.content)
-    assert doc["format"] == "raisebook.round" and doc["version"] == 1
+    assert doc["format"] == "wasila.round" and doc["version"] == 1
     assert doc["round"]["committed_amount"] == 750_000
     assert doc["round"]["participant_count"] == 2
     assert [st["key"] for st in doc["round"]["stages"]][:2] == ["new", "research"]
@@ -127,7 +127,7 @@ async def test_workspace_json_has_everything_but_secrets(db: AsyncSession, froze
     await make_investor(db, other, name="Not Mine", email="notmine@example.com")
     f = await exports.export_workspace_json(db, s["ctx"], now=frozen_now)
     doc = json.loads(f.content)
-    assert doc["format"] == "raisebook.export" and doc["version"] == 1
+    assert doc["format"] == "wasila.export" and doc["version"] == 1
     assert doc["workspace"]["id"] == str(s["ws"].id)
     assert {r["name"] for r in doc["rounds"]} == {"Seed", "Pre-seed"}
     assert {i["name"] for i in doc["investors"]} == {"Dana Whitfield", "Marcus Odell"}
@@ -136,7 +136,7 @@ async def test_workspace_json_has_everything_but_secrets(db: AsyncSession, froze
     assert len(doc["members"]) == 2
     assert any(a["kind"] == "call" for a in doc["activities"])
     text = f.content
-    for secret in ("rb_live_", "rb_test_", "key_hash", "token", "secret key", "notmine"):
+    for secret in ("wsl_live_", "wsl_test_", "key_hash", "token", "secret key", "notmine"):
         assert secret not in text
 
 

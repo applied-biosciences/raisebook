@@ -59,7 +59,7 @@ export function Dialog({
     if (!open || !d || !vv) return;
     const fit = () => {
       const kb = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
-      d.style.setProperty("--rb-kb", `${kb}px`);
+      d.style.setProperty("--wsl-kb", `${kb}px`);
     };
     fit();
     vv.addEventListener("resize", fit);
@@ -135,8 +135,8 @@ export function Dialog({
         "m-auto w-[calc(100%-32px)] rounded-md border border-line bg-surface p-0 text-fg shadow-dialog",
         scrollBody && "max-h-[calc(100dvh-48px)] overflow-hidden open:flex open:flex-col",
         // Phones: a bottom sheet, full width, its footer above the keyboard.
-        "phone:mx-0 phone:mt-auto phone:mb-[var(--rb-kb,0px)] phone:w-full phone:max-w-none! phone:rounded-b-none phone:border-x-0 phone:border-b-0",
-        "phone:max-h-[calc(100dvh-var(--rb-kb,0px)-12px)] phone:overflow-hidden phone:open:flex phone:open:flex-col phone:open:anim-sheet-up",
+        "phone:mx-0 phone:mt-auto phone:mb-[var(--wsl-kb,0px)] phone:w-full phone:max-w-none! phone:rounded-b-none phone:border-x-0 phone:border-b-0",
+        "phone:max-h-[calc(100dvh-var(--wsl-kb,0px)-12px)] phone:overflow-hidden phone:open:flex phone:open:flex-col phone:open:anim-sheet-up",
         className,
       )}
       style={{ maxWidth: width }}

@@ -1,5 +1,5 @@
 /**
- * Raisebook UI kit (design/SYSTEM.md §3). Presentational, token-themed, keyboard-accessible.
+ * Wasila UI kit (design/SYSTEM.md §3). Presentational, token-themed, keyboard-accessible.
  * No data fetching here: pages and components/app/* pass data in through props.
  * The live inventory is /design (dev, or NEXT_PUBLIC_ENABLE_DESIGN=1).
  */
@@ -58,6 +58,9 @@ export { Table, TableScroll, TBody, Td, Th, THead, Tr } from "./Table";
 export { TabLinks, Tabs, tabPanelId } from "./Tabs";
 export type { TabItem } from "./Tabs";
 export { ThemeToggle } from "./ThemeToggle";
+export { ThemeIconButton } from "./ThemeIconButton";
+export { GlobalChrome } from "./GlobalChrome";
+export { LanguageSwitch } from "./LanguageSwitch";
 export { TimezonePicker } from "./TimezonePicker";
 export type { TimezonePickerProps } from "./TimezonePicker";
 export { Timeline, activitySentence, matchesTimelineFilter } from "./Timeline";

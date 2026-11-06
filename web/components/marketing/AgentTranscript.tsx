@@ -22,7 +22,7 @@ export function AgentTranscript({ className }: { className?: string }) {
         <span className="hidden sm:inline">~/kestrel</span>
         <span className="ml-auto inline-flex items-center gap-6">
           <span aria-hidden className="inline-block size-6 rounded-pill bg-good" />
-          raisebook connected
+          wasila connected
         </span>
       </figcaption>
       <div className="flex flex-col gap-14 px-14 py-14">
@@ -35,7 +35,7 @@ export function AgentTranscript({ className }: { className?: string }) {
             <p className="flex items-center gap-8">
               <span aria-hidden className="agent-diamond" />
               <span className="text-agent">
-                raisebook · <b className="font-medium">{call.tool}</b>
+                wasila · <b className="font-medium">{call.tool}</b>
               </span>
               <span className="text-code-muted">(MCP)</span>
             </p>

@@ -10,11 +10,11 @@ import httpx
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.core import clock
-from raisebook.core.ratelimit import LIMITS, Limit
-from raisebook.models.user import LoginToken, User
-from raisebook.models.workspace import Membership
 from tests.factories import make_invite, make_user, make_workspace
+from wasila.core import clock
+from wasila.core.ratelimit import LIMITS, Limit
+from wasila.models.user import LoginToken, User
+from wasila.models.workspace import Membership
 
 
 def token_of(link: str) -> str:
@@ -64,8 +64,8 @@ async def test_verify_creates_user_session_and_cookies(
     assert body["csrf_token"]
     assert r.headers["cache-control"] == "no-store"
     set_cookie = r.headers.get_list("set-cookie")
-    session_cookie = next(c for c in set_cookie if c.startswith("rb_session="))
-    csrf_cookie = next(c for c in set_cookie if c.startswith("rb_csrf="))
+    session_cookie = next(c for c in set_cookie if c.startswith("wsl_session="))
+    csrf_cookie = next(c for c in set_cookie if c.startswith("wsl_csrf="))
     assert "HttpOnly" in session_cookie and "SameSite=lax" in session_cookie
     assert "HttpOnly" not in csrf_cookie
     user = await db.scalar(select(User).where(User.email == "dana@example.com"))
@@ -145,9 +145,9 @@ async def test_ip_rate_limit_still_202(
 async def test_no_dev_link_outside_local_dev(
     client: httpx.AsyncClient, monkeypatch: Any, outbox: list[Any]
 ) -> None:
-    from raisebook.config import reset_settings_cache
+    from wasila.config import reset_settings_cache
 
-    monkeypatch.setenv("RAISEBOOK_PUBLIC_BASE_URL", "https://api.raisebook.org")
+    monkeypatch.setenv("WASILA_PUBLIC_BASE_URL", "https://api.wasila.app")
     reset_settings_cache()
     try:
         r = await request_link(client, "prod@example.com")

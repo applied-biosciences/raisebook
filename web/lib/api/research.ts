@@ -72,7 +72,7 @@ export interface AiSettings {
   research_available: boolean;
   /** An owner signed in to the web: may save or remove the key. */
   can_manage_key: boolean;
-  /** raisebook:admin: preset, models and the monthly limit. */
+  /** wasila:admin: preset, models and the monthly limit. */
   can_edit: boolean;
 }
 
@@ -435,7 +435,7 @@ export const saveAiKey = (c: ApiClient, key: string) => c.put<AiSettings>("/v1/w
 /** Owner signed in. Deletes the key now; queued research is cancelled. */
 export const removeAiKey = (c: ApiClient) => c.del<void>("/v1/workspace/ai-settings/key");
 
-/** raisebook:admin. Model ids by hand make the preset `custom`. */
+/** wasila:admin. Model ids by hand make the preset `custom`. */
 export const updateAiSettings = (c: ApiClient, body: AiSettingsUpdate) =>
   c.patch<AiSettings>("/v1/workspace/ai-settings", body);
 

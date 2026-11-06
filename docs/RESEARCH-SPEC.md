@@ -1,8 +1,8 @@
 # Investor Research — agreed spec (owner-approved 2026-10-13)
 
 > **Not shipped.** Investor research is an unreleased design in progress. It is off by default
-> (`RAISEBOOK_RESEARCH_ENABLED`), raisebook.org does not run it, and nothing here describes how
-> the live service handles your data today; the [privacy page](https://raisebook.org/privacy)
+> (`WASILA_RESEARCH_ENABLED`), wasila.app does not run it, and nothing here describes how
+> the live service handles your data today; the [privacy page](https://wasila.app/privacy)
 > does. If research ships, the privacy page changes first.
 
 Owner decisions from the grilling session. Binding; deviations need the owner.
@@ -26,8 +26,8 @@ Owner decisions from the grilling session. Binding; deviations need the owner.
 9. **Models:** presets in Settings — **Best (default)**: Sonar Pro search + Claude Opus writer; **Balanced**: Sonar + Claude Sonnet; **Budget**: Sonar + a cheap capable writer. "Advanced": any OpenRouter model id per step. Identity step always uses the cheap search model. Show est. cost per dossier per preset. Verify preset model ids exist on OpenRouter when saving the key (use OpenRouter's public models list; pick current ids at build time).
 10. **Freshness:** dossier dated; "may be stale" after 90 days; when an investor moves to **Meeting** and dossier > 30 days old, offer "Refresh before your meeting? ≈ $X" (never automatic). Refresh shows **"New since <date>"** diff at top.
 11. **MCP/agents:** read dossiers; start research (write scope, respects cap); **`save_dossier`** — an agent researches with its own tools and submits a dossier in the same schema; validated by the same rules (citations required, identity anchor match, schema, privacy filter); marked "by <agent-name>". Lets Claude Code users research without an OpenRouter key.
-12. **Key:** one OpenRouter key per **workspace**, set by owner/admin. Members with edit rights run research within cap; viewers read only. Key encrypted at rest (envelope encryption with a server KEK from env), never readable back (show last 4), validated against OpenRouter on save, redacted from logs, "Remove key" deletes immediately. Raisebook never pays for model calls.
-13. **Ethics:** professional info only — firm, role, investments, funds, public posts/talks/interviews in professional capacity, publicly listed work email. **Never:** personal phone, home address, family, health, politics, religion, personal social accounts. Enforced in prompts AND by an output filter (phones/addresses stripped) applied to both model and agent-submitted dossiers. Public **Research Policy** page + a removal-request process (investors can request deletion of what Raisebook stores about them).
+12. **Key:** one OpenRouter key per **workspace**, set by owner/admin. Members with edit rights run research within cap; viewers read only. Key encrypted at rest (envelope encryption with a server KEK from env), never readable back (show last 4), validated against OpenRouter on save, redacted from logs, "Remove key" deletes immediately. Wasila never pays for model calls.
+13. **Ethics:** professional info only — firm, role, investments, funds, public posts/talks/interviews in professional capacity, publicly listed work email. **Never:** personal phone, home address, family, health, politics, religion, personal social accounts. Enforced in prompts AND by an output filter (phones/addresses stripped) applied to both model and agent-submitted dossiers. Public **Research Policy** page + a removal-request process (investors can request deletion of what Wasila stores about them).
 
 Engineering defaults (Claude's call): background jobs with progress UI; partial/failed runs keep gathered sources and are resumable; idempotent job claims; per-run cost accounting; all tests use fictional investors and a mocked OpenRouter (no real spend in tests/CI).
 

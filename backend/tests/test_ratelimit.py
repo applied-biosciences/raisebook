@@ -7,9 +7,9 @@ from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
 
-from raisebook.core import clock, ratelimit
-from raisebook.core.ratelimit import LIMITS, Limit, PostgresBackend, window_start
 from tests.factories import make_api_key, make_user, make_workspace, owner_of
+from wasila.core import clock, ratelimit
+from wasila.core.ratelimit import LIMITS, Limit, PostgresBackend, window_start
 
 
 async def test_key_read_limit_returns_429_with_headers(

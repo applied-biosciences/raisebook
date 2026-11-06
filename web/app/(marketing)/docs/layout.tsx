@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { DocsNav } from "@/components/marketing/docs/DocsNav";
 
 export const metadata: Metadata = {
-  title: { template: "%s · Raisebook docs", default: "Docs" },
+  title: { template: "%s · Wasila docs", default: "Docs" },
 };
 
 /** Docs shell (SYSTEM §4.15): a 220px sticky nav and content at a 680px measure. */

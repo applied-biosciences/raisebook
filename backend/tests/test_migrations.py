@@ -8,12 +8,6 @@ from sqlalchemy import delete, text, update
 from sqlalchemy.exc import DBAPIError, IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.core.actor import Actor, user_actor
-from raisebook.models.activity import Activity
-from raisebook.models.enums import ActorType, Via
-from raisebook.models.imports import ImportRun
-from raisebook.models.round import RoundParticipant, RoundStage
-from raisebook.models.workspace import ApiKey
 from tests.factories import (
     add_member,
     make_activity,
@@ -25,6 +19,12 @@ from tests.factories import (
     make_workspace,
     stages_of,
 )
+from wasila.core.actor import Actor, user_actor
+from wasila.models.activity import Activity
+from wasila.models.enums import ActorType, Via
+from wasila.models.imports import ImportRun
+from wasila.models.round import RoundParticipant, RoundStage
+from wasila.models.workspace import ApiKey
 
 
 async def expect_db_error(db: AsyncSession, stmt: object) -> None:
@@ -144,7 +144,7 @@ async def test_activity_cannot_reference_other_workspace(db: AsyncSession) -> No
                 investor_id=inv_b.id,
                 kind="note",
                 actor_type="system",
-                actor_label="raisebook",
+                actor_label="wasila",
                 via="system",
             )
         )
@@ -203,7 +203,7 @@ async def test_stage_positions_are_deferrable(db: AsyncSession) -> None:
 async def test_api_key_scope_check(db: AsyncSession) -> None:
     ws = await make_workspace(db)
     key, _ = await make_api_key(db, ws)
-    for scopes in ([], ["raisebook:write"], ["raisebook:read", "raisebook:root"]):
+    for scopes in ([], ["wasila:write"], ["wasila:read", "wasila:root"]):
         await expect_db_error(db, update(ApiKey).where(ApiKey.id == key.id).values(scopes=scopes))
 
 

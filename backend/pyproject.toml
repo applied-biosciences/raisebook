@@ -1,7 +1,7 @@
 [project]
-name = "raisebook"
-version = "0.2.0"
-description = "Raisebook: a free-forever, open-source fundraising CRM for founders, with an MCP server"
+name = "wasila"
+version = "1.0.0.0"
+description = "Wasila: a free-forever, open-source fundraising CRM for founders, with an MCP server"
 license = "AGPL-3.0-only"
 requires-python = ">=3.12,<3.13"
 dependencies = [
@@ -18,10 +18,13 @@ dependencies = [
     "typer>=0.15",
     "pyjwt[crypto]>=2.10",
     "cryptography>=43",
+    "openpyxl>=3.1",
+    "python-docx>=1.1",
+    "python-pptx>=1.0",
 ]
 
 [project.scripts]
-rbctl = "raisebook.cli:app"
+wasilactl = "wasila.cli:app"
 
 [dependency-groups]
 dev = [
@@ -36,7 +39,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["raisebook"]
+packages = ["wasila"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
@@ -58,7 +61,7 @@ ignore = ["S101", "S105", "B008", "RUF012"]
 "alembic/**" = ["E501", "S608"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["raisebook", "tests"]
+known-first-party = ["wasila", "tests"]
 
 [tool.mypy]
 python_version = "3.12"
@@ -68,11 +71,11 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = [
-    "raisebook.auth.*",
-    "raisebook.core.secrets",
-    "raisebook.services.normalize",
-    "raisebook.services.csv_io",
-    "raisebook.services.jobs",
-    "raisebook.services.spend",
+    "wasila.auth.*",
+    "wasila.core.secrets",
+    "wasila.services.normalize",
+    "wasila.services.csv_io",
+    "wasila.services.jobs",
+    "wasila.services.spend",
 ]
 strict = true

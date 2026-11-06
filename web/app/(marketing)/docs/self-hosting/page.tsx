@@ -18,9 +18,9 @@ export const metadata: Metadata = pageMeta("/docs/self-hosting");
 
 const INSTALL = [
   `git clone ${REPO_URL}.git`,
-  "cd raisebook",
+  "cd wasila",
   "cp deploy/.env.example deploy/.env",
-  "# edit deploy/.env: hosts, POSTGRES_PASSWORD, RAISEBOOK_SESSION_SECRET, SMTP",
+  "# edit deploy/.env: hosts, POSTGRES_PASSWORD, WASILA_SESSION_SECRET, SMTP",
   "docker compose -f deploy/docker-compose.yml up -d --build",
 ].join("\n");
 
@@ -28,12 +28,12 @@ const SECRETS = [
   "# POSTGRES_PASSWORD",
   "openssl rand -base64 36 | tr -d '/+=' | cut -c1-40",
   "",
-  "# RAISEBOOK_SESSION_SECRET (changing it later signs everyone out)",
+  "# WASILA_SESSION_SECRET (changing it later signs everyone out)",
   `python3 -c "import secrets; print(secrets.token_urlsafe(48))"`,
 ].join("\n");
 
 const UPDATE = [
-  "cd raisebook && git pull",
+  "cd wasila && git pull",
   "# build while the old containers keep serving, then swap",
   "docker compose -f deploy/docker-compose.yml build",
   "docker compose -f deploy/docker-compose.yml up -d",
@@ -41,19 +41,19 @@ const UPDATE = [
 ].join("\n");
 
 const LOCAL = [
-  "createdb raisebook_dev",
-  "psql raisebook_dev -c 'CREATE EXTENSION IF NOT EXISTS citext; CREATE EXTENSION IF NOT EXISTS pg_trgm;'",
+  "createdb wasila_dev",
+  "psql wasila_dev -c 'CREATE EXTENSION IF NOT EXISTS citext; CREATE EXTENSION IF NOT EXISTS pg_trgm;'",
   "",
   "# terminal 1, from the repo root: API and MCP on :8000",
   "cd backend && uv sync",
-  "RAISEBOOK_DATABASE_URL=postgresql://localhost/raisebook_dev uv run alembic upgrade head",
-  "RAISEBOOK_ENV=dev uv run uvicorn --factory raisebook.main:create_app --reload",
+  "WASILA_DATABASE_URL=postgresql://localhost/wasila_dev uv run alembic upgrade head",
+  "WASILA_ENV=dev uv run uvicorn --factory wasila.main:create_app --reload",
   "",
   "# terminal 2, from the repo root: web on :3000",
   "cd web && npm ci && npm run dev",
   "",
   "# optional, from backend/: a sample workspace with fictional investors",
-  "uv run rbctl seed-demo --email you@example.com",
+  "uv run wasilactl seed-demo --email you@example.com",
 ].join("\n");
 
 export default function SelfHosting() {
@@ -64,9 +64,9 @@ export default function SelfHosting() {
         title="Self-hosting"
         lede={
           <p>
-            Raisebook is one repository and one Docker Compose file. If you would rather keep your
+            Wasila is one repository and one Docker Compose file. If you would rather keep your
             investor list on a machine you control, run your own copy. It is the same software as
-            raisebook.org, with nothing held back.
+            wasila.app, with nothing held back.
           </p>
         }
       />
@@ -120,13 +120,13 @@ export default function SelfHosting() {
         rows={[
           ["WEB_HOST, API_HOST", "Your two hostnames. MCP is served at https://API_HOST/mcp."],
           ["POSTGRES_PASSWORD", "Database password. Required."],
-          ["RAISEBOOK_SESSION_SECRET", "Signs session cookies and CSRF tokens. Required."],
-          ["RAISEBOOK_SESSION_COOKIE_DOMAIN", "The parent domain both hosts share, so the session reaches the API."],
-          ["RAISEBOOK_SMTP_HOST, _PORT, _USERNAME, _PASSWORD", "Your SMTP provider."],
-          ["RAISEBOOK_EMAIL_FROM", 'Sender, e.g. "Raisebook <login@raise.example.com>".'],
-          ["RAISEBOOK_RATE_LIMIT_BACKEND", "postgres (default), memory or off."],
-          ["RAISEBOOK_MAGIC_LINKS_PER_IP_HOUR", "Sign-in links per IP per hour (default 100). Raise it for an event on shared Wi-Fi."],
-          ["RAISEBOOK_EMAIL_GLOBAL_PER_HOUR", "All outbound email per hour (default 500). Keep it under your email plan."],
+          ["WASILA_SESSION_SECRET", "Signs session cookies and CSRF tokens. Required."],
+          ["WASILA_SESSION_COOKIE_DOMAIN", "The parent domain both hosts share, so the session reaches the API."],
+          ["WASILA_SMTP_HOST, _PORT, _USERNAME, _PASSWORD", "Your SMTP provider."],
+          ["WASILA_EMAIL_FROM", 'Sender, e.g. "Wasila <login@raise.example.com>".'],
+          ["WASILA_RATE_LIMIT_BACKEND", "postgres (default), memory or off."],
+          ["WASILA_MAGIC_LINKS_PER_IP_HOUR", "Sign-in links per IP per hour (default 100). Raise it for an event on shared Wi-Fi."],
+          ["WASILA_EMAIL_GLOBAL_PER_HOUR", "All outbound email per hour (default 500). Keep it under your email plan."],
           ["NEXT_PUBLIC_SPONSOR_URL", "The Support link. Empty hides it."],
         ]}
       />
@@ -148,7 +148,7 @@ export default function SelfHosting() {
         team. Run it from cron, as the comment at the top of the script shows.
       </P>
       <P>
-        Also run <C>docker compose -f deploy/docker-compose.yml exec api rbctl housekeeping</C>{" "}
+        Also run <C>docker compose -f deploy/docker-compose.yml exec api wasilactl housekeeping</C>{" "}
         once a day. It removes expired sign-in links, sessions and old rate-limit counters.
       </P>
 
@@ -162,7 +162,7 @@ export default function SelfHosting() {
 
       <H2>The license</H2>
       <P>
-        Raisebook is AGPL-3.0. You can run, change and share it freely. If you change it and let
+        Wasila is AGPL-3.0. You can run, change and share it freely. If you change it and let
         other people use your version over a network, you must offer them its source code. Running an
         unmodified copy asks nothing more of you than keeping the license notices.
       </P>

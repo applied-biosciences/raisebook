@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from raisebook.core.errors import ImportInvalid
-from raisebook.services import csv_io
-from raisebook.services.exports import ROUND_CSV_COLUMNS
+from wasila.core.errors import ImportInvalid
+from wasila.services import csv_io
+from wasila.services.exports import ROUND_CSV_COLUMNS
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures"
 STAGE_NAMES = ["new", "New", "research", "Researching", "meeting", "Meeting", "dd", "Diligence"]

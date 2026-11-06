@@ -9,10 +9,10 @@ from typing import Any
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.models.activity import Activity
-from raisebook.models.research import InvestorIdentity, ResearchRun
 from tests.research.helpers import AGENT, agent_doc, ledger, research_world
 from tests.research.pipeline_mock import LINKEDIN, NAME, SITE
+from wasila.models.activity import Activity
+from wasila.models.research import InvestorIdentity, ResearchRun
 
 
 async def test_rest_twin_validates_marks_and_costs_nothing(

@@ -12,8 +12,8 @@ export const metadata: Metadata = pageMeta("/privacy");
 
 const SECTIONS = [
   "The promise",
-  "What Raisebook stores",
-  "What Raisebook never collects",
+  "What Wasila stores",
+  "What Wasila never collects",
   "Cookies and browser storage",
   "Logs",
   "Email",
@@ -35,7 +35,7 @@ export default function Privacy() {
             <AsideFacts
               items={[
                 ["Updated", "2026-10-13"],
-                ["Covers", "raisebook.org"],
+                ["Covers", "wasila.app"],
                 ["Status", "In effect"],
               ]}
             />
@@ -48,7 +48,7 @@ export default function Privacy() {
           title="Your raise is your business."
           lede={
             <p>
-              Raisebook holds some of the most sensitive data a founder has: who you are talking to,
+              Wasila holds some of the most sensitive data a founder has: who you are talking to,
               what they said and how much they might invest. This page says plainly what happens to
               it. The code is public, so you can check every line of it.
             </p>
@@ -59,7 +59,7 @@ export default function Privacy() {
         <H2>The promise</H2>
         <RuledList items={PRIVACY_PROMISE} className="mb-18" />
 
-        <H2>What Raisebook stores</H2>
+        <H2>What Wasila stores</H2>
         <DocTable
           caption="Data stored"
           head={["What", "Why"]}
@@ -67,7 +67,7 @@ export default function Privacy() {
           minWidth={460}
           rows={[
             ["Your email address and, if you add it, your name", "To sign you in and show who did what to your co-founders."],
-            ["If you use \u201cContinue with Google\u201d: your Google account id, and the verified email and name Google returns", "To sign you in with Google and keep that Google account tied to the same Raisebook account. Raisebook asks Google only for your basic profile (openid, email, profile), never for Gmail, contacts or Drive."],
+            ["If you use \u201cContinue with Google\u201d: your Google account id, and the verified email and name Google returns", "To sign you in with Google and keep that Google account tied to the same Wasila account. Wasila asks Google only for your basic profile (openid, email, profile), never for Gmail, contacts or Drive."],
             ["Sign-in sessions: when they started and were last used, the browser's user agent and IP address", "To keep you signed in, and so you can see and end them under Account → Signed-in browsers. A session ends after 30 days without use, or 90 days after sign-in at the latest."],
             ["Sign-in requests: the email address and IP that asked for a link", "To send the link and limit abuse. Deleted about a day after the link expires, whether or not it was used."],
             ["Pending invites: the invited email address and role", "To let them join. Deleted once revoked, or a week after they expire; accepted invites become a membership."],
@@ -79,11 +79,11 @@ export default function Privacy() {
           ]}
         />
 
-        <H2>What Raisebook never collects</H2>
+        <H2>What Wasila never collects</H2>
         <Ul>
           <li>No analytics, tracking pixels, session replay, heatmaps or advertising IDs.</li>
-          <li>No third-party scripts or cookies. Fonts are served from raisebook.org itself.</li>
-          <li>No data from other sites: Raisebook does not scrape LinkedIn or enrich contacts.</li>
+          <li>No third-party scripts or cookies. Fonts are served from wasila.app itself.</li>
+          <li>No data from other sites: Wasila does not scrape LinkedIn or enrich contacts.</li>
           <li>
             No sharing between workspaces: no &ldquo;investors you might know&rdquo;, no benchmarks,
             no shared contact graph. No query in the code reads more than one workspace&apos;s rows,
@@ -97,16 +97,16 @@ export default function Privacy() {
           head={["Name", "Kind", "Purpose"]}
           minWidth={460}
           rows={[
-            ["rb_session", "cookie, HttpOnly", "Keeps you signed in. 30 days, renewed while you use the app, 90 days at most."],
-            ["rb_csrf", "cookie", "Protects your account from forged requests."],
-            ["rb_google_flow", "cookie, HttpOnly", "Only during \u201cContinue with Google\u201d: ties Google's answer to the browser that started it. 10 minutes, then gone."],
-            ["rb-theme", "localStorage", "Light, dark or system."],
-            ["rb-last-ws, rb-last-route", "localStorage", "Opens the workspace and page you used last."],
+            ["wsl_session", "cookie, HttpOnly", "Keeps you signed in. 30 days, renewed while you use the app, 90 days at most."],
+            ["wsl_csrf", "cookie", "Protects your account from forged requests."],
+            ["wsl_google_flow", "cookie, HttpOnly", "Only during \u201cContinue with Google\u201d: ties Google's answer to the browser that started it. 10 minutes, then gone."],
+            ["wsl-theme", "localStorage", "Light, dark or system."],
+            ["wsl-last-ws, wsl-last-route", "localStorage", "Opens the workspace and page you used last."],
             ["View, column, density and sort choices", "localStorage", "Remembers how you like each list laid out."],
-            ["rb-recent-investors", "localStorage", "The investors you opened recently in a workspace, for search. Names and firms, on this device only."],
-            ["rb-triage-note, rb-import-map", "localStorage", "An unsent note draft, and how you mapped a CSV's columns last time."],
-            ["rb-signin-requested", "localStorage", "The address you asked a sign-in link for, so the link page can show it. Deleted on sign-in, useless after 15 minutes."],
-            ["rb-signin, rb-name-asked, onboarding flags", "sessionStorage / localStorage", "Small flags for the sign-in and first-run screens."],
+            ["wsl-recent-investors", "localStorage", "The investors you opened recently in a workspace, for search. Names and firms, on this device only."],
+            ["wsl-triage-note, wsl-import-map", "localStorage", "An unsent note draft, and how you mapped a CSV's columns last time."],
+            ["wsl-signin-requested", "localStorage", "The address you asked a sign-in link for, so the link page can show it. Deleted on sign-in, useless after 15 minutes."],
+            ["wsl-signin, wsl-name-asked, onboarding flags", "sessionStorage / localStorage", "Small flags for the sign-in and first-run screens."],
           ]}
         />
         <P>
@@ -125,27 +125,27 @@ export default function Privacy() {
 
         <H2>Email</H2>
         <P>
-          Raisebook sends two kinds of email: sign-in links and workspace invites. They go through
-          Resend. Only the recipient&apos;s address and the message leave Raisebook.
-          Raisebook never emails your investors.
+          Wasila sends two kinds of email: sign-in links and workspace invites. They go through
+          Resend. Only the recipient&apos;s address and the message leave Wasila.
+          Wasila never emails your investors on its own: an email goes only when a person in your workspace presses Send, from your own mailbox.
         </P>
 
         <H2>Hosting and backups</H2>
         <P>
-          Raisebook runs on DigitalOcean in San Francisco (SFO3). The database is backed up nightly, and
+          Wasila runs on infrastructure operated by Applied Biosciences Limited (Funding Room files are stored in the database). The database is backed up nightly, and
           backups are kept for at most 14 days. When you delete something, it is removed from the
           live database at once and leaves the backups as they expire, within 14 days.
         </P>
 
         <H2>Agents and AI</H2>
         <P>
-          Raisebook never runs or pays for AI on its own. When you connect an agent such as Claude
+          Wasila never runs or pays for AI on its own. When you connect an agent such as Claude
           Code, Codex or Cursor, it reads and writes through your API key, and what it reads goes to
           the AI provider you chose, under that provider&apos;s terms. Every change an agent makes is
           on the timeline under its name. Revoke the key and the access ends.
         </P>
         <P>
-          Investor research is the one place Raisebook talks to an AI provider, and only on your own
+          Investor research is the one place Wasila talks to an AI provider, and only on your own
           OpenRouter key, only when someone in your workspace presses Research. It sends the
           investor&apos;s name, firm, title and links, your company profile and the round&apos;s terms
           (and your deck, when you ask for a profile draft). It never sends your notes, emails,
@@ -167,7 +167,7 @@ export default function Privacy() {
             permanent and immediate.
           </li>
           <li>
-            <b>Ask.</b> For anything you cannot do in the app, write to 0@raisebook.org. We
+            <b>Ask.</b> For anything you cannot do in the app, write to hello@wasila.app. We
             answer within 30 days.
           </li>
         </Ul>
@@ -175,10 +175,10 @@ export default function Privacy() {
         <H2>Investor data you enter</H2>
         <P>
           The people in your pipeline are real, and their details are personal data. You decide what
-          to record about them and why, and Raisebook stores it for you and does nothing else with
-          it. In data-protection terms, you are the controller of that data and Zhirayr Gumruyan acts
+          to record about them and why, and Wasila stores it for you and does nothing else with
+          it. In data-protection terms, you are the controller of that data and Applied Biosciences Limited acts
           as your processor. If an investor asks you to delete what you hold about them, delete the
-          investor in Raisebook and it is gone.
+          investor in Wasila and it is gone.
         </P>
 
         <H2>Changes</H2>
@@ -191,11 +191,11 @@ export default function Privacy() {
 
         <H2>Contact</H2>
         <P>
-          Zhirayr Gumruyan, San Francisco, California. Privacy questions: 0@raisebook.org.
+          Applied Biosciences Limited, United Kingdom. Privacy questions: hello@wasila.app.
           Security reports: see <C>SECURITY.md</C> in the repository.
         </P>
         <P>
-          This page covers the hosted service at raisebook.org. A self-hosted copy is run by whoever
+          This page covers the hosted service at wasila.app. A self-hosted copy is run by whoever
           hosts it, under their own policy.
         </P>
       </PageShell>

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://raisebook.org").replace(/\/$/, "");
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://wasila.app").replace(/\/$/, "");
 
 /**
  * Index the marketing site, docs, /llms.txt and the share cards; keep crawlers out of the app

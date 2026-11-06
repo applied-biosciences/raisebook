@@ -1,7 +1,7 @@
 /**
- * Legacy and alias IANA ids → the canonical id Raisebook stores. Browsers still report some
+ * Legacy and alias IANA ids → the canonical id Wasila stores. Browsers still report some
  * old names (Chrome: Asia/Calcutta). Mirrors LEGACY_ZONES in
- * backend/raisebook/services/workspaces.py; keep the two in sync.
+ * backend/wasila/services/workspaces.py; keep the two in sync.
  */
 export const LEGACY_ZONES: Readonly<Record<string, string>> = {
   "Asia/Calcutta": "Asia/Kolkata",

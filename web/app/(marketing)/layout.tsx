@@ -3,14 +3,13 @@ import Link from "next/link";
 import { SiteNav } from "@/components/marketing/SiteNav";
 import { REPO_URL, SPONSOR_URL } from "@/components/marketing/site";
 import { ButtonLink, ThemeToggle, Wordmark } from "@/components/ui";
+import { APP_VERSION_LABEL } from "@/lib/version";
 
 const FOOTER: { title: string; links: { href: string; label: string; external?: boolean }[] }[] = [
   {
     title: "Product",
     links: [
-      { href: "/investor-crm", label: "Investor CRM" },
-      { href: "/pricing", label: "Pricing" },
-      { href: "/compare", label: "Compare" },
+      { href: "/#features", label: "Features" },
       { href: "/faq", label: "FAQ" },
       { href: "/docs", label: "Docs" },
       { href: "/docs/mcp", label: "MCP setup" },
@@ -20,12 +19,10 @@ const FOOTER: { title: string; links: { href: string; label: string; external?: 
   {
     title: "Guides",
     links: [
-      { href: "/seed-round-tracker", label: "Track your seed round" },
-      { href: "/ai-investor-research", label: "Investor research with AI" },
-      { href: "/fundraising-crm-mcp", label: "Raisebook for AI agents" },
-      { href: "/free-investor-crm", label: "Free investor CRM" },
-      { href: "/compare/spreadsheet", label: "Spreadsheet vs CRM" },
+      { href: "/docs/csv", label: "Import investor lists" },
       { href: "/docs/meetings", label: "Meetings and calendar" },
+      { href: "/docs/mcp-tools", label: "MCP tools" },
+      { href: "/docs/export", label: "Export your data" },
     ],
   },
   {
@@ -64,7 +61,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               Sign in
             </ButtonLink>
             <ButtonLink href="/signin" variant="primary">
-              Start free
+              Open Wasila
             </ButtonLink>
           </div>
         </div>
@@ -78,7 +75,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         <div className="gutter mx-auto grid max-w-site gap-x-32 gap-y-32 py-48 sm:grid-cols-2 xl:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,1fr))]">
           <div className="flex flex-col gap-10">
             <Wordmark size={22} />
-            <p className="max-w-[32ch] text-muted">The free, private, open-source investor CRM for founders.</p>
+            <p className="max-w-[32ch] text-muted">Investor CRM and Funding Room for US, UK and Saudi raises. By Applied Biosciences.</p>
             {SPONSOR_URL ? (
               <a
                 href={SPONSOR_URL}
@@ -86,7 +83,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
                 rel="noopener noreferrer"
                 className="link self-start text-sm"
               >
-                Support Raisebook <span aria-hidden>↗</span>
+                Support Wasila <span aria-hidden>↗</span>
               </a>
             ) : null}
           </div>
@@ -118,7 +115,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         </div>
         <div className="border-t border-line">
           <div className="gutter mx-auto flex max-w-site flex-wrap items-center gap-x-18 gap-y-8 py-14">
-            <p className="t-micro text-muted">raisebook.org · AGPL-3.0</p>
+            <p className="t-micro text-muted">Wasila {APP_VERSION_LABEL} · AGPL-3.0</p>
             <ThemeToggle className="sm:ml-auto" />
           </div>
         </div>

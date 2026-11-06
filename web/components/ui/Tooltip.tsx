@@ -23,7 +23,7 @@ export function Tooltip({
   className?: string;
 }) {
   return (
-    <span className={cn("rb-tip", className)} data-side={side} data-align={align}>
+    <span className={cn("wsl-tip", className)} data-side={side} data-align={align}>
       {children}
       <span role="tooltip" id={id}>
         {tip}

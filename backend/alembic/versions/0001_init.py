@@ -4,7 +4,7 @@ Tables, CHECK constraints, partial unique indexes, composite (workspace_id, id)
 foreign keys that stop cross-workspace links, and the ``activities_guard_update``
 append-only trigger. Written as explicit SQL so it reads like the spec.
 
-Raisebook addition to SPEC §3.1: ``login_tokens.invite_id`` (the invite attached
+Wasila addition to SPEC §3.1: ``login_tokens.invite_id`` (the invite attached
 to a magic-link request, accepted in the verify transaction, SPEC §4.1 step 3).
 
 Revision ID: 0001
@@ -159,8 +159,8 @@ CREATE TABLE api_keys (
   CONSTRAINT ck_api_keys_mode_valid CHECK (mode IN ('live', 'test')),
   CONSTRAINT ck_api_keys_scopes_valid CHECK (
     cardinality(scopes) >= 1
-    AND scopes <@ ARRAY['raisebook:read', 'raisebook:write', 'raisebook:admin']::text[]
-    AND 'raisebook:read' = ANY (scopes)),
+    AND scopes <@ ARRAY['wasila:read', 'wasila:write', 'wasila:admin']::text[]
+    AND 'wasila:read' = ANY (scopes)),
   CONSTRAINT fk_api_keys_workspace_id_workspaces FOREIGN KEY (workspace_id)
     REFERENCES workspaces (id) ON DELETE CASCADE,
   CONSTRAINT fk_api_keys_created_by_user_id_users FOREIGN KEY (created_by_user_id)

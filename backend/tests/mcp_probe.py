@@ -1,6 +1,6 @@
 """Test-only MCP tools that exercise ``tool_call`` before feature tools exist.
 
-Registered by patching ``raisebook.mcp.tools.TOOL_MODULES`` in ``test_mcp_transport``.
+Registered by patching ``wasila.mcp.tools.TOOL_MODULES`` in ``test_mcp_transport``.
 """
 
 from __future__ import annotations
@@ -9,11 +9,11 @@ from typing import Any
 
 from mcp.server.fastmcp import Context, FastMCP
 
-from raisebook.auth.scopes import SCOPE_WRITE
-from raisebook.core.errors import NotFound
-from raisebook.mcp.annotations import read_only, write
-from raisebook.mcp.tools._common import Clock, tool_call
-from raisebook.models.investor import Investor
+from wasila.auth.scopes import SCOPE_WRITE
+from wasila.core.errors import NotFound
+from wasila.mcp.annotations import read_only, write
+from wasila.mcp.tools._common import Clock, tool_call
+from wasila.models.investor import Investor
 
 
 def register(server: FastMCP) -> None:

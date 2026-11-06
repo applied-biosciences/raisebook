@@ -426,7 +426,7 @@ export function InvestorsDirectory({
           i.rounds.map((r) => `${r.round_name}: ${r.stage.label}`), i.notes,
         ]),
       );
-      downloadText(`raisebook-${workspace.slug}-investors-${today.replaceAll("-", "")}.csv`, csv);
+      downloadText(`wasila-${workspace.slug}-investors-${today.replaceAll("-", "")}.csv`, csv);
     } catch (err) {
       toast.show(errorMessage(err));
     } finally {
@@ -921,7 +921,7 @@ function TagPrompt({
   onClose: () => void;
   onSubmit: (tag: string) => void;
 }) {
-  const listId = "rb-tag-suggestions";
+  const listId = "wsl-tag-suggestions";
   return (
     <DialogLite title={add ? `Tag ${plural(count, "contact")}` : `Remove a tag from ${plural(count, "contact")}`} onClose={onClose}>
       <form

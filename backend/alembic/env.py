@@ -1,6 +1,6 @@
 """Alembic environment (async, asyncpg).
 
-The database URL and optional schema come from ``RAISEBOOK_*`` settings. When a
+The database URL and optional schema come from ``WASILA_*`` settings. When a
 schema is set (tests pass ``config.attributes["schema"]``), every connection runs
 with ``search_path=<schema>, public`` and the version table lives in that schema.
 A caller may also pass an open connection via ``config.attributes["connection"]``.
@@ -14,10 +14,10 @@ from logging.config import fileConfig
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import create_async_engine
 
-import raisebook.models  # noqa: F401  (registers tables)
+import wasila.models  # noqa: F401  (registers tables)
 from alembic import context
-from raisebook.config import get_settings
-from raisebook.core.database import Base, normalize_db_url
+from wasila.config import get_settings
+from wasila.core.database import Base, normalize_db_url
 
 config = context.config
 if config.config_file_name is not None and config.attributes.get("configure_logger", True):

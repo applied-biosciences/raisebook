@@ -46,6 +46,7 @@ import type { Round } from "@/lib/api/types";
 import { cn } from "@/lib/cn";
 import { moneyCompact, num, plural } from "@/lib/format";
 import { useHotkey } from "@/lib/hotkeys";
+import { convertTables } from "@/lib/api/wasila";
 import { useWorkspace } from "@/lib/session";
 
 type Step = "source" | "columns" | "review" | "done";
@@ -72,7 +73,7 @@ const DUPLICATE_OPTIONS: { value: OnDuplicate; label: string; hint: string }[] =
 
 const ACTION_TONE = { create: "type", update: "soon", skip: "tag", error: "due" } as const;
 const ACTION_LABEL = { create: "Create", update: "Update", skip: "Skip", error: "Error" } as const;
-const MAP_KEY = (sig: string) => `rb-import-map:${sig}`;
+const MAP_KEY = (sig: string) => `wsl-import-map:${sig}`;
 /** Notices that fill a value rather than drop one (listed after real problems). */
 const isNotice = (w: string) => w.startsWith("Type guessed");
 const problemsOf = (r: ImportRow) => r.warnings.filter((w) => !isNotice(w));
@@ -261,7 +262,7 @@ export function ImportFlow({ initialRound }: { initialRound?: string }) {
               id="imp-source"
               aside={
                 <span className="t-body-s flex items-center gap-12">
-                  <a href="/templates/raisebook-investors-template.csv" download className="link">
+                  <a href="/templates/wasila-investors-template.csv" download className="link">
                     Download template CSV
                   </a>
                   <TextLink href="/docs/csv">CSV format</TextLink>
@@ -286,13 +287,34 @@ export function ImportFlow({ initialRound }: { initialRound?: string }) {
               </div>
             ) : (
               <FileDrop
-                prompt="Drop a CSV file here, or paste below"
-                onText={(t, f) => {
-                  setText(t);
-                  setFilename(f.name);
-                  setMapping(null);
-                  setValueMap({});
-                  setPasting(false);
+                prompt="Drop a CSV, Excel (.xlsx) or Word (.docx) file here, or paste below"
+                accept=".csv,.tsv,.txt,.json,.xlsx,.docx,text/csv,application/json"
+                maxBytes={5 * 1024 * 1024}
+                onFile={async (f) => {
+                  const use = (t: string, name: string) => {
+                    setText(t);
+                    setFilename(name);
+                    setMapping(null);
+                    setValueMap({});
+                    setPasting(false);
+                  };
+                  const ext = f.name.split(".").pop()?.toLowerCase();
+                  if (ext === "xlsx" || ext === "docx") {
+                    // Wasila: Excel sheets and Word tables become CSV on the server, then the
+                    // usual mapping, preview and dedupe run on that CSV.
+                    try {
+                      const out = await convertTables(client, f, f.name);
+                      const best = [...out.tables].sort((a, b) => b.rows - a.rows)[0];
+                      if (!best) return;
+                      use(best.csv, `${f.name} · ${best.name}`);
+                    } catch (err) {
+                      setText("");
+                      setFilename(null);
+                      window.alert(errorMessage(err));
+                    }
+                    return;
+                  }
+                  use(await f.text(), f.name);
                 }}
               />
             )}
@@ -602,7 +624,7 @@ function ColumnTable({
       <table className="w-full min-w-[680px] border-collapse text-base">
         <thead>
           <tr>
-            {["Column", "Sample values", "In the file", "Raisebook field"].map((h) => (
+            {["Column", "Sample values", "In the file", "Wasila field"].map((h) => (
               <th key={h} scope="col" className="t-th border-b border-line px-10 py-8 text-left text-muted">
                 {h}
               </th>
@@ -1045,7 +1067,7 @@ function ReviewRow({
       <span role="cell" className="t-body-s min-w-0 truncate max-md:order-2" title={r.match ? `${r.match.name} (${r.match.matched_on.replace("_", " + ")})` : undefined}>
         {r.match ? (
           <>
-            {r.match.investor_id ? "Already in Raisebook" : `Same as row ${r.match.row}`}
+            {r.match.investor_id ? "Already in Wasila" : `Same as row ${r.match.row}`}
             <span className="ml-6 font-mono text-muted">{r.match.matched_on.replace("_", "+")}</span>
           </>
         ) : null}
@@ -1110,7 +1132,7 @@ function ResultView({
         ) : null}
         {existing.length ? (
           <li>
-            {plural(existing.length, "row")} {existing.length === 1 ? "was" : "were"} already in Raisebook and skipped.
+            {plural(existing.length, "row")} {existing.length === 1 ? "was" : "were"} already in Wasila and skipped.
           </li>
         ) : null}
         {inFile.length ? (
@@ -1189,7 +1211,7 @@ function PrototypeRounds({
   return (
     <div className="flex flex-col gap-10">
       <p className="t-body-s text-muted">
-        Prototype JSON detected. Choose which Raisebook round each prototype round goes to; stages,
+        Prototype JSON detected. Choose which Wasila round each prototype round goes to; stages,
         follow-ups, amounts and log entries come along.
       </p>
       {keys.map((k) => {

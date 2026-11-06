@@ -574,8 +574,8 @@ export function researchMatches(
 export function runStallHint(run: Pick<Run, "status" | "error" | "created_at" | "started_at">, now: Date): string | null {
   if (run.status === "running" && run.error) {
     return run.error.code === "openrouter_unavailable" || run.error.code === "openrouter_rate_limited"
-      ? "OpenRouter is not answering right now. Raisebook retries on its own, waiting longer each time."
-      : `The last call failed (${run.error.code}); Raisebook retries on its own.`;
+      ? "OpenRouter is not answering right now. Wasila retries on its own, waiting longer each time."
+      : `The last call failed (${run.error.code}); Wasila retries on its own.`;
   }
   if (run.status === "queued") {
     const since = Date.parse(run.started_at ?? run.created_at);

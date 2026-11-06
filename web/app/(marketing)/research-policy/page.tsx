@@ -43,7 +43,7 @@ export default function ResearchPolicy() {
           title="Professional facts, cited, and nothing else."
           lede={
             <p>
-              Founders use Raisebook to track the investors they talk to. Research helps them prepare: it reads public pages about an
+              Founders use Wasila to track the investors they talk to. Research helps them prepare: it reads public pages about an
               investor&apos;s work and writes a short dossier where every claim links to its source. This page is for founders and for the
               investors they research.
             </p>
@@ -62,7 +62,7 @@ export default function ResearchPolicy() {
         <Ul>
           <li>Only a founder, by pressing a button, for an investor already in their own workspace. It never runs on import or on its own.</li>
           <li>
-            It runs on the founder&apos;s own OpenRouter key and is paid for by them. Raisebook never runs or pays for AI models, and its
+            It runs on the founder&apos;s own OpenRouter key and is paid for by them. Wasila never runs or pays for AI models, and its
             servers never fetch the pages themselves: the search happens at the AI provider.
           </li>
           <li>
@@ -94,7 +94,7 @@ export default function ResearchPolicy() {
           <li>Personal phone numbers or home addresses. A filter strips them from every dossier, whoever wrote it.</li>
           <li>Family, health, politics or religion. Those topics are dropped.</li>
           <li>Personal social accounts. Pages on personal social sites are never used as sources.</li>
-          <li>Anything behind a login, and nothing scraped by Raisebook&apos;s own servers.</li>
+          <li>Anything behind a login, and nothing scraped by Wasila&apos;s own servers.</li>
         </Ul>
         <P>
           These rules are in the instructions given to the models and are enforced again in code on the result, for dossiers written by a
@@ -104,7 +104,7 @@ export default function ResearchPolicy() {
         <H2>Who can see it</H2>
         <P>
           A dossier is private to the founder&apos;s workspace: its members, and the API keys its owners create. It is never shared with
-          other workspaces, never pooled into an investor database, never sold and never used to train models. Raisebook keeps public
+          other workspaces, never pooled into an investor database, never sold and never used to train models. Wasila keeps public
           facts apart from a founder&apos;s private notes about fit, so that this stays true.
         </P>
 
@@ -117,14 +117,14 @@ export default function ResearchPolicy() {
 
         <H2>Ask us to remove you</H2>
         <P>
-          If you are an investor and want Raisebook to delete the research it stores about you, in every workspace, and to refuse future
+          If you are an investor and want Wasila to delete the research it stores about you, in every workspace, and to refuse future
           research about you, send the form. We email you a link to confirm it is you; nothing happens until you open it. The founders&apos;
           own contact entries (your name and email in their address book) are theirs, and stay. We answer every request the same way, so
           this form never reveals whether anything is stored about you.
         </P>
         <RemovalForm />
         <P className="mt-14">
-          Questions: see the <A href="/privacy">privacy page</A>. Operators of a self-hosted copy handle requests with <C>rbctl research removals</C>.
+          Questions: see the <A href="/privacy">privacy page</A>. Operators of a self-hosted copy handle requests with <C>wasilactl research removals</C>.
         </P>
       </PageShell>
     </>

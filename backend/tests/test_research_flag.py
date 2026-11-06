@@ -1,8 +1,9 @@
-"""Investor research is unfinished and off by default (``RAISEBOOK_RESEARCH_ENABLED``).
+"""Investor research is unfinished and off by default (``WASILA_RESEARCH_ENABLED``).
 
 With the flag off, nothing about it is served: no REST routes, no MCP tools, and no research
-line in the MCP instructions. The public pages promise exactly 23 MCP tools (17 + the four
-meeting tools + the two linked-card tools).
+line in the MCP instructions. The public pages promise exactly 26 MCP tools (17 + the four
+meeting tools + the two linked-card tools + Wasila's three: list_funding_room,
+search_master_list, draft_outreach).
 """
 
 from __future__ import annotations
@@ -12,9 +13,12 @@ from typing import Any
 
 import pytest
 
-from raisebook.config import reset_settings_cache
+from wasila.config import reset_settings_cache
 
 CORE_TOOLS = {
+    "list_funding_room",
+    "search_master_list",
+    "draft_outreach",
     "get_workspace",
     "list_rounds",
     "get_round_summary",
@@ -50,7 +54,7 @@ RESEARCH_TOOLS = {
 
 @pytest.fixture
 def research_off(monkeypatch: Any) -> Iterator[None]:
-    monkeypatch.setenv("RAISEBOOK_RESEARCH_ENABLED", "false")
+    monkeypatch.setenv("WASILA_RESEARCH_ENABLED", "false")
     reset_settings_cache()
     yield
     monkeypatch.undo()
@@ -58,14 +62,14 @@ def research_off(monkeypatch: Any) -> Iterator[None]:
 
 
 async def _tool_names() -> set[str]:
-    from raisebook.mcp.server import create_mcp_server
+    from wasila.mcp.server import create_mcp_server
 
     server = create_mcp_server()
     return {t.name for t in await server.list_tools()}
 
 
-async def test_research_off_serves_23_core_tools(research_off: None) -> None:
-    from raisebook.mcp.server import create_mcp_server
+async def test_research_off_serves_26_core_tools(research_off: None) -> None:
+    from wasila.mcp.server import create_mcp_server
 
     names = await _tool_names()
     assert names == CORE_TOOLS
@@ -76,7 +80,7 @@ async def test_research_off_serves_23_core_tools(research_off: None) -> None:
 
 
 async def test_research_off_has_no_research_routes(research_off: None) -> None:
-    from raisebook.main import create_app
+    from wasila.main import create_app
 
     paths = set(create_app().openapi()["paths"])
     assert paths, "openapi lists the core routes"
@@ -103,8 +107,8 @@ async def test_research_off_leaves_no_trace_in_openapi_or_bodies(
     research while the flag is off."""
     import json
 
-    from raisebook.main import create_app
     from tests.api.helpers import world
+    from wasila.main import create_app
 
     spec = json.dumps(create_app().openapi()).lower()
     for word in ("dossier", "research-plan", "researchsummary", "openrouter"):

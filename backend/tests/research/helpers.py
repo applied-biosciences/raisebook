@@ -10,17 +10,6 @@ from typing import Any
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook import worker
-from raisebook.core import secrets
-from raisebook.core.clock import get_now
-from raisebook.models.ai import CompanyProfile, WorkspaceAiSettings
-from raisebook.models.investor import Investor
-from raisebook.models.research import ResearchRun
-from raisebook.models.round import Round
-from raisebook.models.user import User
-from raisebook.models.workspace import Workspace
-from raisebook.services import ai_settings as ai_svc
-from raisebook.services import research_jobs  # noqa: F401 (registers the handlers)
 from tests.factories import (
     add_member,
     make_api_key,
@@ -32,6 +21,17 @@ from tests.factories import (
 )
 from tests.research.openrouter_mock import FAKE_KEY
 from tests.research.pipeline_mock import FIRM, LINKEDIN, NAME, SITE
+from wasila import worker
+from wasila.core import secrets
+from wasila.core.clock import get_now
+from wasila.models.ai import CompanyProfile, WorkspaceAiSettings
+from wasila.models.investor import Investor
+from wasila.models.research import ResearchRun
+from wasila.models.round import Round
+from wasila.models.user import User
+from wasila.models.workspace import Workspace
+from wasila.services import ai_settings as ai_svc
+from wasila.services import research_jobs  # noqa: F401 (registers the handlers)
 
 
 async def set_key(db: AsyncSession, ws: Workspace, *, cap_usd: float | None = None) -> None:

@@ -12,18 +12,18 @@ import pytest_asyncio
 from sqlalchemy import delete, select, text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from raisebook.auth.principal import worker_context
-from raisebook.core.clock import get_now
-from raisebook.models.enums import ResearchKind
-from raisebook.models.research import ResearchRun
-from raisebook.models.user import User
-from raisebook.models.workspace import Workspace
-from raisebook.services import jobs as jobs_svc
-from raisebook.services import research as research_svc
-from raisebook.worker import Worker, sessions_from
 from tests.factories import make_investor, make_workspace, owner_of
 from tests.research.helpers import set_key
 from tests.research.pipeline_mock import Script
+from wasila.auth.principal import worker_context
+from wasila.core.clock import get_now
+from wasila.models.enums import ResearchKind
+from wasila.models.research import ResearchRun
+from wasila.models.user import User
+from wasila.models.workspace import Workspace
+from wasila.services import jobs as jobs_svc
+from wasila.services import research as research_svc
+from wasila.worker import Worker, sessions_from
 
 RESERVE = 10_500  # one identity call's reservation: ≈ $0.007 x 1.5
 BILLED = 7_000

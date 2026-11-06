@@ -43,6 +43,10 @@ ALL_TOOLS = {
     "complete_meeting",
     "link_investors",
     "unlink_investor",
+    # Wasila v1.0.0.0
+    "list_funding_room",
+    "search_master_list",
+    "draft_outreach",
 }
 READ_ONLY = {
     "get_workspace",
@@ -55,6 +59,8 @@ READ_ONLY = {
     "get_dossier",
     "list_research_runs",
     "list_meetings",
+    "list_funding_room",
+    "search_master_list",
 }
 WRITE_IDEMPOTENT = {
     "add_investor",
@@ -72,7 +78,13 @@ WRITE_IDEMPOTENT = {
     "link_investors",
     "unlink_investor",
 }
-WRITE_NOT_IDEMPOTENT = {"update_investor", "log_activity", "import_investors_csv", "save_dossier"}
+WRITE_NOT_IDEMPOTENT = {
+    "update_investor",
+    "log_activity",
+    "import_investors_csv",
+    "save_dossier",
+    "draft_outreach",
+}
 AGENT = {"X-Agent-Name": "claude-code", "X-Agent-Model": "claude-opus-5-5"}
 
 # SPEC §6.4 binding descriptions: a distinctive sentence from each AM tool.
@@ -140,7 +152,7 @@ async def test_get_workspace_and_list_rounds(
         "America/Los_Angeles"
     )
     assert d["you"]["agent_name"] == "codex"
-    assert d["you"]["scopes"] == ["raisebook:read", "raisebook:write"]
+    assert d["you"]["scopes"] == ["wasila:read", "wasila:write"]
     assert {r["slug"] for r in d["rounds"]} == {"seed", "pre-seed"}
     seed = next(r for r in d["rounds"] if r["slug"] == "seed")
     assert seed["stages"][0] == {"key": "new", "label": "New", "kind": "open"}
@@ -222,7 +234,7 @@ async def test_add_investor_dedupes_and_attributes(
     )
     assert filled.data["filled_fields"] == ["location"]
 
-    from raisebook.models.investor import Investor
+    from wasila.models.investor import Investor
 
     inv = await db.get(Investor, inv_id)
     assert inv is not None
@@ -461,6 +473,6 @@ async def test_sandbox_test_key_works(db: AsyncSession, mcp_call: Any) -> None:
     ws = await make_workspace(db, sandbox=True)
     await make_round(db, ws, name="Seed", slug="seed")
     _, raw = await make_api_key(db, ws, scopes="read,write")
-    assert raw.startswith("rb_test_")
+    assert raw.startswith("wsl_test_")
     res = await mcp_call(raw, "add_investor", {"name": "Fictional Person", "round": "seed"})
     assert res.ok, res.text

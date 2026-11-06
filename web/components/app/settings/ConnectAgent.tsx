@@ -48,28 +48,28 @@ export const MCP_TOOLS: { name: string; does: string; write: boolean }[] = [
   { name: "complete_meeting", does: "Mark a meeting done with the outcome, next step and follow-up.", write: true },
 ];
 
-const PLACEHOLDER = "rb_live_XXXX";
+const PLACEHOLDER = "wsl_live_XXXX";
 
 export function snippetTabs(secret: string | null, sandbox: boolean, agentName?: string): CodeTab[] {
-  const key = secret ?? (sandbox ? "rb_test_XXXX" : PLACEHOLDER);
+  const key = secret ?? (sandbox ? "wsl_test_XXXX" : PLACEHOLDER);
   const name = (fallback: string) => agentName?.trim() || fallback;
   return [
     {
       label: "Claude Code",
       lang: "shell",
-      code: `claude mcp add --transport http raisebook ${MCP_URL} \\\n  --header "Authorization: Bearer ${key}" \\\n  --header "X-Agent-Name: ${name("claude-code")}"`,
-      caption: `${SNIPPET_NOTES.claudeCode} Then ask Claude Code about your raise; /mcp lists the raisebook tools.`,
+      code: `claude mcp add --transport http wasila ${MCP_URL} \\\n  --header "Authorization: Bearer ${key}" \\\n  --header "X-Agent-Name: ${name("claude-code")}"`,
+      caption: `${SNIPPET_NOTES.claudeCode} Then ask Claude Code about your raise; /mcp lists the wasila tools.`,
     },
     {
       label: "Codex",
       lang: "toml",
-      code: `# ~/.codex/config.toml\n[mcp_servers.raisebook]\nurl = "${MCP_URL}"\nbearer_token_env_var = "RAISEBOOK_API_KEY"\nhttp_headers = { "X-Agent-Name" = "${name("codex")}" }`,
+      code: `# ~/.codex/config.toml\n[mcp_servers.wasila]\nurl = "${MCP_URL}"\nbearer_token_env_var = "WASILA_API_KEY"\nhttp_headers = { "X-Agent-Name" = "${name("codex")}" }`,
       caption: SNIPPET_NOTES.codex,
     },
     {
       label: "Cursor",
       lang: "json",
-      code: `{\n  "mcpServers": {\n    "raisebook": {\n      "url": "${MCP_URL}",\n      "headers": {\n        "Authorization": "Bearer \${env:RAISEBOOK_API_KEY}",\n        "X-Agent-Name": "${name("cursor")}"\n      }\n    }\n  }\n}`,
+      code: `{\n  "mcpServers": {\n    "wasila": {\n      "url": "${MCP_URL}",\n      "headers": {\n        "Authorization": "Bearer \${env:WASILA_API_KEY}",\n        "X-Agent-Name": "${name("cursor")}"\n      }\n    }\n  }\n}`,
       caption: SNIPPET_NOTES.cursor,
     },
     {
@@ -216,7 +216,7 @@ export function ConnectAgent() {
   return (
     <div className="flex flex-col gap-24">
       <p className="t-body-l measure text-muted">
-        Raisebook has an MCP server, so Claude Code, Codex, Cursor or any MCP client can read and work your pipeline
+        Wasila has an MCP server, so Claude Code, Codex, Cursor or any MCP client can read and work your pipeline
         with you. Every action an agent takes shows on the timeline in{" "}
         <span className="text-agent">its own color</span>, under its name.
       </p>
@@ -289,7 +289,7 @@ export function ConnectAgent() {
           <CodeBlock tabs={snippetTabs(secret, workspace.is_sandbox, d.agentName)} wrap={phone} />
           {!secret ? (
             <p className="t-body-s mt-8 text-muted">
-              Replace <span className="font-mono">{workspace.is_sandbox ? "rb_test_XXXX" : PLACEHOLDER}</span> with your key. Keys
+              Replace <span className="font-mono">{workspace.is_sandbox ? "wsl_test_XXXX" : PLACEHOLDER}</span> with your key. Keys
               are shown once, when you create them.
             </p>
           ) : null}
@@ -307,7 +307,7 @@ export function ConnectAgent() {
                 lang="shell"
                 title="Shell"
                 wrap={phone}
-                code={`export RAISEBOOK_API_KEY=${secret ?? (workspace.is_sandbox ? "rb_test_XXXX" : PLACEHOLDER)}`}
+                code={`export WASILA_API_KEY=${secret ?? (workspace.is_sandbox ? "wsl_test_XXXX" : PLACEHOLDER)}`}
               />
               <p className="t-body-s mt-8 text-muted">{SNIPPET_NOTES.model}</p>
             </div>

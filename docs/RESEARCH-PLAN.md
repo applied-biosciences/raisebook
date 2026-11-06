@@ -1,8 +1,8 @@
 # Investor Research: build plan
 
 > **Not shipped.** Investor research is an unreleased design in progress. It is off by default
-> (`RAISEBOOK_RESEARCH_ENABLED`), raisebook.org does not run it, and nothing here describes how
-> the live service handles your data today; the [privacy page](https://raisebook.org/privacy)
+> (`WASILA_RESEARCH_ENABLED`), wasila.app does not run it, and nothing here describes how
+> the live service handles your data today; the [privacy page](https://wasila.app/privacy)
 > does. If research ships, the privacy page changes first.
 
 Implements `docs/RESEARCH-SPEC.md` (owner-approved 2026-10-13, 13 decisions, binding; amended
@@ -27,11 +27,11 @@ Three build parts, each landing green on its own (backend pytest, ruff check, ru
 
 ## 0. Ground rules and spec amendments this feature forces
 
-- **SPEC §1.6 and the privacy promise #4** say Raisebook never sends workspace data to an LLM.
-  R2/R12 make research a *bring-your-own-key* feature: Raisebook calls OpenRouter **only with
+- **SPEC §1.6 and the privacy promise #4** say Wasila never sends workspace data to an LLM.
+  R2/R12 make research a *bring-your-own-key* feature: Wasila calls OpenRouter **only with
   the workspace's own key**, only when a member presses a button (R4), and never pays. Part 2
   amends SPEC §1.6 bullet 4 and §8.4 promise 4, and Part 3 updates `/privacy` to say exactly
-  what is sent (§7.6 below). The promise "Raisebook never pays for or runs models on its own"
+  what is sent (§7.6 below). The promise "Wasila never pays for or runs models on its own"
   stays true.
 - **SPEC §1.6 "No investor database built from user data"** stays true: research rows are
   workspace-scoped like every other table, no query reads two workspaces, nothing is shared
@@ -40,15 +40,15 @@ Three build parts, each landing green on its own (backend pytest, ruff check, ru
   2026-10-14, R15) **reuse across one owner's workspaces** (§12.2), which *reads* the public
   layer of another workspace only when the requester owns both. SPEC §1.6 gets both written
   in.
-- **"No scraping"** stays true: Raisebook's servers never fetch third-party pages. Search runs
+- **"No scraping"** stays true: Wasila's servers never fetch third-party pages. Search runs
   inside OpenRouter (Sonar / web plugin); the company website prefill also goes through
   OpenRouter, so there is no server-side URL fetch and no SSRF surface.
-- **Roles.** The spec says "owner/admin". Raisebook roles are owner/editor/viewer, scopes
+- **Roles.** The spec says "owner/admin". Wasila roles are owner/editor/viewer, scopes
   read/write/admin. Mapping: setting or removing the OpenRouter key = **owner signed in on the
   web** (`require_owner_session`, like API keys; secrets never travel through agent keys);
-  preset, advanced model ids and cap = `raisebook:admin` (owner session or admin key); starting
-  research = `raisebook:write` (editors, write keys, MCP write tools), within cap; reading
-  dossiers = `raisebook:read` (viewers included).
+  preset, advanced model ids and cap = `wasila:admin` (owner session or admin key); starting
+  research = `wasila:write` (editors, write keys, MCP write tools), within cap; reading
+  dossiers = `wasila:read` (viewers included).
 - **Money for AI cost** is the one non-whole-unit amount in the product: stored as
   `*_micros bigint` (1 = US$0.000001), always USD (OpenRouter bills USD), never mixed with
   round currency. Displayed as `$0.19` (≥ $0.01) or `<$0.01`.
@@ -59,7 +59,7 @@ Three build parts, each landing green on its own (backend pytest, ruff check, ru
   `httpx.AsyncClient`/transport; tests use `httpx.MockTransport` (no new dependency;
   `respx` is not needed). A dev-only mock server script (`backend/scripts/mock_openrouter.py`,
   stdlib + the same canned fixtures) lets the web be exercised end to end with
-  `RAISEBOOK_OPENROUTER_BASE_URL=http://localhost:8787/api/v1`.
+  `WASILA_OPENROUTER_BASE_URL=http://localhost:8787/api/v1`.
 - **Clock**: every service and the worker take `now` from `core.clock.get_now()`; SQL lease
   comparisons get `now` as a bound parameter, never `now()` in logic paths.
 
@@ -242,7 +242,7 @@ prefill job when it finishes (success or permanent failure) and by housekeeping 
 - Workspace JSON export (`services/exports.py`) gains `research`: company profile, AI
   settings **without key material** (preset, models, cap, last4 absent), identities, latest
   dossier per investor with facts, sources and suggestions. CSV unchanged.
-- Housekeeping (`rbctl housekeeping`) also purges finished jobs > 30 days, transient uploads,
+- Housekeeping (`wasilactl housekeeping`) also purges finished jobs > 30 days, transient uploads,
   removal requests per §1.12, and runs older than 400 days (their sources go with them unless
   cited by a kept dossier; cited sources are re-parented to `run_id NULL`, column nullable).
 
@@ -250,21 +250,21 @@ prefill job when it finishes (success or permanent failure) and by housekeeping 
 
 ## 2. Secrets: envelope encryption (Part 1)
 
-`raisebook/core/secrets.py` (strict mypy), using `cryptography` (already present through
+`wasila/core/secrets.py` (strict mypy), using `cryptography` (already present through
 `pyjwt[crypto]`; add it explicitly to `pyproject.toml` dependencies).
 
-- **KEK** from `RAISEBOOK_SECRETS_KEK`: `<kek_id>:<base64url 32 bytes>` (or bare base64url,
-  id `k1`). `RAISEBOOK_SECRETS_KEK_PREVIOUS` (optional, same format) for rotation: decrypt
+- **KEK** from `WASILA_SECRETS_KEK`: `<kek_id>:<base64url 32 bytes>` (or bare base64url,
+  id `k1`). `WASILA_SECRETS_KEK_PREVIOUS` (optional, same format) for rotation: decrypt
   tries the id on the row. Settings field type `SecretStr`, validated at startup when set
   (wrong length → fail fast). Missing KEK → research is **disabled** with a clear error
-  (`research_unavailable`: "This server has no RAISEBOOK_SECRETS_KEK set; ask whoever runs
+  (`research_unavailable`: "This server has no WASILA_SECRETS_KEK set; ask whoever runs
   it."); the rest of the app works. Production: documented as required, warned at startup.
 - `seal(plaintext, *, aad) -> Sealed(ciphertext, nonce, dek_wrapped, dek_nonce, kek_id)`:
   fresh random 32-byte DEK per secret, AES-256-GCM, 96-bit random nonces; the DEK is wrapped
   with the KEK by AES-GCM. AAD binds the ciphertext to its row: `b"rb:openrouter:" +
   workspace_id.bytes` (a ciphertext copied to another workspace fails to open).
 - `open_(sealed, *, aad) -> str`; any failure raises `SecretUnavailable` (no detail).
-- `rbctl secrets gen-kek` prints a new KEK line; `rbctl secrets rotate` re-wraps every DEK
+- `wasilactl secrets gen-kek` prints a new KEK line; `wasilactl secrets rotate` re-wraps every DEK
   under the current KEK (DEKs and ciphertexts untouched) and reports counts only.
 - **Never readable back** (R12): no endpoint, MCP tool, export, log or error returns the key.
   Only `key_last4`. The decrypted key exists only inside `services/openrouter.py` call
@@ -273,11 +273,11 @@ prefill job when it finishes (success or permanent failure) and by housekeeping 
   to `_VALUE_PATTERNS`; `openrouter_key`/`kek` added to `SENSITIVE_KEY_RE`; httpx/httpcore
   loggers set to WARNING; OpenRouter error bodies are never logged verbatim (only status +
   OpenRouter `error.code`).
-- Docs: `deploy/.env.example` gains a commented `RAISEBOOK_SECRETS_KEK=` with the generate
+- Docs: `deploy/.env.example` gains a commented `WASILA_SECRETS_KEK=` with the generate
   command (`python3 -c "import base64,os;print('k1:'+base64.urlsafe_b64encode(os.urandom(32)).decode())"`)
   and "losing it makes saved OpenRouter keys unreadable; members re-enter them"; compose's
-  `x-api-env` gains `RAISEBOOK_SECRETS_KEK: ${RAISEBOOK_SECRETS_KEK:-}` and
-  `RAISEBOOK_SECRETS_KEK_PREVIOUS`. Tests set a generated KEK in `conftest.py`'s env block.
+  `x-api-env` gains `WASILA_SECRETS_KEK: ${WASILA_SECRETS_KEK:-}` and
+  `WASILA_SECRETS_KEK_PREVIOUS`. Tests set a generated KEK in `conftest.py`'s env block.
 
 ---
 
@@ -287,7 +287,7 @@ prefill job when it finishes (success or permanent failure) and by housekeeping 
 - `enqueue(db, *, kind, workspace_id, payload, dedupe_key, priority, now)`: `INSERT … ON
   CONFLICT (dedupe_key) WHERE status IN ('queued','running') DO NOTHING RETURNING id`; on
   conflict returns the existing job. Same transaction as the run row, then `NOTIFY
-  raisebook_jobs` (fires on commit).
+  wasila_jobs` (fires on commit).
 - `claim(conn, worker_id, now, lease_s)`:
   ```sql
   UPDATE jobs SET status='running', locked_by=:w, locked_until=:now + :lease,
@@ -311,10 +311,10 @@ prefill job when it finishes (success or permanent failure) and by housekeeping 
   lost lease does no harm: steps already marked done in `research_runs.progress` are skipped,
   sources dedupe on `(run_id, url_key)`, the spend ledger is keyed by reservation (§5).
 
-### 3.2 Runner `raisebook/worker.py` + `rbctl worker`
-- Settings: `RAISEBOOK_WORKER_CONCURRENCY` (default 4), `RAISEBOOK_WORKER_POLL_S` (2),
-  `RAISEBOOK_WORKER_LEASE_S` (120), `RAISEBOOK_WORKER_GRACE_S` (50).
-- One asyncio process: N slot tasks; a dedicated asyncpg connection `LISTEN raisebook_jobs`
+### 3.2 Runner `wasila/worker.py` + `wasilactl worker`
+- Settings: `WASILA_WORKER_CONCURRENCY` (default 4), `WASILA_WORKER_POLL_S` (2),
+  `WASILA_WORKER_LEASE_S` (120), `WASILA_WORKER_GRACE_S` (50).
+- One asyncio process: N slot tasks; a dedicated asyncpg connection `LISTEN wasila_jobs`
   wakes idle slots; otherwise poll every `POLL_S`. Its own small SQLAlchemy engine/pool (like
   the rate limiter's), never the API's.
 - Heartbeat task per running job every `LEASE_S / 3`.
@@ -328,19 +328,19 @@ prefill job when it finishes (success or permanent failure) and by housekeeping 
 - **Graceful shutdown**: SIGTERM/SIGINT → stop claiming, wait up to `GRACE_S` for in-flight
   jobs; then cancel them and release their leases (`status='queued', locked_by=NULL`,
   `attempts = attempts - 1`) so another worker resumes immediately. Exit 0.
-- `rbctl worker --once` drains the queue and exits (tests, cron-style self-hosting).
+- `wasilactl worker --once` drains the queue and exits (tests, cron-style self-hosting).
 - Logs: job id, kind, workspace id, status, duration, attempt. Never payload contents.
 
 ### 3.3 Compose
-New `worker` service in `deploy/docker-compose.yml`: `image: raisebook-api:local`,
-`command: ["rbctl", "worker"]`, `environment: *api-env`, `depends_on: migrate
+New `worker` service in `deploy/docker-compose.yml`: `image: wasila-api:local`,
+`command: ["wasilactl", "worker"]`, `environment: *api-env`, `depends_on: migrate
 (service_completed_successfully)`, `restart: unless-stopped`, `stop_grace_period: 60s`,
 `networks: [internal]`, no ports. It needs outbound HTTPS to `openrouter.ai` (the internal
 network is not `internal: true`, so it already has egress; documented in `docs/DEPLOY.md`).
 `deploy/README.md` and `docs/DEPLOY.md` list the worker and the KEK.
 
 ### 3.4 Dev and tests
-- Dev: `uv run rbctl worker` beside uvicorn (added to CLAUDE.md "Run").
+- Dev: `uv run wasilactl worker` beside uvicorn (added to CLAUDE.md "Run").
 - Tests run handlers **in-process**: a `run_jobs(db)` helper claims and runs queued jobs
   synchronously against the test session (same transaction semantics as the rest of the
   suite); the real claim SQL, concurrency (two claimers, one job) and stuck recovery are
@@ -385,7 +385,7 @@ Steps and their `progress.steps` keys:
 ### 4.2 OpenRouter client `services/openrouter.py`
 - `OpenRouterClient(key, *, base_url=settings.openrouter_base_url, transport=None, timeout)`;
   base URL default `https://openrouter.ai/api/v1`, headers `Authorization: Bearer <key>`,
-  `HTTP-Referer: https://raisebook.org`, `X-Title: Raisebook`. No SDK dependency (httpx is
+  `HTTP-Referer: https://wasila.app`, `X-Title: Wasila`. No SDK dependency (httpx is
   already pinned). An app-level factory (`get_openrouter_transport`) is overridable in tests.
 - `check_key() -> KeyInfo` → `GET /key` (R12 validate on save): 200 → label, limit,
   limit_remaining, is_free_tier; 401/403 → `InvalidOpenRouterKey` (422
@@ -408,7 +408,7 @@ Steps and their `progress.steps` keys:
   "url_citation"` (`url`, `title`, `content`), which OpenRouter normalizes for every provider,
   falling back to a top-level `citations` / `search_results` array if present.
 - Writer-step request shape: `response_format: {"type": "json_schema", "json_schema":
-  {"name": "raisebook_dossier_v1", "strict": true, "schema": DOSSIER_SCHEMA}}`, temperature
+  {"name": "wasila_dossier_v1", "strict": true, "schema": DOSSIER_SCHEMA}}`, temperature
   0.2 where supported, `max_tokens` 6000. Model ids without `structured_outputs` in their
   supported parameters are refused at save time under Advanced ("This model cannot return
   structured JSON; pick another writer."). The response is still parsed and validated by our
@@ -697,20 +697,20 @@ corrects the charge to the real cost. "Remove key" cancels running runs too; the
 re-checks the run and the key before every call.
 - Start-time check: `POST …/research` refuses up front (422 `spend_cap_reached`) when
   `spent + reserved + the run's hold > cap`. Bulk `fits` counts the runs whose estimates
-  **plus the holds of the runs in flight at once** (`RAISEBOOK_WORKER_CONCURRENCY`) fit, best
+  **plus the holds of the runs in flight at once** (`WASILA_WORKER_CONCURRENCY`) fit, best
   fit first for a round; bulk requires `confirm_micros` ≥ the server's current estimate (else
   409 `estimate_changed` with the new number) and fits as many runs as the remaining cap
   allows only if the client sent `allow_partial: true`; otherwise 422 with "N of M fit under
   your cap".
 - Cap edits apply immediately; lowering below `spent` just stops new calls.
-- Agent `save_dossier` costs Raisebook nothing and does not touch the ledger.
+- Agent `save_dossier` costs Wasila nothing and does not touch the ledger.
 
 ---
 
 ## 6. REST API (Part 1: settings/profile; Part 2: research)
 
-New modules registered in `api/router.py` before `investors`: `raisebook.api.ai_settings`,
-`raisebook.api.company_profile`, `raisebook.api.research`, `raisebook.api.research_policy`.
+New modules registered in `api/router.py` before `investors`: `wasila.api.ai_settings`,
+`wasila.api.company_profile`, `wasila.api.research`, `wasila.api.research_policy`.
 Every route is added to `tests/isolation/test_rest_isolation.py` (`ORGLESS` only for the two
 public removal routes). Shapes in `schemas/research.py`, `schemas/ai_settings.py`.
 
@@ -763,7 +763,7 @@ investor page and sheet need no extra request.
 | method | path | auth | notes |
 |---|---|---|---|
 | POST | `/v1/research-policy/removal-requests` | anonymous, `anon_ip` + new `removal_request` bucket (5/h per IP, 3/day per email) | `{name, email, linkedin_url?, firm?, message?}` → 202 always (no enumeration); sends a verification email with a one-time link (`/research-policy/verify?token=…`, 7 days) |
-| POST | `/v1/research-policy/removal-requests/verify` | anonymous | `{token}` → status `verified`; the operator is told (log line + optional `RAISEBOOK_OPERATOR_EMAIL`) |
+| POST | `/v1/research-policy/removal-requests/verify` | anonymous | `{token}` → status `verified`; the operator is told (log line + optional `WASILA_OPERATOR_EMAIL`) |
 
 ### 6.6 Errors (new `core/errors.py` classes)
 `ResearchUnavailable` (503 `research_unavailable`: no KEK), `NoAiKey` (422 `no_ai_key`:
@@ -778,7 +778,7 @@ through `core.refs.how` as today.
 viewer: all GETs; editor / write key: research, identity pick, suggestions, profile PUT,
 prefill, save dossier; owner session only: key PUT/DELETE; admin: PATCH ai-settings.
 
-### 6.8 Operator CLI (`rbctl research …`)
+### 6.8 Operator CLI (`wasilactl research …`)
 `removals list [--status verified]` (with `proof`), `removals apply <id> [--proof-checked]` (enqueues `research.removal`),
 `removals reject <id> --note`, `usage --workspace` (counts only). The removal job deletes, in
 every workspace, research rows whose anchor matches the request (`linkedin_key`, or
@@ -793,7 +793,7 @@ Policy page says this plainly. Every cross-workspace statement lives in
 
 ---
 
-## 7. MCP tools (Part 2, `raisebook/mcp/tools/research.py`)
+## 7. MCP tools (Part 2, `wasila/mcp/tools/research.py`)
 
 Registered in `mcp/tools/__init__.py` (`TOOL_MODULES`); shapes in `mcp/shaping.py`; every tool
 in `tests/isolation/test_mcp_isolation.py`; descriptions added to
@@ -829,8 +829,8 @@ scrollBody`, `useHotkey` for keys, `Combobox` for the Advanced model picker (lon
 ### 8.1 Settings → AI research (`/w/[ws]/settings/ai`)
 SettingsNav gains "AI research" and "Company profile". Page sections:
 1. **Plain statement** (R6, R12): "Research runs on your own OpenRouter key. When you research
-   an investor, Raisebook sends their name, firm, title and links, your company profile and
-   round terms (and your deck when you prefill) to OpenRouter and the models below. Raisebook
+   an investor, Wasila sends their name, firm, title and links, your company profile and
+   round terms (and your deck when you prefill) to OpenRouter and the models below. Wasila
    never pays for or sees model usage beyond the cost OpenRouter reports."
 2. **Key**: owner sees a password field + "Save key" (validates, error text inline), or
    "Key ending ••••a1b2 · checked 2 min ago" + "Replace" + "Remove key" (ConfirmDialog,
@@ -849,7 +849,7 @@ follow, check range with `CurrencyPicker` currency of the workspace, strategic h
 "Prefill" block: website URL field and `FileDrop` for a PDF deck → starts the prefill run →
 inline progress → fills the form as an unsaved draft with "Drafted from your deck — review and
 save" (changes highlighted until saved). Note under the block: "Your deck is sent to the AI
-provider through your OpenRouter key and not kept by Raisebook." Banner on the Dossier tab and
+provider through your OpenRouter key and not kept by Wasila." Banner on the Dossier tab and
 in Triage when the profile is empty: "Add your company profile for fit and talking points."
 
 ### 8.3 Investor sheet and page: Dossier tab
@@ -947,7 +947,7 @@ spend, RE).
   new job); claim with two concurrent committing sessions → exactly one wins (SKIP LOCKED);
   lease expiry → `recover_stuck` requeues; attempts exhausted → failed; backoff schedule with
   frozen clock and `Retry-After`; heartbeat by a worker that lost the lease updates nothing;
-  graceful shutdown releases leases and decrements attempts; `rbctl worker --once` drains.
+  graceful shutdown releases leases and decrements attempts; `wasilactl worker --once` drains.
 - `test_spend_ledger.py`: reserve within cap ok; over cap → 0 rows; 20 concurrent reservations
   on committing sessions never exceed the cap (sum of reserved ≤ cap); settle moves reserved →
   spent; recovery releases a dead run's reservation; month boundary in the workspace timezone.
@@ -1001,7 +1001,7 @@ spend, RE).
 - `test_research_permissions.py` + matrix additions; `tests/mcp/test_tools.py` count 22 with
   annotations; MCP isolation cases for all 5 tools; REST isolation for every new route
   (runs, batches, suggestions, identity, dossier of B's investor → 404).
-- `test_research_removal.py`: request → verification email (outbox) → verify → `rbctl
+- `test_research_removal.py`: request → verification email (outbox) → verify → `wasilactl
   research removals apply` deletes matching research rows in two workspaces (counts only),
   keeps contacts, resets unchanged auto-applied values, inserts suppression; later research
   on that anchor → `research_suppressed`; anonymous rate limits; no enumeration (always 202).
@@ -1026,13 +1026,13 @@ spend, RE).
 compose/docs)
 - `backend/alembic/versions/0003_research.py` (all tables in §1 at once, so later parts add
   no migration unless needed).
-- `raisebook/core/secrets.py`, `config.py` (KEK, OpenRouter base URL, worker settings),
+- `wasila/core/secrets.py`, `config.py` (KEK, OpenRouter base URL, worker settings),
   `core/logging.py` redaction, `core/errors.py` new classes.
 - `models/ai.py` (settings, usage months, company profile), `models/jobs.py`,
   `models/research.py` (the rest, ORM only in Part 1), `models/enums.py`.
 - `services/ai_settings.py` (presets, key save/remove, verify ids), `services/openrouter.py`
   (Part 1 needs only `check_key` + `list_models`), `services/spend.py` (reserve/settle/
-  release), `services/company_profile.py`, `services/jobs.py`, `raisebook/worker.py`,
+  release), `services/company_profile.py`, `services/jobs.py`, `wasila/worker.py`,
   `cli.py` (`worker`, `secrets gen-kek|rotate`).
 - `api/ai_settings.py`, `api/company_profile.py` (GET/PUT), router registration.
 - `deploy/docker-compose.yml` (worker + env), `deploy/.env.example`, `deploy/README.md`,
@@ -1103,7 +1103,7 @@ meeting offer; policy pages + docs; screenshots)
    pick or LinkedIn; an automatic match for its cited LinkedIn and a firm domain that carries
    the firm's name); otherwise they are suggestions to accept. Agent identities must be the
    same person (name, firm) and are never saved while "Is this them?" waits.
-8. **Removal proof**: confirming the emailed link proves only the mailbox. `rbctl research
+8. **Removal proof**: confirming the emailed link proves only the mailbox. `wasilactl research
    removals list` shows `proof: strong|weak` (strong = the email is on the person's firm
    domain); `apply` refuses weak proof without `--proof-checked`. The done email carries no
    counts. Suppressions keep every LinkedIn and name+firm key the deleted research knew, and
@@ -1162,7 +1162,7 @@ boolean NOT NULL DEFAULT false`).
 
 ### 12.3 Investor notes as starting facts (R16)
 - `use_notes_in_research` (default off) is changed with `PATCH /v1/workspace/ai-settings`
-  (`raisebook:admin`: owners and admin keys); Settings → AI research → "Investor notes" with
+  (`wasila:admin`: owners and admin keys); Settings → AI research → "Investor notes" with
   the copy "Investor notes are sent to your AI provider during research."
 - `privacy_filter.notes_for_research`: NFKC, a line about family, health, politics, religion
   or a home is dropped, phones/addresses/consumer emails stripped, trimmed to about 2,000

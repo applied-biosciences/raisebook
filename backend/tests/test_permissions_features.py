@@ -177,11 +177,11 @@ ROWS = [
 ]
 
 AM_MODULES = {
-    "raisebook.api.rounds",
-    "raisebook.api.participants",
-    "raisebook.api.investors",
-    "raisebook.api.activities",
-    "raisebook.api.follow_ups",
+    "wasila.api.rounds",
+    "wasila.api.participants",
+    "wasila.api.investors",
+    "wasila.api.activities",
+    "wasila.api.follow_ups",
 }
 
 

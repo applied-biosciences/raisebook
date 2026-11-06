@@ -50,6 +50,6 @@ export const revokeApiKey = (c: ApiClient, id: UUID) => c.del<void>(`/v1/api-key
 
 /** Public MCP endpoint shown in snippets (SPEC §6.5, §10). */
 export const PUBLIC_API_URL = (
-  process.env.NEXT_PUBLIC_PUBLIC_API_URL ?? "https://api.raisebook.org"
+  process.env.NEXT_PUBLIC_PUBLIC_API_URL ?? "https://api.wasila.app"
 ).replace(/\/$/, "");
 export const MCP_URL = `${PUBLIC_API_URL}/mcp`;

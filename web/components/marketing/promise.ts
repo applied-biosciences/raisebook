@@ -9,15 +9,15 @@ export const PRIVACY_PROMISE: { lead: string; body: string }[] = [
   },
   {
     lead: "We never pool, sell, rent or mine it.",
-    body: "Raisebook never builds an investor database from your data and never shows one workspace's data to another.",
+    body: "Wasila never builds an investor database from your data and never shows one workspace's data to another.",
   },
   {
     lead: "No ads, no trackers.",
-    body: "No analytics scripts, pixels or third-party cookies. Fonts are served by Raisebook.",
+    body: "No analytics scripts, pixels or third-party cookies. Fonts are served by Wasila.",
   },
   {
     lead: "No AI on your data unless you bring it.",
-    body: "Raisebook never runs or pays for AI on its own. Investor research runs only when you press a button, on your own OpenRouter key, and sends only the investor's name, firm and links, your company profile and round terms. Agents you connect use your key, and every action they take is on the timeline.",
+    body: "Wasila never runs or pays for AI on its own. Claude and investor research run only when you press a button, on your own Anthropic or OpenRouter key, and see only public investor profile data, your company profile and round terms: never emails, phone numbers, amounts or notes. Agents you connect use your key, and every action they take is on the timeline.",
   },
   {
     lead: "Leave any time.",
@@ -25,6 +25,6 @@ export const PRIVACY_PROMISE: { lead: string; body: string }[] = [
   },
   {
     lead: "Check our work.",
-    body: "Raisebook is open source under AGPL-3.0, including the code that handles your data.",
+    body: "Wasila is open source under AGPL-3.0, including the code that handles your data.",
   },
 ];

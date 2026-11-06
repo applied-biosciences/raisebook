@@ -22,12 +22,12 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from raisebook.auth.session import SESSION_COOKIE
-from raisebook.config import Settings, reset_settings_cache
-from raisebook.core import clock
-from raisebook.models.user import User, UserSession
-from raisebook.services import google_auth
 from tests.factories import make_invite, make_user, make_workspace, owner_of
+from wasila.auth.session import SESSION_COOKIE
+from wasila.config import Settings, reset_settings_cache
+from wasila.core import clock
+from wasila.models.user import User, UserSession
+from wasila.services import google_auth
 
 CLIENT_ID = "test-client.apps.googleusercontent.com"
 CLIENT_SECRET = "test-client-secret"
@@ -120,7 +120,7 @@ def _set_env(monkeypatch: pytest.MonkeyPatch, **env: str) -> None:
 
 @pytest.fixture
 def google_off(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
-    _set_env(monkeypatch, RAISEBOOK_GOOGLE_CLIENT_ID="", RAISEBOOK_GOOGLE_CLIENT_SECRET="")
+    _set_env(monkeypatch, WASILA_GOOGLE_CLIENT_ID="", WASILA_GOOGLE_CLIENT_SECRET="")
     yield
     monkeypatch.undo()
     reset_settings_cache()
@@ -130,8 +130,8 @@ def google_off(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
 def fake_google(app: Any, monkeypatch: pytest.MonkeyPatch) -> Iterator[FakeGoogle]:
     _set_env(
         monkeypatch,
-        RAISEBOOK_GOOGLE_CLIENT_ID=CLIENT_ID,
-        RAISEBOOK_GOOGLE_CLIENT_SECRET=CLIENT_SECRET,
+        WASILA_GOOGLE_CLIENT_ID=CLIENT_ID,
+        WASILA_GOOGLE_CLIENT_SECRET=CLIENT_SECRET,
     )
     google_auth.reset_jwks_cache()
     fake = FakeGoogle()
@@ -226,11 +226,11 @@ def test_redirect_uri_derives_from_public_base_url() -> None:
     s = Settings(
         google_client_id="id",
         google_client_secret="gs-very-private",  # type: ignore[arg-type]
-        public_base_url="https://api.raisebook.org/",
+        public_base_url="https://api.wasila.app/",
     )
     cfg = google_auth.google_config(s)
     assert cfg is not None
-    assert cfg.redirect_uri == "https://api.raisebook.org/v1/auth/google/callback"
+    assert cfg.redirect_uri == "https://api.wasila.app/v1/auth/google/callback"
     assert cfg.client_secret == "gs-very-private"
     assert "gs-very-private" not in repr(s)  # SecretStr never prints
 
@@ -266,7 +266,7 @@ async def test_start_redirects_with_pkce_state_nonce(
 async def test_flow_cookie_is_secure_in_production_config(
     browser: Browser, fake_google: FakeGoogle, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    _set_env(monkeypatch, RAISEBOOK_SESSION_COOKIE_SECURE="true")
+    _set_env(monkeypatch, WASILA_SESSION_COOKIE_SECURE="true")
     b = await browser()
     r = await b.get("/v1/auth/google/start")
     flow_cookie = next(
@@ -297,7 +297,7 @@ async def test_new_user_signs_in_and_goes_to_onboarding(
     cookies = r.headers.get_list("set-cookie")
     sess = next(c for c in cookies if c.startswith(f"{SESSION_COOKIE}="))
     assert "httponly" in sess.lower() and "samesite=lax" in sess.lower()
-    assert any(c.startswith("rb_csrf=") for c in cookies)
+    assert any(c.startswith("wsl_csrf=") for c in cookies)
     flow_clear = next(c for c in cookies if c.startswith(google_auth.FLOW_COOKIE))
     assert "max-age=0" in flow_clear.lower() or "expires=thu, 01 jan 1970" in flow_clear.lower()
 
@@ -588,7 +588,7 @@ async def test_sub_mismatch_is_refused(
 async def test_google_sign_ins_are_rate_limited(
     browser: Browser, fake_google: FakeGoogle, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    _set_env(monkeypatch, RAISEBOOK_GOOGLE_MAX_PER_WINDOW="2")
+    _set_env(monkeypatch, WASILA_GOOGLE_MAX_PER_WINDOW="2")
     for _ in range(2):
         b = await browser()
         assert (await _login(b, fake_google)).headers["location"] == f"{APP}/onboarding"
@@ -599,7 +599,7 @@ async def test_google_sign_ins_are_rate_limited(
 async def test_start_and_callback_are_ip_rate_limited(
     browser: Browser, fake_google: FakeGoogle, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    from raisebook.core.ratelimit import LIMITS, Limit
+    from wasila.core.ratelimit import LIMITS, Limit
 
     monkeypatch.setitem(LIMITS, "anon_ip", Limit(2, 60))
     b = await browser()

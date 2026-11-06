@@ -1,4 +1,4 @@
-# Raisebook web image (Next.js standalone output). SPEC §11.
+# Wasila web image (Next.js standalone output). SPEC §11.
 #
 # Build context is web/:
 #   docker build -f deploy/web.Dockerfile web
@@ -11,13 +11,13 @@ RUN npm ci --no-audit --no-fund
 
 FROM node:22-bookworm-slim AS build
 WORKDIR /app
-ARG NEXT_PUBLIC_API_URL=https://api.raisebook.org
-ARG NEXT_PUBLIC_SITE_URL=https://raisebook.org
-ARG NEXT_PUBLIC_PUBLIC_API_URL=https://api.raisebook.org
-ARG NEXT_PUBLIC_REPO_URL=https://github.com/gumruyanzh/raisebook
-# Empty hides the "Support Raisebook" buttons.
+ARG NEXT_PUBLIC_API_URL=https://api.wasila.app
+ARG NEXT_PUBLIC_SITE_URL=https://wasila.app
+ARG NEXT_PUBLIC_PUBLIC_API_URL=https://api.wasila.app
+ARG NEXT_PUBLIC_REPO_URL=https://github.com/applied-biosciences/wasila
+# Empty hides the "Support Wasila" buttons.
 ARG NEXT_PUBLIC_SPONSOR_URL=""
-# The commit this image was built from (a <meta name="raisebook-commit"> on every page).
+# The commit this image was built from (a <meta name="wasila-commit"> on every page).
 ARG GIT_SHA=""
 ENV NEXT_TELEMETRY_DISABLED=1 \
     NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
@@ -36,7 +36,7 @@ ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
     HOSTNAME=0.0.0.0 \
     PORT=3000
-RUN useradd --system --uid 10001 --home /app raisebook
+RUN useradd --system --uid 10001 --home /app wasila
 COPY --from=build --chown=10001 /app/.next/standalone ./
 COPY --from=build --chown=10001 /app/.next/static ./.next/static
 COPY --from=build --chown=10001 /app/public ./public

@@ -1,11 +1,11 @@
-# Self-hosting Raisebook
+# Self-hosting Wasila
 
-Raisebook runs as six containers on one machine: Postgres 17, a one-shot migration job,
+Wasila runs as six containers on one machine: Postgres 17, a one-shot migration job,
 the API (REST under `/v1` and the MCP server at `/mcp`), a background job runner (AI
 research; idle while research is off), the web app, and Caddy for HTTPS.
 Any Linux host with Docker and 1 GB of RAM is enough for a team.
 
-The production setup for raisebook.org (DigitalOcean, DNS records, backups) is in
+The production setup for wasila.app (DigitalOcean, DNS records, backups) is in
 [`docs/DEPLOY.md`](../docs/DEPLOY.md). This page is the short version for your own domain.
 
 ## Files
@@ -14,7 +14,7 @@ The production setup for raisebook.org (DigitalOcean, DNS records, backups) is i
 |---|---|
 | `api.Dockerfile` | API image (Python 3.12, uv, non-root uid 10001). Build context `backend/`. |
 | `web.Dockerfile` | Web image (Next.js standalone, Node 22, non-root). Build context `web/`. |
-| `docker-compose.yml` | `postgres`, `migrate`, `api`, `worker`, `web`, `caddy`. Only Caddy publishes ports (80, 443). `worker` runs `rbctl worker` on the API image. Logs are capped at 5 × 20 MB per container. |
+| `docker-compose.yml` | `postgres`, `migrate`, `api`, `worker`, `web`, `caddy`. Only Caddy publishes ports (80, 443). `worker` runs `wasilactl worker` on the API image. Logs are capped at 5 × 20 MB per container. |
 | `Caddyfile` | `WEB_HOST` → web, `www.WEB_HOST` → redirect, `API_HOST` → API and `/mcp` (unbuffered). Security headers and a self-only CSP. |
 | `.env.example` | Every setting. Copy to `deploy/.env` (git-ignored). |
 | `backup.sh` | Nightly `pg_dump` with a 14-day retention limit. |
@@ -23,14 +23,14 @@ The production setup for raisebook.org (DigitalOcean, DNS records, backups) is i
 
 1. Point two DNS records at the machine: `WEB_HOST` (for example `crm.example.com`) and
    `API_HOST` (for example `api.crm.example.com`). They must share a parent domain, which
-   goes in `RAISEBOOK_SESSION_COOKIE_DOMAIN` (`example.com` here), so the sign-in cookie
+   goes in `WASILA_SESSION_COOKIE_DOMAIN` (`example.com` here), so the sign-in cookie
    reaches both.
 2. Configure:
    ```bash
-   git clone https://github.com/gumruyanzh/raisebook && cd raisebook
+   git clone https://github.com/applied-biosciences/wasila && cd wasila
    cp deploy/.env.example deploy/.env
-   # Set your hosts: WEB_HOST, API_HOST, RAISEBOOK_SESSION_COOKIE_DOMAIN, RAISEBOOK_EMAIL_FROM.
-   # Set your secrets: POSTGRES_PASSWORD, RAISEBOOK_SESSION_SECRET and the SMTP settings.
+   # Set your hosts: WEB_HOST, API_HOST, WASILA_SESSION_COOKIE_DOMAIN, WASILA_EMAIL_FROM.
+   # Set your secrets: POSTGRES_PASSWORD, WASILA_SESSION_SECRET and the SMTP settings.
    ```
 3. Start:
    ```bash
@@ -40,22 +40,22 @@ The production setup for raisebook.org (DigitalOcean, DNS records, backups) is i
    curl -s https://$API_HOST/healthz/ready               # {"status":"ok","db":"ok"}
    ```
 4. Sign in at `https://$WEB_HOST/signin`. The sign-in link arrives by email, so SMTP must
-   work. To check email without a provider, set `RAISEBOOK_EMAIL_BACKEND=log` and read the
+   work. To check email without a provider, set `WASILA_EMAIL_BACKEND=log` and read the
    link from `docker compose logs api`, then switch back.
 
 ## "Continue with Google" (optional)
 
-Off until both `RAISEBOOK_GOOGLE_CLIENT_ID` and `RAISEBOOK_GOOGLE_CLIENT_SECRET` are set in
+Off until both `WASILA_GOOGLE_CLIENT_ID` and `WASILA_GOOGLE_CLIENT_SECRET` are set in
 `deploy/.env`. The sign-in page asks `GET /v1/auth/providers` and hides the button while
 they are empty.
 
 1. In Google Cloud Console, open APIs & Services > OAuth consent screen and set it up
-   (External, app name "Raisebook", scopes `openid`, `email`, `profile`; these are not
+   (External, app name "Wasila", scopes `openid`, `email`, `profile`; these are not
    sensitive scopes, so Google does not need to review the app).
 2. Credentials > Create credentials > OAuth client ID, type "Web application". Add exactly one
-   authorized redirect URI, `https://$API_HOST/v1/auth/google/callback` (for raisebook.org:
-   `https://api.raisebook.org/v1/auth/google/callback`). It is derived from
-   `RAISEBOOK_PUBLIC_BASE_URL`, so it must match character for character. No JavaScript
+   authorized redirect URI, `https://$API_HOST/v1/auth/google/callback` (for wasila.app:
+   `https://api.wasila.app/v1/auth/google/callback`). It is derived from
+   `WASILA_PUBLIC_BASE_URL`, so it must match character for character. No JavaScript
    origin is needed.
 3. Put the client ID and secret in `deploy/.env`, then
    `docker compose -f deploy/docker-compose.yml up -d api` (no rebuild; the web reads the
@@ -63,7 +63,7 @@ they are empty.
 
 A Google sign-in uses the same account as the emailed link for that address. Google must
 report the address as verified. The first Google sign-in binds the Google account to the
-Raisebook account, and a different Google account claiming the same address later is
+Wasila account, and a different Google account claiming the same address later is
 refused.
 
 ## AI research (optional)
@@ -74,19 +74,19 @@ never calls a model on its own account. The `worker` service runs the research j
 1. Generate a key-encryption key (it seals the saved OpenRouter keys) and keep it with your
    other secrets; lose it and every workspace has to enter its key again:
    ```bash
-   docker compose -f deploy/docker-compose.yml run --rm --no-deps api rbctl secrets gen-kek
+   docker compose -f deploy/docker-compose.yml run --rm --no-deps api wasilactl secrets gen-kek
    # prints k1:<base64url of 32 bytes>
    ```
-2. In `deploy/.env` set `RAISEBOOK_RESEARCH_ENABLED=true`, `RAISEBOOK_SECRETS_KEK=` that line,
-   and optionally `RAISEBOOK_OPERATOR_EMAIL` (emailed when a removal request is confirmed).
+2. In `deploy/.env` set `WASILA_RESEARCH_ENABLED=true`, `WASILA_SECRETS_KEK=` that line,
+   and optionally `WASILA_OPERATOR_EMAIL` (emailed when a removal request is confirmed).
 3. `docker compose -f deploy/docker-compose.yml up -d` restarts `api` and `worker` with it;
    `docker compose -f deploy/docker-compose.yml logs worker | grep worker_started` shows the
    job kinds it serves.
 
 Removal requests from the public Research Policy page are applied by you:
-`rbctl research removals list --status verified`, then `rbctl research removals apply <id>`
+`wasilactl research removals list --status verified`, then `wasilactl research removals apply <id>`
 (add `--proof-checked` only after checking a `proof: weak` request some other way) or
-`rbctl research removals reject <id>`. KEK rotation and the rest are in
+`wasilactl research removals reject <id>`. KEK rotation and the rest are in
 [`docs/DEPLOY.md`](../docs/DEPLOY.md) under "AI research".
 
 ## Updating
@@ -103,16 +103,16 @@ curl -s https://$API_HOST/healthz                            # "commit" is the n
 
 ```bash
 dc="docker compose -f deploy/docker-compose.yml"
-$dc exec api rbctl --help                          # admin CLI
-$dc exec api rbctl seed-demo --email you@example.com   # fictional sample workspace
-$dc exec api rbctl housekeeping                    # expired tokens/sessions, dead invites, old rate-limit windows
+$dc exec api wasilactl --help                          # admin CLI
+$dc exec api wasilactl seed-demo --email you@example.com   # fictional sample workspace
+$dc exec api wasilactl housekeeping                    # expired tokens/sessions, dead invites, old rate-limit windows
 $dc logs -f api                                    # JSON logs; no request bodies, emails or investor data
 $dc logs -f worker                                 # background jobs (job id, kind, attempt; never keys)
 ```
 
-Run `rbctl housekeeping` daily from cron. Back up with `deploy/backup.sh` (see the header of
+Run `wasilactl housekeeping` daily from cron. Back up with `deploy/backup.sh` (see the header of
 the script). Restore a dump into an empty database with
-`pg_restore --clean --if-exists --no-owner -d raisebook <file>`.
+`pg_restore --clean --if-exists --no-owner -d wasila <file>`.
 
 ## Trust boundaries
 
@@ -122,17 +122,17 @@ the script). Restore a dump into an empty database with
   publish the API port directly or run behind a different proxy, set `FORWARDED_ALLOW_IPS` to
   that proxy's address. **Never set it to `*` when the API is reachable without the proxy**:
   anyone could then spoof their IP and bypass those limits.
-- **Session cookie domain.** `rb_session` and `rb_csrf` are scoped to
-  `RAISEBOOK_SESSION_COOKIE_DOMAIN` (the parent domain), so every subdomain of it receives the
+- **Session cookie domain.** `wsl_session` and `wsl_csrf` are scoped to
+  `WASILA_SESSION_COOKIE_DOMAIN` (the parent domain), so every subdomain of it receives the
   session cookie. Every subdomain must be first-party, run by you, inside the same trust
   boundary. Never point a subdomain at third-party hosting (status pages, docs builders,
   landing-page tools), remove DNS records for anything you shut down so it cannot be taken
-  over, and run staging on a separate registrable domain, not `staging.raisebook.org`.
+  over, and run staging on a separate registrable domain, not `staging.wasila.app`.
 - **Backups.** `backup.sh` writes dumps with `umask 077` into a `700` directory. Encrypt a dump
   (for example with `age` and an offline key) before it leaves the host.
 
 ## Local check without a domain
 
 Caddy needs real DNS for certificates, and the session cookie needs a shared parent domain,
-so the compose stack is meant for a real host. To try Raisebook on your laptop, run the API
+so the compose stack is meant for a real host. To try Wasila on your laptop, run the API
 and the web app directly as described in `CLAUDE.md` (no Docker needed).

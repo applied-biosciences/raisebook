@@ -139,12 +139,12 @@ export function SeoPage({
           Start your raise.
         </h2>
         <p className="t-body-l mt-6 text-muted">
-          Free forever. Sign in with an email link or Google, import a CSV or start from a sample workspace of fictional
+          Sign in with an email link or Google, import a CSV, Excel or Word list, or start from a sample workspace of fictional
           investors.
         </p>
         <div className="mt-14 flex flex-wrap items-center gap-x-18 gap-y-12">
           <ButtonLink href="/signin" variant="primary">
-            Start free
+            Open Wasila
           </ButtonLink>
           <TextLink href="/docs/mcp">Connect Claude Code →</TextLink>
         </div>

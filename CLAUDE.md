@@ -1,23 +1,23 @@
-# Raisebook: working notes for agents
+# Wasila: working notes for agents
 
-Raisebook (raisebook.org) is a free-forever, open-source (AGPL-3.0) fundraising CRM for
+Wasila (wasila.app) is a free-forever, open-source (AGPL-3.0) fundraising CRM for
 founders, with a first-class MCP server. Spec: `docs/SPEC.md`. Its **§0 decisions block
-overrides the rest**: the package is `raisebook`, the env prefix is `RAISEBOOK_*`, the CLI is
-`rbctl`, keys are `rb_live_` / `rb_test_`, and the scopes are `raisebook:read|write|admin`.
-Design rules: `design/SYSTEM.md` (binding). Who edits what: `docs/OWNERSHIP.md`. raisebook.org
+overrides the rest**: the package is `wasila`, the env prefix is `WASILA_*`, the CLI is
+`wasilactl`, keys are `wsl_live_` / `wsl_test_`, and the scopes are `wasila:read|write|admin`.
+Design rules: `design/SYSTEM.md` (binding). Who edits what: `docs/OWNERSHIP.md`. wasila.app
 is live on one DigitalOcean droplet (`docs/DEPLOY.md`); only the owner deploys, so never deploy
-and never touch DNS. The repo is public (github.com/gumruyanzh/raisebook); you do not push
+and never touch DNS. The repo is public (github.com/applied-biosciences/wasila); you do not push
 unless asked.
 
 ## Layout
-- `backend/` is the Python 3.12 project, managed by uv. The package is `backend/raisebook/`
-  (import as `from raisebook.x import y`).
+- `backend/` is the Python 3.12 project, managed by uv. The package is `backend/wasila/`
+  (import as `from wasila.x import y`).
 - `backend/alembic/versions/0001_init.py` holds the whole SPEC §3 schema: composite
   `(workspace_id, id)` FKs, CHECKs, partial unique indexes, and the `activities` append-only
   trigger.
 - `web/` is Next.js 15 + React 19 + Tailwind v4. Tokens only, no component library.
-- `deploy/` has the Dockerfiles, `docker-compose.yml` and `Caddyfile` (web at raisebook.org,
-  API and `/mcp` at api.raisebook.org).
+- `deploy/` has the Dockerfiles, `docker-compose.yml` and `Caddyfile` (web at wasila.app,
+  API and `/mcp` at api.wasila.app).
 - `prototype.html` is the original single-file prototype and the design reference. It is
   read-only.
 - `~/projects/smmist` is the sister project and a **read-only** reference. Copy and adapt its
@@ -30,20 +30,20 @@ cd backend
 uv sync
 uv run pytest -q                                   # needs local Postgres 17 (below)
 uv run ruff check . && uv run ruff format --check .
-uv run mypy raisebook
-RAISEBOOK_DATABASE_URL=postgresql://localhost/raisebook_dev uv run alembic upgrade head
-RAISEBOOK_ENV=dev uv run uvicorn --factory raisebook.main:create_app --reload   # API + /mcp on :8000
-uv run rbctl worker    # background jobs (research), beside uvicorn; --once drains and exits
-uv run rbctl --help    # workspace | apikey | seed-demo --email | housekeeping | worker | secrets
+uv run mypy wasila
+WASILA_DATABASE_URL=postgresql://localhost/wasila_dev uv run alembic upgrade head
+WASILA_ENV=dev uv run uvicorn --factory wasila.main:create_app --reload   # API + /mcp on :8000
+uv run wasilactl worker    # background jobs (research), beside uvicorn; --once drains and exits
+uv run wasilactl --help    # workspace | apikey | seed-demo --email | housekeeping | worker | secrets
 ```
-Research needs `RAISEBOOK_RESEARCH_ENABLED=true` and `RAISEBOOK_SECRETS_KEK` (`uv run rbctl secrets gen-kek`); without it the app
+Research needs `WASILA_RESEARCH_ENABLED=true` and `WASILA_SECRETS_KEK` (`uv run wasilactl secrets gen-kek`); without it the app
 works and research reports `research_unavailable`. Production setup (the `worker` compose
 service, the KEK, rotation, removal requests) is in `docs/DEPLOY.md` under "AI research". Never point dev at real OpenRouter money:
 run `uv run python scripts/mock_openrouter.py --port 8787` and set
-`RAISEBOOK_OPENROUTER_BASE_URL=http://localhost:8787/api/v1` for both uvicorn and the worker
+`WASILA_OPENROUTER_BASE_URL=http://localhost:8787/api/v1` for both uvicorn and the worker
 (its canned answers are about the sample's fictional Dana Whitfield).
-Sign in locally: run the API with `RAISEBOOK_ENV=dev`, request a link at `/signin`, and the
-"check your email" page shows the `dev_link`. `uv run rbctl seed-demo --email you@example.com`
+Sign in locally: run the API with `WASILA_ENV=dev`, request a link at `/signin`, and the
+"check your email" page shows the `dev_link`. `uv run wasilactl seed-demo --email you@example.com`
 creates the fictional sandbox workspace "Kestrel Robotics (sample)".
 
 ## Run (web)
@@ -56,26 +56,26 @@ npm run lint && npm run typecheck && npm run build
 
 ## End-to-end run (integrator recipe, no Docker)
 ```bash
-# API on :8100 (from backend/); the web origin on :3100 is RAISEBOOK_APP_URL, so it is allowed.
-RAISEBOOK_ENV=dev RAISEBOOK_PUBLIC_BASE_URL=http://localhost:8100 \
-  RAISEBOOK_APP_URL=http://localhost:3100 RAISEBOOK_SESSION_COOKIE_SECURE=false \
-  uv run uvicorn --factory raisebook.main:create_app --port 8100
+# API on :8100 (from backend/); the web origin on :3100 is WASILA_APP_URL, so it is allowed.
+WASILA_ENV=dev WASILA_PUBLIC_BASE_URL=http://localhost:8100 \
+  WASILA_APP_URL=http://localhost:3100 WASILA_SESSION_COOKIE_SECURE=false \
+  uv run uvicorn --factory wasila.main:create_app --port 8100
 # Web production build on :3100 (from web/); NEXT_PUBLIC_* are baked in at build time.
 NEXT_PUBLIC_API_URL=http://localhost:8100 NEXT_PUBLIC_SITE_URL=http://localhost:3100 npm run build
 npx next start -p 3100
 ```
-`RAISEBOOK_CORS_ORIGINS` takes a comma-separated list or a JSON list. Final screenshots of every
+`WASILA_CORS_ORIGINS` takes a comma-separated list or a JSON list. Final screenshots of every
 route (light, dark, 390px) are in `design/screens/final/`. Signing in by script: request a link
 (`POST /v1/auth/magic-link`), open the `dev_link` and press **Continue**: the verify page never
-spends the token on load. Use a throwaway database (for example `raisebook_shots`) and
-`RAISEBOOK_RATE_LIMIT_BACKEND=off` for screenshot runs.
+spends the token on load. Use a throwaway database (for example `wasila_shots`) and
+`WASILA_RATE_LIMIT_BACKEND=off` for screenshot runs.
 
 ## Tests
-- Local Homebrew **Postgres 17**: databases `raisebook_dev` and `raisebook_test` exist, with
-  `citext` and `pg_trgm`. Override the test DB with `RAISEBOOK_TEST_DATABASE_URL`. There is no
+- Local Homebrew **Postgres 17**: databases `wasila_dev` and `wasila_test` exist, with
+  `citext` and `pg_trgm`. Override the test DB with `WASILA_TEST_DATABASE_URL`. There is no
   Docker and no testcontainers.
 - Each pytest session creates its own schema `t_<pid>_<hex>`, runs `alembic upgrade head` into
-  it, and drops it at exit (`RAISEBOOK_TEST_KEEP_SCHEMA=1` keeps it). Concurrent runs are safe.
+  it, and drops it at exit (`WASILA_TEST_KEEP_SCHEMA=1` keeps it). Concurrent runs are safe.
 - The `db` fixture rolls back an outer transaction per test, and service commits release a
   savepoint. Clients: `client` (anonymous), `session_client(user, ws)` (cookie + CSRF),
   `key_client(key)`, and `mcp_call(key, tool, args)` (the real `/mcp` route). Factories are in
@@ -88,7 +88,7 @@ spends the token on load. Use a throwaway database (for example `raisebook_shots
 - OpenRouter is never reached from tests: an autouse guard installs a refusing transport (an
   unmocked request fails the test). Use the `openrouter_mock` fixture
   (`tests/research/openrouter_mock.py`, fictional `FAKE_KEY`, recorded models list in
-  `tests/research/fixtures/`). conftest sets a throwaway `RAISEBOOK_SECRETS_KEK` per run.
+  `tests/research/fixtures/`). conftest sets a throwaway `WASILA_SECRETS_KEK` per run.
 - Queue and worker races use `committing_sessionmaker` with a test-only job kind
   (`test.<hex>`) and delete their rows afterwards.
 
@@ -100,7 +100,7 @@ spends the token on load. Use a throwaway database (for example `raisebook_shots
   (`services/activities.log`). No-ops write nothing. Agents (API key or MCP) are recorded with
   `actor_label` from `X-Agent-Name` (else the key's `agent_name`, else its name) and
   `agent_model` from `X-Agent-Model`.
-- Errors: raise `raisebook.core.errors.APIError` subclasses. The envelope is
+- Errors: raise `wasila.core.errors.APIError` subclasses. The envelope is
   `{"error": {code, message, details, request_id}}`. Messages say what to do next.
 - MCP tools call the same services as REST and never re-implement rules. Reference resolution
   (investor by id, email, LinkedIn or name; round by id, slug or name, defaulting to the single
@@ -128,9 +128,9 @@ spends the token on load. Use a throwaway database (for example `raisebook_shots
   90 days after sign-in (`session_max_days`); `/v1/me/sessions` lists and ends them.
 - Per-IP `auth_fail`, per-person `invite_user`/`invite_user_new` buckets, and
   `workspaces_per_user` caps. Invite subjects are fixed; names cannot contain links.
-- MCP: `mcp/server.RaisebookMCP` returns compact JSON text (no outputSchema), rewrites
+- MCP: `mcp/server.WasilaMCP` returns compact JSON text (no outputSchema), rewrites
   argument validation errors to `validation_error: …`, hides write tools from read-only keys
-  and reports the Raisebook version. Shapes live in `mcp/shaping.py`; shared argument types
+  and reports the Wasila version. Shapes live in `mcp/shaping.py`; shared argument types
   (descriptions, "VC"/"250k" leniency) in `mcp/tools/_args.py`. Error text names MCP tools
   for MCP callers (`core.refs.how`) and REST paths for REST callers.
 - `add_investor` defaults to `fill_empty`, appends notes on a match, reports `not_applied`,
@@ -157,7 +157,7 @@ spends the token on load. Use a throwaway database (for example `raisebook_shots
 - Import: only a missing name is a row error; bad optional cells are dropped with a warning.
 - Bulk writes go through `POST /v1/rounds/{round}/participants/bulk-update` with a shared
   `data.bulk_id`; feeds collapse runs with `GET /v1/activities?collapse_runs=true`.
-- Google sign-in is off unless `RAISEBOOK_GOOGLE_CLIENT_ID` and `_SECRET` are set; the web
+- Google sign-in is off unless `WASILA_GOOGLE_CLIENT_ID` and `_SECRET` are set; the web
   asks `GET /v1/auth/providers` and hides the button otherwise.
 
 ## Invariants added in the pipeline redo (keep them; spec: `design/pipeline-redo/DECISION.md`)
@@ -202,7 +202,7 @@ spends the token on load. Use a throwaway database (for example `raisebook_shots
   amount, recency by stage kind). Drag a card onto a column to move it; §5.5 keys still work.
 
 ## Investor research, Part 1 foundation (spec `docs/RESEARCH-SPEC.md`, plan `docs/RESEARCH-PLAN.md`)
-- **Unreleased and off by default.** Only `RAISEBOOK_RESEARCH_ENABLED=true` serves its REST
+- **Unreleased and off by default.** Only `WASILA_RESEARCH_ENABLED=true` serves its REST
   modules (`api/router.RESEARCH_API_MODULES`), its MCP tools (`mcp/tools.RESEARCH_TOOL_MODULES`)
   and the research line of the MCP instructions. With it off the MCP surface is the 23 core tools
   every public page promises (`tests/test_research_flag.py`). Never mention research on a
@@ -214,7 +214,7 @@ spends the token on load. Use a throwaway database (for example `raisebook_shots
 - The OpenRouter key is sealed by `core/secrets.py` (AES-256-GCM DEK per key, wrapped by the
   KEK; AAD = workspace id). Only `key_last4` is ever returned; no export, log or error carries
   the key; `sk-or-…` is redacted from logs. Only an owner signed in to the web sets or removes
-  it (`require_owner_session`); preset, model ids and cap need `raisebook:admin`.
+  it (`require_owner_session`); preset, model ids and cap need `wasila:admin`.
 - `services/ai_settings.PRESETS` is pinned to the recorded models list by a test; ids are
   verified on `GET /models` when a key is saved and when models change with a key present.
 - Money for AI is USD micros (`*_micros bigint`). Every OpenRouter call reserves first with
@@ -222,7 +222,7 @@ spends the token on load. Use a throwaway database (for example `raisebook_shots
   `settle_for_run` with OpenRouter's reported cost; recovery, cancel and shutdown call
   `release_for_run`.
 - Jobs: `services/jobs.py` (enqueue with `dedupe_key`, `FOR UPDATE SKIP LOCKED` claims, leases,
-  backoff, `recover_stuck`) and `raisebook/worker.py` (`rbctl worker`). Handlers register with
+  backoff, `recover_stuck`) and `wasila/worker.py` (`wasilactl worker`). Handlers register with
   `worker.register(kind, handler, on_recover=…)` from a module listed in
   `worker.HANDLER_MODULES`, are idempotent per step and call `ctx.check_lease()` between steps.
   Jobs carry ids only, never secrets or investor fields.
@@ -315,7 +315,7 @@ spends the token on load. Use a throwaway database (for example `raisebook_shots
   Guests are only people at the same firm (`norm_firm`).
 - Deletion follows investors (investor/guest cascade; a round delete sets `round_id` NULL).
   Meetings are in the workspace JSON export.
-- `services/calendar_feed.py`: one hashed `rbcal_` secret per user, shown once; the feed reads
+- `services/calendar_feed.py`: one hashed `wslcal_` secret per user, shown once; the feed reads
   the user's current memberships on every request (the only per-user cross-workspace read
   besides research reuse). Feed routes are org-less in `tests/isolation`.
 - Web: pure rules in `web/lib/meetings.ts` (unit tested): chip text, `meetingBeatsFollowUp`,

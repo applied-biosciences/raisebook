@@ -14,7 +14,7 @@
   "smallTapCount": 55,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "104x22 a \"Raisebook home\"",
+   "104x22 a \"Wasila home\"",
    "47x32 a \"Docs\"",
    "69x32 a \"Sign in\"",
    "87x32 a \"Start free\"",
@@ -41,20 +41,20 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=65 w=390 \"Raisebook Docs Sign in Start f\"",
+   "sticky header top=0 h=65 w=390 \"Wasila Docs Sign in Start f\"",
    "sticky th top=3651 h=31 w=199 \"INVESTOR\"",
    "sticky th top=3651 h=31 w=157 \"STAGE · FIT\"",
    "sticky th top=4769 h=31 w=104 \"YOUR COLUMN\"",
    "sticky th top=4769 h=31 w=185 \"SAMPLE\"",
    "sticky th top=4769 h=31 w=37 \"maps to\"",
-   "sticky th top=4769 h=31 w=134 \"RAISEBOOK FIELD\""
+   "sticky th top=4769 h=31 w=134 \"WASILA FIELD\""
   ],
   "smallTextNodes": 130,
   "truncated": [
    "Ostrava Industrial CVC"
   ],
   "url": "/",
-  "title": "Raisebook · The free fundraising CRM, built for founders and their agents",
+  "title": "Wasila · The free fundraising CRM, built for founders and their agents",
   "errors": []
  },
  "02-signin@390x844": {
@@ -69,7 +69,7 @@
   "smallTapCount": 12,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "133x28 a \"Raisebook home\"",
+   "133x28 a \"Wasila home\"",
    "358x40 input \"you@company.com\"",
    "358x40 button \"Email me a sign-in link\"",
    "35x16 a \"Terms\"",
@@ -86,7 +86,7 @@
   "smallTextNodes": 9,
   "truncated": [],
   "url": "/signin",
-  "title": "Sign in · Raisebook",
+  "title": "Sign in · Wasila",
   "errors": []
  },
  "03-app-home@390x844": {
@@ -103,7 +103,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -130,7 +130,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=780 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 19,
@@ -156,7 +156,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -183,7 +183,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=780 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 19,
@@ -209,7 +209,7 @@
   "smallTapCount": 34,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "198x32 a \"Pipeline\"",
@@ -236,7 +236,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=48 h=254 w=200 \"Navigation\"",
    "fixed div top=780 h=48 w=113 \"+ Investor\""
   ],
@@ -263,7 +263,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -290,7 +290,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=780 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 19,
@@ -316,7 +316,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -343,7 +343,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=780 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 19,
@@ -369,7 +369,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -396,7 +396,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=780 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 19,
@@ -422,7 +422,7 @@
   "smallTapCount": 40,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -449,7 +449,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=780 h=48 w=113 \"+ Investor\"",
    "fixed div top=0 h=844 w=390 \"Triage\"",
    "fixed div top=702 h=143 w=390 \"Researching Contacted Passed S\""
@@ -478,7 +478,7 @@
   "smallTapCount": 36,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -505,7 +505,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=780 h=48 w=113 \"+ Investor\"",
    "fixed div top=0 h=844 w=390 \"DIV\"",
    "fixed div top=0 h=844 w=390 \"Filters ✕ Stage Any New Resear\""
@@ -533,7 +533,7 @@
   "smallTapCount": 57,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -560,7 +560,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=780 h=48 w=113 \"+ Investor\"",
    "fixed div top=0 h=844 w=390 \"DIV\"",
    "fixed div top=0 h=844 w=390 \"Dana Whitfield\""
@@ -589,7 +589,7 @@
   "smallTapCount": 31,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -616,7 +616,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=780 h=48 w=113 \"+ Investor\"",
    "fixed div top=0 h=844 w=390 \"DIV\"",
    "fixed div top=0 h=844 w=390 \"Dana Whitfield\""
@@ -642,7 +642,7 @@
   "smallTapCount": 55,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -669,7 +669,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 40,
   "truncated": [
@@ -694,7 +694,7 @@
   "smallTapCount": 56,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -721,7 +721,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 37,
   "truncated": [
@@ -745,7 +745,7 @@
   "smallTapCount": 28,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -772,7 +772,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 5,
   "truncated": [
@@ -796,7 +796,7 @@
   "smallTapCount": 31,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -823,7 +823,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 12,
   "truncated": [
@@ -847,7 +847,7 @@
   "smallTapCount": 141,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -874,7 +874,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 88,
   "truncated": [
@@ -912,7 +912,7 @@
   "smallTapCount": 73,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -939,7 +939,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=1043 h=31 w=86 \"ORDER\"",
    "sticky th top=1043 h=31 w=183 \"LABEL\"",
    "sticky th top=1043 h=31 w=116 \"COLOR\"",
@@ -967,7 +967,7 @@
   "smallTapCount": 21,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -992,7 +992,7 @@
    "14px INPUT"
   ],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 9,
   "truncated": [
@@ -1017,7 +1017,7 @@
   "smallTapCount": 18,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1037,7 +1037,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=867 h=31 w=94 \"ROUND\"",
    "sticky th top=867 h=31 w=76 \"STATUS\"",
    "sticky th top=867 h=31 w=111 \"INSTRUMENT\"",
@@ -1065,7 +1065,7 @@
   "smallTapCount": 6,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "111x32 button \"Workspaces ▾\"",
    "28x28 button \"MA\"",
    "165x32 a \"Go to your workspace\"",
@@ -1073,7 +1073,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Workspaces ▾ MA\""
+   "sticky header top=0 h=57 w=390 \"Wasila Workspaces ▾ MA\""
   ],
   "smallTextNodes": 2,
   "truncated": [],
@@ -1095,7 +1095,7 @@
   "smallTapCount": 14,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1111,7 +1111,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=340 h=31 w=152 \"NAME\"",
    "sticky th top=340 h=31 w=219 \"EMAIL\"",
    "sticky th top=340 h=31 w=116 \"ROLE\"",
@@ -1138,7 +1138,7 @@
   "smallTapCount": 6,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "111x32 button \"Workspaces ▾\"",
    "28x28 button \"MA\"",
    "165x32 a \"Go to your workspace\"",
@@ -1146,7 +1146,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Workspaces ▾ MA\""
+   "sticky header top=0 h=57 w=390 \"Wasila Workspaces ▾ MA\""
   ],
   "smallTextNodes": 2,
   "truncated": [],
@@ -1168,7 +1168,7 @@
   "smallTapCount": 13,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1183,7 +1183,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=428 h=31 w=68 \"NAME\"",
    "sticky th top=428 h=31 w=119 \"AGENT NAME\"",
    "sticky th top=428 h=31 w=151 \"PREFIX\"",
@@ -1213,7 +1213,7 @@
   "smallTapCount": 20,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1235,7 +1235,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 29,
   "truncated": [
@@ -1257,7 +1257,7 @@
   "smallTapCount": 18,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1277,7 +1277,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 6,
   "truncated": [
@@ -1301,7 +1301,7 @@
   "smallTapCount": 11,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "111x32 button \"Workspaces ▾\"",
    "28x28 button \"MA\"",
    "324x40 input \"Morgan Avery\"",
@@ -1314,7 +1314,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Workspaces ▾ MA\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Workspaces ▾ MA\"",
    "sticky th top=496 h=31 w=278 \"NAME\"",
    "sticky th top=496 h=31 w=72 \"ROLE\"",
    "sticky th top=496 h=31 w=83 \"MEMBERS\"",
@@ -1323,7 +1323,7 @@
   "smallTextNodes": 12,
   "truncated": [],
   "url": "/account",
-  "title": "Account · Raisebook",
+  "title": "Account · Wasila",
   "errors": []
  },
  "28-add-investor-dialog@390x844": {
@@ -1340,7 +1340,7 @@
   "smallTapCount": 36,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1367,7 +1367,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=780 h=48 w=113 \"+ Investor\"",
    "fixed dialog top=67 h=710 w=358 \"Add investor Adds a contact an\""
   ],
@@ -1394,7 +1394,7 @@
   "smallTapCount": 30,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "258x32 a \"Kestrel Robotics (sample)\"",
    "258x32 button \"New workspace…\"",
@@ -1421,7 +1421,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=48 h=116 w=260 \"Workspaces\"",
    "fixed div top=780 h=48 w=113 \"+ Investor\""
   ],
@@ -1448,7 +1448,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "144x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1475,7 +1475,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=390 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=390 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=780 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 27,
@@ -1503,7 +1503,7 @@
   "smallTapCount": 54,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "104x22 a \"Raisebook home\"",
+   "104x22 a \"Wasila home\"",
    "47x32 a \"Docs\"",
    "69x32 a \"Sign in\"",
    "87x32 a \"Start free\"",
@@ -1530,20 +1530,20 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=65 w=360 \"Raisebook Docs Sign in Start f\"",
+   "sticky header top=0 h=65 w=360 \"Wasila Docs Sign in Start f\"",
    "sticky th top=3765 h=31 w=183 \"INVESTOR\"",
    "sticky th top=3765 h=31 w=143 \"STAGE · FIT\"",
    "sticky th top=4901 h=31 w=104 \"YOUR COLUMN\"",
    "sticky th top=4901 h=31 w=185 \"SAMPLE\"",
    "sticky th top=4901 h=31 w=37 \"maps to\"",
-   "sticky th top=4901 h=31 w=134 \"RAISEBOOK FIELD\""
+   "sticky th top=4901 h=31 w=134 \"WASILA FIELD\""
   ],
   "smallTextNodes": 130,
   "truncated": [
    "Ostrava Industrial CVC"
   ],
   "url": "/",
-  "title": "Raisebook · The free fundraising CRM, built for founders and their agents",
+  "title": "Wasila · The free fundraising CRM, built for founders and their agents",
   "errors": []
  },
  "02-signin@360x780": {
@@ -1558,7 +1558,7 @@
   "smallTapCount": 12,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "133x28 a \"Raisebook home\"",
+   "133x28 a \"Wasila home\"",
    "328x40 input \"you@company.com\"",
    "328x40 button \"Email me a sign-in link\"",
    "35x16 a \"Terms\"",
@@ -1575,7 +1575,7 @@
   "smallTextNodes": 9,
   "truncated": [],
   "url": "/signin",
-  "title": "Sign in · Raisebook",
+  "title": "Sign in · Wasila",
   "errors": []
  },
  "03-app-home@360x780": {
@@ -1593,7 +1593,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1620,7 +1620,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=716 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 17,
@@ -1646,7 +1646,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1673,7 +1673,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=716 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 17,
@@ -1699,7 +1699,7 @@
   "smallTapCount": 34,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "198x32 a \"Pipeline\"",
@@ -1726,7 +1726,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=48 h=254 w=200 \"Navigation\"",
    "fixed div top=716 h=48 w=113 \"+ Investor\""
   ],
@@ -1753,7 +1753,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1780,7 +1780,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=716 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 17,
@@ -1806,7 +1806,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1833,7 +1833,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=716 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 17,
@@ -1859,7 +1859,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1886,7 +1886,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=716 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 17,
@@ -1912,7 +1912,7 @@
   "smallTapCount": 40,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1939,7 +1939,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=716 h=48 w=113 \"+ Investor\"",
    "fixed div top=0 h=780 w=360 \"Triage\"",
    "fixed div top=638 h=143 w=360 \"Researching Contacted Passed S\""
@@ -1969,7 +1969,7 @@
   "smallTapCount": 36,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -1996,7 +1996,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=716 h=48 w=113 \"+ Investor\"",
    "fixed div top=0 h=780 w=360 \"DIV\"",
    "fixed div top=0 h=780 w=360 \"Filters ✕ Stage Any New Resear\""
@@ -2024,7 +2024,7 @@
   "smallTapCount": 57,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2051,7 +2051,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=716 h=48 w=113 \"+ Investor\"",
    "fixed div top=0 h=780 w=360 \"DIV\"",
    "fixed div top=0 h=780 w=360 \"Dana Whitfield\""
@@ -2080,7 +2080,7 @@
   "smallTapCount": 31,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2107,7 +2107,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=716 h=48 w=113 \"+ Investor\"",
    "fixed div top=0 h=780 w=360 \"DIV\"",
    "fixed div top=0 h=780 w=360 \"Dana Whitfield\""
@@ -2135,7 +2135,7 @@
   "smallTapCount": 55,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2162,7 +2162,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 40,
   "truncated": [
@@ -2191,7 +2191,7 @@
   "smallTapCount": 56,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2218,7 +2218,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 37,
   "truncated": [
@@ -2247,7 +2247,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2274,7 +2274,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 5,
   "truncated": [
@@ -2305,7 +2305,7 @@
   "smallTapCount": 31,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2332,7 +2332,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 12,
   "truncated": [
@@ -2357,7 +2357,7 @@
   "smallTapCount": 139,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2384,7 +2384,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 88,
   "truncated": [
@@ -2423,7 +2423,7 @@
   "smallTapCount": 73,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2450,7 +2450,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=1043 h=31 w=86 \"ORDER\"",
    "sticky th top=1043 h=31 w=183 \"LABEL\"",
    "sticky th top=1043 h=31 w=116 \"COLOR\"",
@@ -2480,7 +2480,7 @@
   "smallTapCount": 21,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2505,7 +2505,7 @@
    "14px INPUT"
   ],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 9,
   "truncated": [
@@ -2531,7 +2531,7 @@
   "smallTapCount": 18,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2551,7 +2551,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=867 h=31 w=94 \"ROUND\"",
    "sticky th top=867 h=31 w=76 \"STATUS\"",
    "sticky th top=867 h=31 w=111 \"INSTRUMENT\"",
@@ -2580,7 +2580,7 @@
   "smallTapCount": 6,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "111x32 button \"Workspaces ▾\"",
    "28x28 button \"MA\"",
    "165x32 a \"Go to your workspace\"",
@@ -2588,7 +2588,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Workspaces ▾ MA\""
+   "sticky header top=0 h=57 w=360 \"Wasila Workspaces ▾ MA\""
   ],
   "smallTextNodes": 2,
   "truncated": [],
@@ -2611,7 +2611,7 @@
   "smallTapCount": 14,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2627,7 +2627,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=340 h=31 w=152 \"NAME\"",
    "sticky th top=340 h=31 w=219 \"EMAIL\"",
    "sticky th top=340 h=31 w=116 \"ROLE\"",
@@ -2654,7 +2654,7 @@
   "smallTapCount": 6,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "111x32 button \"Workspaces ▾\"",
    "28x28 button \"MA\"",
    "165x32 a \"Go to your workspace\"",
@@ -2662,7 +2662,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Workspaces ▾ MA\""
+   "sticky header top=0 h=57 w=360 \"Wasila Workspaces ▾ MA\""
   ],
   "smallTextNodes": 2,
   "truncated": [],
@@ -2685,7 +2685,7 @@
   "smallTapCount": 13,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2700,7 +2700,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=428 h=31 w=68 \"NAME\"",
    "sticky th top=428 h=31 w=119 \"AGENT NAME\"",
    "sticky th top=428 h=31 w=151 \"PREFIX\"",
@@ -2732,7 +2732,7 @@
   "smallTapCount": 20,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2754,7 +2754,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 29,
   "truncated": [
@@ -2778,7 +2778,7 @@
   "smallTapCount": 18,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2798,7 +2798,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 6,
   "truncated": [
@@ -2822,7 +2822,7 @@
   "smallTapCount": 11,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "111x32 button \"Workspaces ▾\"",
    "28x28 button \"MA\"",
    "294x40 input \"Morgan Avery\"",
@@ -2835,7 +2835,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Workspaces ▾ MA\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Workspaces ▾ MA\"",
    "sticky th top=496 h=31 w=278 \"NAME\"",
    "sticky th top=496 h=31 w=72 \"ROLE\"",
    "sticky th top=496 h=31 w=83 \"MEMBERS\"",
@@ -2844,7 +2844,7 @@
   "smallTextNodes": 12,
   "truncated": [],
   "url": "/account",
-  "title": "Account · Raisebook",
+  "title": "Account · Wasila",
   "errors": []
  },
  "28-add-investor-dialog@360x780": {
@@ -2862,7 +2862,7 @@
   "smallTapCount": 36,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2889,7 +2889,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=716 h=48 w=113 \"+ Investor\"",
    "fixed dialog top=25 h=730 w=328 \"Add investor Adds a contact an\""
   ],
@@ -2916,7 +2916,7 @@
   "smallTapCount": 30,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "258x32 a \"Kestrel Robotics (sample)\"",
    "258x32 button \"New workspace…\"",
@@ -2943,7 +2943,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=48 h=116 w=260 \"Workspaces\"",
    "fixed div top=716 h=48 w=113 \"+ Investor\""
   ],
@@ -2970,7 +2970,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "114x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -2997,7 +2997,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=360 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=360 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=716 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 27,
@@ -3021,7 +3021,7 @@
   "smallTapCount": 62,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "104x22 a \"Raisebook home\"",
+   "104x22 a \"Wasila home\"",
    "47x32 a \"Docs\"",
    "69x32 a \"Sign in\"",
    "87x32 a \"Start free\"",
@@ -3048,20 +3048,20 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=65 w=768 \"Raisebook Docs Sign in Start f\"",
+   "sticky header top=0 h=65 w=768 \"Wasila Docs Sign in Start f\"",
    "sticky th top=3319 h=31 w=411 \"INVESTOR\"",
    "sticky th top=3319 h=31 w=323 \"STAGE · FIT\"",
    "sticky th top=4362 h=31 w=171 \"YOUR COLUMN\"",
    "sticky th top=4362 h=31 w=305 \"SAMPLE\"",
    "sticky th top=4362 h=31 w=37 \"maps to\"",
-   "sticky th top=4362 h=31 w=221 \"RAISEBOOK FIELD\""
+   "sticky th top=4362 h=31 w=221 \"WASILA FIELD\""
   ],
   "smallTextNodes": 133,
   "truncated": [
    "Ostrava Industrial CVC"
   ],
   "url": "/",
-  "title": "Raisebook · The free fundraising CRM, built for founders and their agents",
+  "title": "Wasila · The free fundraising CRM, built for founders and their agents",
   "errors": []
  },
  "02-signin@768x1024": {
@@ -3076,7 +3076,7 @@
   "smallTapCount": 12,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "133x28 a \"Raisebook home\"",
+   "133x28 a \"Wasila home\"",
    "400x40 input \"you@company.com\"",
    "400x40 button \"Email me a sign-in link\"",
    "35x16 a \"Terms\"",
@@ -3093,7 +3093,7 @@
   "smallTextNodes": 9,
   "truncated": [],
   "url": "/signin",
-  "title": "Sign in · Raisebook",
+  "title": "Sign in · Wasila",
   "errors": []
  },
  "03-app-home@768x1024": {
@@ -3110,7 +3110,7 @@
   "smallTapCount": 115,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -3137,7 +3137,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 476,
   "truncated": [
@@ -3175,7 +3175,7 @@
   "smallTapCount": 115,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -3202,7 +3202,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 476,
   "truncated": [
@@ -3240,7 +3240,7 @@
   "smallTapCount": 122,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "198x32 a \"Pipeline\"",
@@ -3267,7 +3267,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=48 h=254 w=200 \"Navigation\""
   ],
   "smallTextNodes": 477,
@@ -3306,7 +3306,7 @@
   "smallTapCount": 115,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -3333,7 +3333,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 476,
   "truncated": [
@@ -3371,7 +3371,7 @@
   "smallTapCount": 115,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -3398,7 +3398,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 476,
   "truncated": [
@@ -3434,7 +3434,7 @@
   "smallTapCount": 51,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -3461,7 +3461,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=459 h=33 w=42 \"Select\"",
    "sticky th top=459 h=33 w=280 \"INVESTOR\"",
    "sticky th top=459 h=33 w=154 \"STAGE\"",
@@ -3506,7 +3506,7 @@
   "smallTapCount": 35,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -3533,7 +3533,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "sticky div top=761 h=24 w=734 \"DIV\""
   ],
   "smallTextNodes": 31,
@@ -3556,7 +3556,7 @@
   "smallTapCount": 60,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -3583,7 +3583,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=459 h=33 w=42 \"Select\"",
    "sticky th top=459 h=33 w=280 \"INVESTOR\"",
    "sticky th top=459 h=33 w=154 \"STAGE\"",
@@ -3628,7 +3628,7 @@
   "smallTapCount": 83,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -3655,7 +3655,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=459 h=33 w=42 \"Select\"",
    "sticky th top=459 h=33 w=280 \"INVESTOR\"",
    "sticky th top=459 h=33 w=154 \"STAGE\"",
@@ -3700,7 +3700,7 @@
   "smallTapCount": 57,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -3727,7 +3727,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=459 h=33 w=42 \"Select\"",
    "sticky th top=459 h=33 w=280 \"INVESTOR\"",
    "sticky th top=459 h=33 w=154 \"STAGE\"",
@@ -3772,7 +3772,7 @@
   "smallTapCount": 56,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -3799,7 +3799,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 40,
   "truncated": [
@@ -3821,7 +3821,7 @@
   "smallTapCount": 57,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -3848,7 +3848,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 37,
   "truncated": [
@@ -3872,7 +3872,7 @@
   "smallTapCount": 74,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -3899,7 +3899,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=269 h=36 w=36 \"TH\"",
    "sticky th top=269 h=36 w=319 \"NAME ↑\"",
    "sticky th top=269 h=36 w=220 \"FIRM\"",
@@ -3940,7 +3940,7 @@
   "smallTapCount": 33,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -3967,7 +3967,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 12,
   "truncated": [
@@ -3989,7 +3989,7 @@
   "smallTapCount": 156,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4016,7 +4016,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 93,
   "truncated": [
@@ -4038,7 +4038,7 @@
   "smallTapCount": 74,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4065,7 +4065,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=834 h=31 w=86 \"ORDER\"",
    "sticky th top=834 h=31 w=189 \"LABEL\"",
    "sticky th top=834 h=31 w=118 \"COLOR\"",
@@ -4093,7 +4093,7 @@
   "smallTapCount": 22,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4119,7 +4119,7 @@
    "14px INPUT"
   ],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 9,
   "truncated": [
@@ -4144,7 +4144,7 @@
   "smallTapCount": 25,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4171,7 +4171,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=628 h=31 w=94 \"ROUND\"",
    "sticky th top=628 h=31 w=76 \"STATUS\"",
    "sticky th top=628 h=31 w=111 \"INSTRUMENT\"",
@@ -4201,7 +4201,7 @@
   "smallTapCount": 7,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "111x32 button \"Workspaces ▾\"",
    "83x32 button \"Search and commands\"",
    "28x28 button \"MA\"",
@@ -4210,7 +4210,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Workspaces ▾ Search \""
+   "sticky header top=0 h=57 w=768 \"Wasila Workspaces ▾ Search \""
   ],
   "smallTextNodes": 2,
   "truncated": [],
@@ -4232,7 +4232,7 @@
   "smallTapCount": 21,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4255,7 +4255,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=253 h=31 w=152 \"NAME\"",
    "sticky th top=253 h=31 w=219 \"EMAIL\"",
    "sticky th top=253 h=31 w=116 \"ROLE\"",
@@ -4282,7 +4282,7 @@
   "smallTapCount": 7,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "111x32 button \"Workspaces ▾\"",
    "83x32 button \"Search and commands\"",
    "28x28 button \"MA\"",
@@ -4291,7 +4291,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Workspaces ▾ Search \""
+   "sticky header top=0 h=57 w=768 \"Wasila Workspaces ▾ Search \""
   ],
   "smallTextNodes": 2,
   "truncated": [],
@@ -4313,7 +4313,7 @@
   "smallTapCount": 20,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4335,7 +4335,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=323 h=31 w=68 \"NAME\"",
    "sticky th top=323 h=31 w=119 \"AGENT NAME\"",
    "sticky th top=323 h=31 w=151 \"PREFIX\"",
@@ -4368,7 +4368,7 @@
   "smallTapCount": 35,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4395,7 +4395,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=1531 h=31 w=170 \"TOOL\"",
    "sticky th top=1531 h=31 w=386 \"WHAT IT DOES\"",
    "sticky th top=1531 h=31 w=64 \"ACCESS\""
@@ -4420,7 +4420,7 @@
   "smallTapCount": 25,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4447,7 +4447,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 6,
   "truncated": [
@@ -4469,7 +4469,7 @@
   "smallTapCount": 12,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "111x32 button \"Workspaces ▾\"",
    "83x32 button \"Search and commands\"",
    "28x28 button \"MA\"",
@@ -4483,7 +4483,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Workspaces ▾ Search \"",
+   "sticky header top=0 h=57 w=768 \"Wasila Workspaces ▾ Search \"",
    "sticky th top=407 h=31 w=393 \"NAME\"",
    "sticky th top=407 h=31 w=101 \"ROLE\"",
    "sticky th top=407 h=31 w=116 \"MEMBERS\"",
@@ -4492,7 +4492,7 @@
   "smallTextNodes": 12,
   "truncated": [],
   "url": "/account",
-  "title": "Account · Raisebook",
+  "title": "Account · Wasila",
   "errors": []
  },
  "28-add-investor-dialog@768x1024": {
@@ -4507,7 +4507,7 @@
   "smallTapCount": 60,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4534,7 +4534,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=459 h=33 w=42 \"Select\"",
    "sticky th top=459 h=33 w=280 \"INVESTOR\"",
    "sticky th top=459 h=33 w=154 \"STAGE\"",
@@ -4579,7 +4579,7 @@
   "smallTapCount": 54,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "258x32 a \"Kestrel Robotics (sample)\"",
    "258x32 button \"New workspace…\"",
@@ -4606,7 +4606,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=48 h=116 w=260 \"Workspaces\"",
    "sticky th top=459 h=33 w=42 \"Select\"",
    "sticky th top=459 h=33 w=280 \"INVESTOR\"",
@@ -4651,7 +4651,7 @@
   "smallTapCount": 51,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4678,7 +4678,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=768 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=768 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=459 h=33 w=42 \"Select\"",
    "sticky th top=459 h=33 w=280 \"INVESTOR\"",
    "sticky th top=459 h=33 w=154 \"STAGE\"",
@@ -4725,7 +4725,7 @@
   "smallTapCount": 119,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "198x32 a \"Pipeline\"",
@@ -4752,7 +4752,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=844 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=844 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=48 h=254 w=200 \"Navigation\""
   ],
   "smallTextNodes": 457,
@@ -4782,7 +4782,7 @@
   "smallTapCount": 112,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4809,7 +4809,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=844 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=844 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 456,
   "truncated": [
@@ -4838,7 +4838,7 @@
   "smallTapCount": 112,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4865,7 +4865,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=844 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=844 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 456,
   "truncated": [
@@ -4892,7 +4892,7 @@
   "smallTapCount": 48,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4919,7 +4919,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=844 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=844 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=342 h=33 w=46 \"Select\"",
    "sticky th top=342 h=33 w=309 \"INVESTOR\"",
    "sticky th top=342 h=33 w=170 \"STAGE\"",
@@ -4964,7 +4964,7 @@
   "smallTapCount": 35,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -4991,7 +4991,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=844 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=844 \"Wasila Kestrel Robotics (sa\"",
    "sticky div top=449 h=24 w=810 \"DIV\""
   ],
   "smallTextNodes": 32,
@@ -5014,7 +5014,7 @@
   "smallTapCount": 80,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -5041,7 +5041,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=844 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=844 \"Wasila Kestrel Robotics (sa\"",
    "sticky th top=342 h=33 w=46 \"Select\"",
    "sticky th top=342 h=33 w=309 \"INVESTOR\"",
    "sticky th top=342 h=33 w=170 \"STAGE\"",
@@ -5086,7 +5086,7 @@
   "smallTapCount": 143,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "193x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "83x32 button \"Search and commands\"",
@@ -5113,7 +5113,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=844 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=844 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 94,
   "truncated": [
@@ -5137,7 +5137,7 @@
   "smallTapCount": 34,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "184x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "198x32 a \"Pipeline\"",
@@ -5164,7 +5164,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=430 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=430 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=48 h=254 w=200 \"Navigation\"",
    "fixed div top=868 h=48 w=113 \"+ Investor\""
   ],
@@ -5190,7 +5190,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "184x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -5217,7 +5217,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=430 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=430 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=868 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 21,
@@ -5242,7 +5242,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "184x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -5269,7 +5269,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=430 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=430 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=868 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 21,
@@ -5294,7 +5294,7 @@
   "smallTapCount": 27,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "184x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -5321,7 +5321,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=430 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=430 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=868 h=48 w=113 \"+ Investor\""
   ],
   "smallTextNodes": 21,
@@ -5346,7 +5346,7 @@
   "smallTapCount": 40,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "184x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -5373,7 +5373,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=430 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=430 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=868 h=48 w=113 \"+ Investor\"",
    "fixed div top=0 h=932 w=430 \"Triage\"",
    "fixed div top=790 h=143 w=430 \"Researching Contacted Passed S\""
@@ -5401,7 +5401,7 @@
   "smallTapCount": 57,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "184x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -5428,7 +5428,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=430 \"Raisebook Kestrel Robotics (sa\"",
+   "sticky header top=0 h=57 w=430 \"Wasila Kestrel Robotics (sa\"",
    "fixed div top=868 h=48 w=113 \"+ Investor\"",
    "fixed div top=0 h=932 w=430 \"DIV\"",
    "fixed div top=0 h=932 w=430 \"Dana Whitfield\""
@@ -5453,7 +5453,7 @@
   "smallTapCount": 143,
   "smallTaps": [
    "24x16 a \"Skip to content\"",
-   "95x20 a \"Raisebook home\"",
+   "95x20 a \"Wasila home\"",
    "184x32 button \"Kestrel Robotics (sample) ▾\"",
    "57x32 button \"Menu\"",
    "28x28 button \"MA\"",
@@ -5480,7 +5480,7 @@
   ],
   "tinyInputs": [],
   "fixed": [
-   "sticky header top=0 h=57 w=430 \"Raisebook Kestrel Robotics (sa\""
+   "sticky header top=0 h=57 w=430 \"Wasila Kestrel Robotics (sa\""
   ],
   "smallTextNodes": 89,
   "truncated": [
