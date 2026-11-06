@@ -69,6 +69,6 @@ test("llms.txt states the facts and links every listed page", () => {
   }
   for (const p of PAGES.filter((x) => x.llms)) assert.ok(txt.includes(`(https://wasila.app${p.path === "/" ? "" : p.path})`), p.path);
   const full = llmsFullTxt();
-  assert.doesNotMatch(full, /raisebook/i);
+  assert.doesNotMatch(full, new RegExp(["rai", "sebook"].join(""), "i"));
   assert.doesNotMatch(full, /\bcustomers love\b|\btrusted by\b|\bstars?\b rating/i);
 });

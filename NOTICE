@@ -1,0 +1,17 @@
+Wasila
+Copyright (C) 2026 Applied Biosciences Limited and Wasila contributors.
+
+Wasila is a modified version of Raisebook (https://github.com/gumruyanzh/raisebook),
+Copyright (C) 2026 Zhirayr Gumruyan and Raisebook contributors, licensed under the GNU
+Affero General Public License, version 3 (see LICENSE).
+
+Changes in Wasila (from v1.0.0.0, 2026-11-06): renamed and rebranded; US/UK/Saudi round
+fields; the Funding Room; Excel/Word lead import and the master list; custom fields, AI
+columns, saved lists and warm intros; Claude integration; email outreach and campaigns;
+the deck editor; funding costs; Arabic/English scaffolding. See CHANGELOG.md.
+
+Wasila is distributed under the same license. Anyone who runs a modified version as a
+network service must offer its users the corresponding source code (AGPL-3.0, section 13).
+
+Fonts in web/app/fonts/ (Bricolage Grotesque, IBM Plex Sans, IBM Plex Sans Arabic, IBM Plex
+Mono) are licensed under the SIL Open Font License 1.1 (web/app/fonts/LICENSE-OFL.txt).

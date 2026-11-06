@@ -154,14 +154,9 @@ export function FundingRoom() {
       <div className="grid grid-cols-1 gap-20 xl:grid-cols-[minmax(0,1fr)_340px]">
         <section aria-label="Documents" className="min-w-0">
           <div className="mb-12 flex flex-wrap items-center gap-8">
-            <Input
-              type="search"
-              placeholder="Search titles and folders"
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              className="w-full sm:w-[320px]"
-              aria-label="Search documents"
-            />
+            <div className="w-full sm:w-[320px]">
+              <Input type="search" placeholder="Search titles and folders" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search documents" />
+            </div>
           </div>
           {docs === null ? (
             <p className="text-muted">Loading the Funding Room…</p>
@@ -269,10 +264,13 @@ export function FundingRoom() {
                 const title = (docs ?? []).find((d) => d.id === e.document_id)?.title ?? (e.data.title as string | undefined);
                 return (
                   <li key={e.id} className="text-muted">
-                    <span className={e.actor_type === "agent" ? "text-agent" : "text-fg"}>
-                      {e.kind === "link_viewed" ? "" : (e.actor_label ?? "Someone") + " "}
-                    </span>
-                    {EVENT_WORDS[e.kind] ?? e.kind} {title ? <span className="text-fg">{title}</span> : null}
+                    {e.kind !== "link_viewed" && e.actor_label ? (
+                      <span className={e.actor_type === "agent" ? "text-agent" : "text-fg"}>{e.actor_label} </span>
+                    ) : null}
+                    {e.kind === "link_viewed" || e.actor_label
+                      ? (EVENT_WORDS[e.kind] ?? e.kind)
+                      : (EVENT_WORDS[e.kind] ?? e.kind).replace(/^./, (c) => c.toUpperCase())}{" "}
+                    {title ? <span className="text-fg">{title}</span> : null}
                     <span className="block text-2xs">{when(e.created_at)}</span>
                   </li>
                 );
@@ -368,6 +366,7 @@ function DocumentRow({
               <Button size="sm" busy={busy ? "Uploading…" : false} onClick={() => file.current?.click()}>
                 {doc.latest ? "New version" : "Upload file"}
               </Button>
+              <span className="w-[120px]">
               <Select
                 size="sm"
                 aria-label={`Review status of ${doc.title}`}
@@ -387,6 +386,7 @@ function DocumentRow({
                   </option>
                 ))}
               </Select>
+              </span>
               <Button
                 size="sm"
                 variant="ghost"

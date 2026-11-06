@@ -193,7 +193,8 @@ export function MasterList() {
             { value: "gcc", label: "GCC" },
           ]}
         />
-        <Select aria-label="Investor type" value={type} onChange={(e) => setType(e.target.value)} className="w-[150px]">
+        <div className="w-[150px]">
+        <Select aria-label="Investor type" value={type} onChange={(e) => setType(e.target.value)}>
           <option value="">All types</option>
           {Object.entries(INVESTOR_TYPE_LABEL).map(([k, v]) => (
             <option key={k} value={k}>
@@ -201,8 +202,13 @@ export function MasterList() {
             </option>
           ))}
         </Select>
-        <Input aria-label="Interest or tag" placeholder="Healthcare, AI…" value={tag} onChange={(e) => setTag(e.target.value)} className="w-[160px]" />
-        <Input type="search" aria-label="Search names and firms" placeholder="Name, firm, notes" value={q} onChange={(e) => setQ(e.target.value)} className="w-[180px]" />
+        </div>
+        <div className="w-[160px]">
+          <Input aria-label="Interest or tag" placeholder="Healthcare, AI…" value={tag} onChange={(e) => setTag(e.target.value)} />
+        </div>
+        <div className="w-full sm:w-[200px]">
+          <Input type="search" aria-label="Search names and firms" placeholder="Name, firm, notes" value={q} onChange={(e) => setQ(e.target.value)} />
+        </div>
         <label className="flex items-center gap-6 text-13">
           <input type="checkbox" checked={hasEmail} onChange={(e) => setHasEmail(e.target.checked)} /> Has email
         </label>

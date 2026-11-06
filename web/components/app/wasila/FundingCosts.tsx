@@ -47,6 +47,7 @@ function MoneyCell({ value, onSave, disabled, label }: { value: number; onSave: 
   const [v, setV] = useState(String(value));
   useEffect(() => setV(String(value)), [value]);
   return (
+    <span className="inline-block w-[110px]">
     <Input
       aria-label={label}
       inputMode="numeric"
@@ -61,9 +62,10 @@ function MoneyCell({ value, onSave, disabled, label }: { value: number; onSave: 
         if (Number.isFinite(n) && n !== value) await onSave(n);
         else setV(String(value));
       }}
-      className="w-[110px] text-right font-mono"
+      className="text-right font-mono"
       size="sm"
     />
+    </span>
   );
 }
 
@@ -139,11 +141,13 @@ export function FundingCosts() {
         actions={
           canWrite ? (
             <>
-              <Select aria-label="Currency" size="md" value={currency} onChange={(e) => setCurrency(e.target.value)} className="w-[90px]">
+              <span className="w-[90px]">
+              <Select aria-label="Currency" size="md" value={currency} onChange={(e) => setCurrency(e.target.value)}>
                 {["GBP", "USD", "SAR", "EUR", "AED"].map((c) => (
                   <option key={c}>{c}</option>
                 ))}
               </Select>
+              </span>
               <input
                 ref={file}
                 type="file"

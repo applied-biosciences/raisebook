@@ -226,7 +226,7 @@ async def test_recover_runs_the_kind_hook(
     assert (await row(sm, job_id))["status"] == "queued"
 
 
-async def test_rbctl_worker_once_drains(
+async def test_wasilactl_worker_once_drains(
     committing_sessionmaker: async_sessionmaker[AsyncSession],
     k: str,
     monkeypatch: pytest.MonkeyPatch,

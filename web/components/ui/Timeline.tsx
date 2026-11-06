@@ -369,7 +369,7 @@ export function Timeline({
             </span>
             {renderExtra ? <span className="ml-auto">{renderExtra(a)}</span> : null}
           </p>
-          {a.body && a.kind !== "research" ? <p className="mt-3 max-w-[65ch] whitespace-pre-wrap text-muted">{a.body}</p> : null}
+          {a.body && a.kind !== "research" ? <p className="mt-3 max-w-[65ch] whitespace-pre-wrap [overflow-wrap:anywhere] text-muted">{a.body}</p> : null}
         </div>
       </li>
     );

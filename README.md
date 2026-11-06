@@ -1,230 +1,151 @@
-# Wasila: the free, open-source investor CRM for founders
+# Wasila (وسيلة) · v1.0.0.0
 
-[![M8ven Verified](https://m8ven.ai/badge/mcp/applied-biosciences-wasila-1bxu0o?variant=verified&v=c1ce95b2a161546abc067ae305ec022e)](https://m8ven.ai/mcp/applied-biosciences-wasila-1bxu0o?s=readme)
+<img src="web/public/brand/wasila-logo.png" alt="Wasila" width="160" align="right" />
 
-**Wasila is a free, open-source investor CRM (fundraising CRM) for startup founders.** It
-tracks every investor through every round (stages, fit, follow-ups, meetings, notes and
-commitments) and ships an MCP server, so Claude Code, Codex, Cursor or any MCP client can work
-the pipeline with you.
+**Wasila is an investor CRM and Funding Room for founders raising in the US, the UK and Saudi
+Arabia.** It keeps one searchable master list of investors, every round's pipeline, a
+diligence document room, email outreach with the right attachments, the pitch deck and the
+funding costs in one place, with Claude and an MCP server for agentic work. Nothing is ever
+sent, shared or changed by an AI without a person's click.
 
-**[Start your raise at wasila.app](https://wasila.app)**, free, or self-host it.
-Licensed under AGPL-3.0. [Pricing](https://wasila.app/pricing) ·
-[Docs](https://wasila.app/docs) · [Compare](https://wasila.app/compare) ·
-[FAQ](https://wasila.app/faq) · [llms.txt](https://wasila.app/llms.txt)
+Wasila is a white-label build for Applied Biosciences. It is open source under AGPL-3.0;
+see [NOTICE](NOTICE) for the upstream project it builds on.
 
-![A round in Wasila: the ledger strip, and investors on a kanban board by stage](docs/img/board.png)
+## What's in v1.0.0.0
 
-## Who it's for
+- **US, UK and Saudi rounds.** Each round names its market and gets the right defaults:
+  USD, GBP or SAR; SAFE, priced equity, convertible notes or the UK advance subscription
+  agreement (ASA); SEIS / EIS / SEIS-then-EIS tax relief for UK rounds; a Sharia-compliant
+  flag for Saudi rounds.
+- **Funding Room.** The diligence repository: documents by category (pitch, corporate,
+  financial, technical, clinical, regulatory, IP, cybersecurity, data protection,
+  commercial, legal, SEIS/EIS), every version kept, review status (draft, in review,
+  approved, archived), confidentiality, and US / UK / KSA checklists. **Share links** expose
+  approved documents only, expire after 1 to 90 days, can be revoked, and count views
+  without tracking people.
+- **Master list.** Import leads from **CSV, Excel (.xlsx) or Word (.docx) tables**, or add
+  them by hand, into one deduplicated list with country, phone and interest tags. Filter by
+  market (UK, US, KSA, GCC), type, interests, "has email" and "not contacted". Save lists.
+  Add **custom fields** and **AI columns**.
+- **Claude.** Each workspace adds its own Anthropic API key (sealed on the server, only the
+  last four characters are ever shown). **Ask Wasila** turns a plain-English question into
+  master-list filters; Claude fills AI columns, drafts warm letters and investor updates,
+  and suggests deck edits. Claude sees public investor profile data only.
+- **Outreach.** Email investors from your own mailbox (Gmail, Outlook or any SMTP account)
+  with approved Funding Room documents attached by hand. Every send is an `email` activity
+  on the investor's timeline. **Campaigns** merge one email (`{first_name}`, `{firm}`, …)
+  into a reviewed draft per investor; **follow-ups** list sent mail with no reply after N
+  days; replies are logged in one click.
+- **Warm intros.** Who in your network knows each investor, and how well; the best path
+  shows on the investor's file and in the master list.
+- **Deck editor.** Edit the text of a PowerPoint deck from the Funding Room, hide or reorder
+  slides, and save a new version (layout, images and fonts stay as designed). Claude can
+  suggest a version tailored to one investor.
+- **Funding costs.** Use of funds, SEIS/EIS tranches and the 48-month income and cost plan,
+  imported from your business-plan workbook and editable in place, with monthly burn,
+  runway and the funding gap.
+- **Everything from the base pipeline:** rounds with Triage, Board and Table views, investor
+  files with an append-only timeline, follow-ups, meetings with a calendar feed, linked
+  cards, CSV/JSON export, hard delete, a REST API under `/v1` and an MCP server at `/mcp`
+  with **26 tools** (31 with investor research on). Agents can draft emails
+  (`draft_outreach`) but cannot send them, and there are no delete tools.
+- **Every page** shows the version (`Wasila v1.0.0.0`) and a light/dark switch, works on a
+  phone and on a desktop, and is ready for Arabic: **Settings → Language** switches to
+  right-to-left with IBM Plex Sans Arabic (translation comes in a later release).
 
-Founders raising a pre-seed, seed or Series A round who have outgrown the investor
-spreadsheet: solo founders and small founding teams who want an investor pipeline with
-follow-ups and meetings, do not want to pay per seat, and do not want their investor list
-pooled into someone else's database. It also suits founders who work with an AI coding agent
-and want it to log calls and set follow-ups for them.
+## Brand
 
-It is not an investor database (you bring your list), it never emails investors for you, and
-it is built for founders raising money, not for VC firms managing deal flow.
+| Token | Hex | Use |
+|---|---|---|
+| Primary | `#0000FF` | Actions and links (light mode) |
+| Light | `#B9D9EB` | Soft fills |
+| Sky | `#00A1EB` | Actions in dark mode, meters |
+| Gold | `#E5C100` | Highlights (SEIS/EIS tranches) |
 
-## Free forever
-
-Wasila costs $0, and that will not change.
-
-- There is no paid tier, no seat price and no feature behind a paywall. Every workspace gets
-  every feature, with the same limits.
-- The maintainer pays the running costs today. Donations, once they open, will be optional;
-  they will pay for hosting and never buy features, priority or a different deal on your data.
-- The code is AGPL-3.0, so anyone who runs a modified copy as a service has to publish their
-  changes. A hosted fork cannot quietly turn into a closed, paid product.
-
-## The privacy promise
-
-1. **Your data is yours.** A workspace is visible only to its members and to the API keys its
-   owners create.
-2. **We never pool, sell, rent or mine it.** Wasila never builds an investor database from
-   your data and never shows one workspace's data to another.
-3. **No ads, no trackers.** No analytics scripts, pixels or third-party cookies. Fonts are
-   served by Wasila.
-4. **No AI on your data unless you bring it.** Wasila never runs or pays for AI on its
-   own. Investor research runs only when you press a button, on your own OpenRouter key, and
-   sends only the investor's name, firm and links, your company profile and round terms.
-   Agents you connect use your key, and every action they take is on the timeline.
-5. **Leave any time.** Export everything as CSV and JSON. Delete your workspace or account
-   permanently, effective immediately.
-6. **Check our work.** Wasila is open source under AGPL-3.0, including the code that
-   handles your data.
-
-The details are on [wasila.app/privacy](https://wasila.app/privacy).
-
-## What it does
-
-- **Rounds** with a target, instrument (SAFE, priced, convertible note), cap or pre-money,
-  target close date, and stages you can rename, recolor and reorder.
-- **A pipeline page** with three views: **Triage** to decide on new investors one at a time
-  (number keys, undo), a kanban **Board** you can drag (or drive with Alt+← / Alt+→), and a
-  sortable, filterable **Table**. Above them, a ledger strip with committed against target,
-  the funnel and due follow-ups; beside them, an investor sheet with the full timeline.
-- **Investor contacts** shared across rounds, with dedupe on email, LinkedIn, name + firm
-  and (when it is unambiguous) the name alone. An agent adding someone you already have fills
-  in what is missing instead of creating a duplicate or dropping its notes.
-- **An append-only timeline** that records who did what, people and agents alike. Agent
-  actions are marked in their own color, with the agent's name and model.
-- **Co-founders and advisors** as owners, editors and viewers. Sign in with an emailed link
-  or with Google.
-- **Meetings**: schedule them from an investor's file (it moves them to Meeting), see today's
-  on Today and on board cards, record the outcome and next step when they are done, and
-  subscribe to all of them from Google, Apple or Outlook Calendar with a private feed URL.
-- **Linked cards**: link two or more investors who work the deal as one team (partners at
-  the same fund), and see the team on their cards and files.
-- **A sample workspace** with fictional investors, to try everything before your own data.
-- **CSV import** with column mapping, preview and dedupe. **CSV and JSON export** of a round,
-  all investors or the whole workspace. Hard delete of anything, at any time.
-- **Investor research**: on demand and on your own OpenRouter key, a short dossier per
-  investor (recent deals, thesis, a way in, an opener, a risk) where every fact cites a
-  source, with a monthly spend limit per workspace and no markup. Agents can save their own
-  research with `save_dossier`.
-- **A phone layout** for the pipeline, board and triage.
-- **A REST API** under `/v1` and **an MCP server** at `/mcp` with 23 tools, 28 with research
-  enabled (no deletes).
-
-Limits per workspace, the same for everyone: 50 rounds, 20,000 investors, 20 members,
-20 API keys.
-
-## How it compares
-
-From each product's public pricing page on 2026-10-15; sources and details on
-[wasila.app/compare](https://wasila.app/compare).
-
-| | Lowest paid price | Free plan | Open source | MCP server |
-|---|---|---|---|---|
-| **Wasila** | $0, no paid tier | Everything: 50 rounds, 20,000 investors, 20 members | Yes (AGPL-3.0) | Yes, free plan |
-| Foundersuite | $745/yr (Silver) | Basic: 75 investors per pipeline | No | Not listed |
-| Visible | $59/mo (Base, annual) | Starter: 2 pipelines, 100 update recipients | No | Yes |
-| Affinity | $2,000/user/yr | None listed | No | Not checked |
-| Attio | $35/seat/mo (Plus, annual) | Up to 3 seats | No | Yes |
-| folk | $24/member/mo (annual) | 14-day trial | No | Yes |
-
-Foundersuite includes an investor database, Visible adds investor updates and data rooms,
-Affinity is built for VC firms, and Attio and folk are general CRMs. Wasila does the
-investor pipeline only, free and open source.
-
-## Connect your agent (MCP quickstart)
-
-Create a key in Settings → Connect an agent (it is shown once), then:
-
-```bash
-claude mcp add --transport http wasila \
-  https://api.wasila.app/mcp \
-  --header "Authorization: Bearer wsl_live_XXXX" \
-  --header "X-Agent-Name: claude-code"
-```
-
-Keep the default (local) scope or use `--scope user`. Never use `--scope project` with a
-literal key: that writes it to a shared `.mcp.json`. An optional
-`--header "X-Agent-Model: <model>"` shows the model next to the agent's name on the timeline.
-
-Codex (`~/.codex/config.toml`):
-
-```toml
-[mcp_servers.wasila]
-url = "https://api.wasila.app/mcp"
-bearer_token_env_var = "WASILA_API_KEY"
-http_headers = { "X-Agent-Name" = "codex" }
-```
-
-Then `export WASILA_API_KEY=wsl_live_…` in the shell that starts Codex.
-
-Cursor (`~/.cursor/mcp.json`; start Cursor from a terminal so it sees `WASILA_API_KEY`):
-
-```json
-{
-  "mcpServers": {
-    "wasila": {
-      "url": "https://api.wasila.app/mcp",
-      "headers": {
-        "Authorization": "Bearer ${env:WASILA_API_KEY}",
-        "X-Agent-Name": "cursor"
-      }
-    }
-  }
-}
-```
-
-Then ask: "What follow-ups are due this week in Seed?" or "Add these five investors from my
-notes to Seed and remind me Friday." The agent starts with `get_workspace`, can create a
-round (`create_round`), add up to 50 investors at once (`add_investors`) and set follow-ups
-in the same call. A read-only key only sees the read tools. Setup for other clients and the
-full tool reference: [wasila.app/docs/mcp](https://wasila.app/docs/mcp).
+Tokens live in `web/app/globals.css` (`--brand-*`, `--accent`). The logo and app icons are in
+`web/public/brand/` and `web/app/` (`icon.png`, `apple-icon.png`, `favicon.ico`).
 
 ## Quick start (development)
 
-You need Python 3.12 with [uv](https://docs.astral.sh/uv/), Node 20.9+, and Postgres 17 on
-localhost with `wasila_dev` and `wasila_test` databases (extensions `citext` and
+You need Python 3.12 with [uv](https://docs.astral.sh/uv/), Node 20.9+, and Postgres 16 or
+17 on localhost with `wasila_dev` and `wasila_test` databases (extensions `citext` and
 `pg_trgm`).
 
 ```bash
-# API and MCP server on :8000
+# Local (terminal 1, in backend/): API and MCP server on :8000
 cd backend
 uv sync
 WASILA_DATABASE_URL=postgresql://localhost/wasila_dev uv run alembic upgrade head
+export WASILA_SECRETS_KEK="$(uv run wasilactl secrets gen-kek)"   # seals the Claude key and mail password
 WASILA_ENV=dev uv run uvicorn --factory wasila.main:create_app --reload
 
-# Web app on :3000 (another terminal)
+# Local (terminal 2, in web/): web app on :3000
 cd web
 npm ci
 npm run dev
 ```
 
-Open http://localhost:3000/signin and request a link. In development the "check your inbox"
-page shows the link, so you do not need email. For a workspace full of fictional investors:
+Open http://localhost:3000/signin and request a link; in development the "check your
+inbox" page shows it. For fictional sample data: `uv run wasilactl seed-demo --email you@example.com`.
 
-```bash
-cd backend && uv run wasilactl seed-demo --email you@example.com
-```
+Settings you will want:
+
+| Variable | What it does |
+|---|---|
+| `WASILA_SECRETS_KEK` | Required to save the Anthropic key and the SMTP password (`wasilactl secrets gen-kek`). |
+| `WASILA_ANTHROPIC_BASE_URL` | Defaults to `https://api.anthropic.com`; point at a local fake for development. |
+| `WASILA_OUTREACH_BACKEND` | `smtp` (default) sends through each workspace's mail settings; `memory` never sends (tests, demos). |
 
 Checks:
 
 ```bash
 cd backend && uv run pytest -q && uv run ruff check . && uv run ruff format --check . && uv run mypy wasila
-cd web && npm run lint && npm run typecheck && npm run build
+cd web && npm run lint && npm run typecheck && npm run test:unit && npm run build
 ```
+
+## Connect an agent (MCP)
+
+Create a key in Settings → Connect an agent (shown once), then for Claude Code:
+
+```bash
+claude mcp add --transport http wasila https://api.wasila.app/mcp \
+  --header "Authorization: Bearer wsl_live_XXXX" \
+  --header "X-Agent-Name: claude-code"
+```
+
+Then ask: "List the Funding Room checklist for KSA", "Find UK healthcare angels we have not
+contacted", or "Draft a warm letter to Dana Whitfield with the one-pager attached". Drafts
+appear in Wasila → Outreach for a person to review and send.
 
 ## Self-hosting
 
-One Docker Compose file runs Postgres, the API, the web app and Caddy for TLS:
-
-```bash
-cp deploy/.env.example deploy/.env   # set your hosts and secrets
-docker compose -f deploy/docker-compose.yml up -d --build
-```
-
-Step by step: [wasila.app/docs/self-hosting](https://wasila.app/docs/self-hosting),
-[`docs/DEPLOY.md`](docs/DEPLOY.md) and the trust boundaries in
-[`deploy/README.md`](deploy/README.md): never expose the API port directly with
-`FORWARDED_ALLOW_IPS=*`, and keep every subdomain of your cookie domain first-party.
-Run `wasilactl housekeeping` daily; it deletes expired sign-in requests, sessions and dead invites.
+`deploy/` has the Dockerfiles, `docker-compose.yml` and a `Caddyfile`. See
+[`docs/DEPLOY.md`](docs/DEPLOY.md). Set `WASILA_SECRETS_KEK` in production, back up the
+database (Funding Room files are stored in it), and run `wasilactl housekeeping` daily.
+v1.0.0.0 is **not deployed**; AWS deployment is a later step.
 
 ## Repository
 
 | Path | What |
 |---|---|
-| `backend/` | FastAPI, SQLAlchemy 2 (async), Alembic, Postgres 17. REST under `/v1`, MCP at `/mcp`. |
-| `web/` | Next.js 15, React 19, Tailwind v4. The app, the site and the docs. |
-| `deploy/` | Dockerfiles, `docker-compose.yml`, `Caddyfile`, backup script. |
-| `docs/SPEC.md` | The product and engineering spec. |
-| `design/SYSTEM.md` | The design system. |
+| `backend/` | FastAPI, SQLAlchemy 2 (async), Alembic, Postgres. REST under `/v1`, MCP at `/mcp`. Package `wasila`, CLI `wasilactl`. |
+| `backend/alembic/versions/0010_wasila.py` | Every v1.0.0.0 table (Funding Room, outreach, Claude, lists, intros, costs). |
+| `web/` | Next.js 15, React 19, Tailwind v4: the app, the public site and the docs. |
+| `web/components/app/wasila/` | Funding Room, master list, outreach, deck editor, funding costs, settings. |
+| `web/lib/i18n/` | Arabic / English scaffolding. |
+| `deploy/` | Dockerfiles, compose, Caddy, backups. |
+| `CHANGELOG.md` | Release notes. |
 
-## Contributing
+## Data and privacy
 
-Issues and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) first, and
-[SECURITY.md](SECURITY.md) to report a vulnerability. Everyone taking part follows the
-[Code of Conduct](CODE_OF_CONDUCT.md).
+Demo, test and docs data is fictional. Real investor lists, letters, decks and workbooks are
+imported at runtime and never committed to this repository. Workspaces are isolated (an id
+from another workspace is always 404, enforced by `tests/isolation/` for every route and MCP
+tool), secrets are sealed with AES-256-GCM envelope encryption, and there are no analytics
+or third-party runtime requests.
 
 ## License
 
-Copyright (C) 2026 Zhirayr Gumruyan and Wasila contributors.
-
-Wasila is free software: you can redistribute it and/or modify it under the terms of the
-GNU Affero General Public License as published by the Free Software Foundation, version 3.
-It is distributed in the hope that it will be useful, but without any warranty; without even
-the implied warranty of merchantability or fitness for a particular purpose. See
-[LICENSE](LICENSE) for the full text.
+Wasila is free software under the GNU Affero General Public License, version 3
+([LICENSE](LICENSE)). If you run a modified copy as a network service, you must offer its
+source to its users. Copyright notices for the upstream work are in [NOTICE](NOTICE).

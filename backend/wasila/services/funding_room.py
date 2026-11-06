@@ -629,29 +629,58 @@ def checklist_items(jurisdiction: str) -> list[tuple[str, str, str]]:
     return items
 
 
-def _words(text: str) -> set[str]:
-    return {
-        w for w in "".join(c.lower() if c.isalnum() else " " for c in text).split() if len(w) > 2
-    }
+# Words that identify each standard document in a title (lower case, substring match).
+KEYWORDS: Final[dict[str, tuple[str, ...]]] = {
+    "deck": ("deck", "pitch", "presentation"),
+    "one_pager": ("one-pager", "one pager", "onepager", "summary", "teaser", "executive"),
+    "financial_model": ("model", "business plan", "forecast", "financial", "p&l", "use of funds"),
+    "cap_table": ("cap table", "captable", "shareholder", "register of members"),
+    "ip_assignment": ("ip ", "ip assignment", "intellectual property", "patent", "assignment"),
+    "dpia": ("dpia", "impact assessment", "data protection"),
+    "security": ("security", "penetration", "pen test", "pentest", "iso 27001", "soc 2"),
+    "us_incorporation": ("incorporation", "delaware", "certificate"),
+    "us_safe": ("safe", "convertible", "note"),
+    "us_409a": ("409a", "valuation"),
+    "us_hipaa": ("hipaa",),
+    "uk_incorporation": ("incorporation", "companies house", "certificate"),
+    "uk_articles": ("articles",),
+    "uk_advance_assurance": ("advance assurance", "seis", "eis"),
+    "uk_asa": ("asa", "advance subscription"),
+    "uk_dtac": ("dtac", "dcb0129", "dcb 0129", "clinical safety"),
+    "ksa_cr": ("commercial registration", " cr", "cr "),
+    "ksa_misa": ("misa", "investment licence", "investment license"),
+    "ksa_zatca": ("zatca", "zakat"),
+    "ksa_pdpl": ("pdpl", "personal data protection"),
+    "ksa_sfda": ("sfda",),
+    "ksa_arabic": ("arabic", "عربي"),
+}
+
+
+def _matches(key: str, category: str, doc: RoomDocument) -> bool:
+    if doc.category != category:
+        return False
+    if key == "deck" and doc.is_deck:
+        return True
+    title = f" {doc.title.lower()} "
+    return any(k in title for k in KEYWORDS.get(key, ()))
 
 
 async def checklist(
     db: AsyncSession, ws: WorkspaceContext, jurisdiction: str
 ) -> list[dict[str, Any]]:
     """Each standard document with the room documents that likely cover it: same category
-    and a shared key word in the title (a guide for people, not a legal opinion)."""
+    and a telling word in the title (a guide for people, not a legal opinion). Documents for
+    another market do not count."""
     items = checklist_items(jurisdiction)
-    docs = await list_documents(db, ws)
+    docs = [
+        d
+        for d in await list_documents(db, ws)
+        if d.review_status != "archived"
+        and (jurisdiction == "all" or d.jurisdiction in ("all", jurisdiction))
+    ]
     out = []
     for key, label, category in items:
-        want = _words(label) - {"the", "and", "for", "used", "company", "position", "summary"}
-        matches = [
-            d
-            for d in docs
-            if d.category == category
-            and d.jurisdiction in ("all", jurisdiction if jurisdiction != "all" else d.jurisdiction)
-            and (want & _words(d.title) or (key in ("deck",) and d.is_deck))
-        ]
+        matches = [d for d in docs if _matches(key, category, d)]
         out.append(
             {
                 "key": key,

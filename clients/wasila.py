@@ -10,16 +10,16 @@ Usage:
 
     from wasila import Wasila
 
-    rb = Wasila(agent_name="my-script")
-    seed = rb.rounds(status="open")[0]
-    added = rb.add_investor("Dana Whitfield", firm="Harbor Light Ventures",
+    client = Wasila(agent_name="my-script")
+    seed = client.rounds(status="open")[0]
+    added = client.add_investor("Dana Whitfield", firm="Harbor Light Ventures",
                             email="dana@example.com")            # dedupes; safe to repeat
     inv = added["investor"]
-    rb.add_to_round(seed["slug"], inv["id"], stage="contacted", fit=4)
-    rb.log_activity(inv["id"], "email", "Sent the deck.", round=seed["slug"],
+    client.add_to_round(seed["slug"], inv["id"], stage="contacted", fit=4)
+    client.log_activity(inv["id"], "email", "Sent the deck.", round=seed["slug"],
                     idempotency_key="msg-123")                 # retries are safe
-    rb.set_follow_up(seed["slug"], inv["id"], in_days=3, note="Nudge on the deck")
-    print(rb.follow_ups(within_days=7))
+    client.set_follow_up(seed["slug"], inv["id"], in_days=3, note="Nudge on the deck")
+    print(client.follow_ups(within_days=7))
 
 Every write is recorded on the investor's timeline under ``agent_name`` (the
 ``X-Agent-Name`` header). Errors raise :class:`WasilaError` with the API's ``code``,
@@ -213,15 +213,15 @@ def _q(ref: str) -> str:
 
 
 def main() -> int:
-    rb = Wasila(agent_name="wasila-py")
-    ws = rb.workspace()
+    client = Wasila(agent_name="wasila-py")
+    ws = client.workspace()
     print(f"{ws['name']} ({ws['slug']}) · you: {ws['you']['type']} {ws['you']['scopes']}")
-    for r in rb.rounds():
+    for r in client.rounds():
         print(
             f"  {r['slug']:<20} {r['status']:<6} {r['committed_amount']:>12,} / "
             f"{r['target_amount']:,} {r['currency']} · {r['participant_count']} investors"
         )
-    due = rb.follow_ups(within_days=7)
+    due = client.follow_ups(within_days=7)
     print(f"Follow-ups (today {due['today']}): {due['counts']}")
     for item in due["data"][:10]:
         inv = item["investor"]

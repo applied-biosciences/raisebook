@@ -1,13 +1,25 @@
 # Wasila: working notes for agents
 
-Wasila (wasila.app) is a free-forever, open-source (AGPL-3.0) fundraising CRM for
-founders, with a first-class MCP server. Spec: `docs/SPEC.md`. Its **§0 decisions block
-overrides the rest**: the package is `wasila`, the env prefix is `WASILA_*`, the CLI is
-`wasilactl`, keys are `wsl_live_` / `wsl_test_`, and the scopes are `wasila:read|write|admin`.
-Design rules: `design/SYSTEM.md` (binding). Who edits what: `docs/OWNERSHIP.md`. wasila.app
-is live on one DigitalOcean droplet (`docs/DEPLOY.md`); only the owner deploys, so never deploy
-and never touch DNS. The repo is public (github.com/applied-biosciences/wasila); you do not push
-unless asked.
+Wasila (v1.0.0.0) is Applied Biosciences' white-label investor CRM and Funding Room for US,
+UK and Saudi raises, built on an AGPL-3.0 upstream (see NOTICE), with a first-class MCP
+server and Claude integration. Spec: `docs/SPEC.md`. Its **§0 decisions block overrides the
+rest**: the package is `wasila`, the env prefix is `WASILA_*`, the CLI is `wasilactl`, keys
+are `wsl_live_` / `wsl_test_`, and the scopes are `wasila:read|write|admin`. Design rules:
+`design/SYSTEM.md` (binding; Wasila palette in `web/app/globals.css`). Who edits what:
+`docs/OWNERSHIP.md`. Nothing is deployed yet: never deploy, never touch DNS, and never push
+to `main` (work on a branch). The v1.0.0.0 features (Funding Room, master list, Claude,
+outreach, decks, funding costs) are summarised in CHANGELOG.md; their isolation cases live in
+`tests/isolation/wasila_cases.py`.
+
+## Wasila v1.0.0.0 invariants (keep them)
+- Email is sent only by an explicit send of one reviewed draft (`services/outreach.send`);
+  there is no MCP send tool. Attachments are approved Funding Room documents only.
+- Claude runs only on the workspace's own key (`workspace_secrets`, kind `anthropic`) and on
+  request; it sees `claude.public_profile` fields only, never emails, phones, amounts or notes.
+- Share links expose approved documents only; only token hashes are stored.
+- Real investor data never goes into the repository (fixtures stay fictional).
+- The version shown on every page is `web/lib/version.ts`; keep it in step with
+  `backend/wasila/__init__.py` and CHANGELOG.md.
 
 ## Layout
 - `backend/` is the Python 3.12 project, managed by uv. The package is `backend/wasila/`
