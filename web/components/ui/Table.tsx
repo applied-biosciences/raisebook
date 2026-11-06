@@ -165,7 +165,7 @@ export function Th({ sort, onSort, align = "left", className, children, ...rest 
       scope="col"
       aria-sort={sort === "asc" ? "ascending" : sort === "desc" ? "descending" : undefined}
       className={cn(
-        "t-th sticky top-0 z-[1] border-b border-line bg-surface px-10 py-8 whitespace-nowrap",
+        "t-th sticky top-0 z-[1] border-b-2 border-brand-sky/50 bg-accent-soft px-10 py-8 whitespace-nowrap",
         align === "right" ? "text-right" : "text-left",
         sort ? "text-fg" : "text-muted",
         className,

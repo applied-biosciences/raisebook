@@ -16,7 +16,7 @@ export function GlobalChrome() {
     >
       <span
         data-testid="app-version"
-        className="pointer-events-auto rounded-pill border border-line bg-surface px-8 py-2 font-mono text-2xs text-muted shadow-pill"
+        className="pointer-events-auto rounded-pill border border-brand-gold bg-brand-gold px-8 py-2 font-mono text-2xs font-medium text-on-gold shadow-pill"
         title="Wasila version"
       >
         Wasila {APP_VERSION_LABEL}

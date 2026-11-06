@@ -49,7 +49,7 @@ const FOOTER: { title: string; links: { href: string; label: string; external?: 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col">
-      <header className="sticky top-0 z-30 border-b border-line bg-canvas md:static">
+      <header className="sticky top-0 z-30 border-b-3 border-brand-gold bg-canvas md:static">
         <div className="gutter mx-auto flex h-64 max-w-site items-center gap-12 sm:gap-24">
           <Wordmark size={22} href="/" />
           <SiteNav className="hidden md:flex" />
@@ -71,7 +71,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         {children}
       </main>
 
-      <footer className="border-t border-line">
+      <footer className="border-t-3 border-brand bg-accent-soft">
         <div className="gutter mx-auto grid max-w-site gap-x-32 gap-y-32 py-48 sm:grid-cols-2 xl:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,1fr))]">
           <div className="flex flex-col gap-10">
             <Wordmark size={22} />

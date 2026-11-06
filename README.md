@@ -57,13 +57,30 @@ see [NOTICE](NOTICE) for the upstream project it builds on.
 
 | Token | Hex | Use |
 |---|---|---|
-| Primary | `#0000FF` | Actions and links (light mode) |
-| Light | `#B9D9EB` | Soft fills |
-| Sky | `#00A1EB` | Actions in dark mode, meters |
-| Gold | `#E5C100` | Highlights (SEIS/EIS tranches) |
+| Primary | `#0000FF` | The app bar, actions and links (light mode), the headline KPI tile |
+| Light | `#B9D9EB` | Soft fills: table headers, tags, empty states, the bar's secondary text |
+| Sky | `#00A1EB` | Actions in dark mode, meters, card rules, section labels (as `--sky-ink`) |
+| Gold | `#E5C100` | The rule under the app bar, the active tab, page-title marks, the version badge |
 
 Tokens live in `web/app/globals.css` (`--brand-*`, `--accent`). The logo and app icons are in
 `web/public/brand/` and `web/app/` (`icon.png`, `apple-icon.png`, `favicon.ico`).
+
+## Run it on your computer (production style)
+
+One command builds the web app for production, runs the API without auto-reload, applies the
+migrations and opens http://localhost:3600. Nothing is deployed anywhere.
+
+```bash
+# Local (Mac Terminal, in the repository folder)
+./deploy/local/start.sh     # start, or rebuild and restart after a git pull
+./deploy/local/stop.sh      # stop
+```
+
+It uses your local Postgres database `wasila_dev`, creates a local encryption key once in
+`deploy/local/.env.local` (git-ignored), and writes logs to `deploy/local/logs/`. For safe
+testing, sign-in links are shown on screen and outreach sends are recorded without emailing
+anyone; `REAL_EMAIL=1 ./deploy/local/start.sh` uses the SMTP settings saved in Settings →
+Email, and `MOCK_CLAUDE=1` swaps Claude for a local fake at no cost.
 
 ## Quick start (development)
 

@@ -47,7 +47,10 @@ export function PageHeader({
               ))}
             </nav>
           ) : null}
-          <h1 className="t-display-s min-w-0 truncate">{title}</h1>
+          <h1 className="t-display-s min-w-0 truncate">
+            <span aria-hidden className="me-8 inline-block h-[0.8em] w-4 rounded-pill bg-brand-gold align-[-0.05em]" />
+            {title}
+          </h1>
           {aside ? <span className="t-micro hidden shrink-0 text-muted sm:inline">{aside}</span> : null}
         </div>
         {actions ? <div className="flex flex-wrap items-center gap-8">{actions}</div> : null}

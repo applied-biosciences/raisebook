@@ -184,7 +184,7 @@ export function FundingRoom() {
         </section>
 
         <aside className="flex min-w-0 flex-col gap-20">
-          <section aria-label="Checklist" className="rounded-md border border-line bg-surface p-14">
+          <section aria-label="Checklist" className="rounded-md border border-line border-t-3 border-t-brand-sky bg-surface p-14">
             <div className="mb-10 flex flex-wrap items-center justify-between gap-8">
               <h2 className="t-display-xs m-0">Checklist</h2>
               <Segmented
@@ -219,7 +219,7 @@ export function FundingRoom() {
             <p className="t-micro mt-10 mb-0 text-muted">A guide to what investors usually ask for, not legal advice.</p>
           </section>
 
-          <section aria-label="Share links" className="rounded-md border border-line bg-surface p-14">
+          <section aria-label="Share links" className="rounded-md border border-line border-t-3 border-t-brand-sky bg-surface p-14">
             <h2 className="t-display-xs m-0 mb-10">Share links</h2>
             {!links.length ? (
               <p className="m-0 text-13 text-muted">No links yet. A link shows approved documents and expires on its own.</p>
@@ -257,7 +257,7 @@ export function FundingRoom() {
             )}
           </section>
 
-          <section aria-label="Activity" className="rounded-md border border-line bg-surface p-14">
+          <section aria-label="Activity" className="rounded-md border border-line border-t-3 border-t-brand-sky bg-surface p-14">
             <h2 className="t-display-xs m-0 mb-10">Activity</h2>
             <ul className="m-0 flex list-none flex-col gap-6 p-0 text-13">
               {events.slice(0, 12).map((e) => {

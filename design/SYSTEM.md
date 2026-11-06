@@ -286,8 +286,11 @@ redirects to the last-used workspace (`localStorage["wsl-last-ws"]`, else the fi
 first open round.
 
 ### 4.1 App shell (`TopBar`)
-A top bar rather than a sidebar, so the board gets the full width. 56px high, `canvas`
-background, 1px line under it, sticky.
+A top bar rather than a sidebar, so the board gets the full width. 56px high, sticky. Wasila:
+a solid brand band (`--bar`, #0000FF light / #0A1766 dark) with a 3px gold rule under it.
+Inside `[data-app-bar]` the neutral tokens are swapped for the bar's (white text, light-blue
+secondary text, gold active underline), and menus or dialogs opened from it get the page
+tokens back, so no control in the bar needs its own colours.
 
 ```
 [Wasila]  [Kestrel Robotics ▾] [SANDBOX]   [ Seed | Pre-seed 2025 | + Round ]     Pipeline  Overview  Investors  Settings  [Search ⌘K] [ZG ▾]

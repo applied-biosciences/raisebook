@@ -350,3 +350,14 @@ spends the token on load. Use a throwaway database (for example `wasila_shots`) 
 - `Investor` and the participant's `investor` carry `group_id` and `linked` (other members,
   by name); `linked_map` loads them for a whole page in one query (no N+1, tested by query
   count in `tests/test_linked_cards.py`). MCP shows `linked: [{id, name, firm}]`.
+
+## Wasila brand pass and local run (keep these)
+- The app bar is the brand band: `[data-app-bar]` swaps the neutral tokens for `--bar-*` in
+  `globals.css` and restores the page tokens for menus/dialogs inside it. Gold (`brand-gold`)
+  marks: the bar's rule, active nav/tab, page-title mark, version badge. Tags and table heads
+  use `accent-soft`; section labels use `--sky-ink`. Text on brand fills uses `on-brand` /
+  `on-gold`. No raw hex outside `globals.css`.
+- `deploy/local/start.sh` / `stop.sh` run the production build locally (web :3600 standalone
+  server, API :8000, `wasila_dev`), outreach in `memory` mode unless `REAL_EMAIL=1`. Logs, pid
+  files and `.env.local` are git-ignored.
+- CORS allows `X-Filename` and `X-Note` (raw-body uploads); `tests/test_core.py` pins it.

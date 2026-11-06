@@ -55,7 +55,7 @@ export default function HomePage() {
     <>
       <JsonLd data={graph(organization(), website(), softwareApplication(), sourceCode(), webPage("/"), faqPage(HOME_FAQ, "/"))} />
 
-      <section aria-labelledby="hero-title" className="overflow-hidden">
+      <section aria-labelledby="hero-title" className="overflow-hidden bg-linear-to-b from-accent-soft via-canvas to-canvas">
         <div className="gutter mx-auto grid max-w-site items-center gap-x-40 gap-y-32 pt-48 pb-56 lg:grid-cols-12 lg:pt-80 lg:pb-80">
           <div className="min-w-0 lg:col-span-7">
             <p className="t-label mb-18">Wasila {APP_VERSION_LABEL} · Investor CRM and Funding Room</p>
@@ -76,7 +76,7 @@ export default function HomePage() {
             <dl className="mt-36 grid max-w-[640px] grid-cols-2 gap-x-24 gap-y-14 sm:grid-cols-4">
               {FACTS.map((f) => (
                 <div key={f.k}>
-                  <dt className="font-display text-lg font-bold">{f.k}</dt>
+                  <dt className="font-display text-lg font-bold text-accent">{f.k}</dt>
                   <dd className="m-0 text-sm text-muted">{f.v}</dd>
                 </div>
               ))}
@@ -99,7 +99,7 @@ export default function HomePage() {
       <Section id="features" index="01" note="Features" title="Everything the raise needs" lede="Built on a proven investor pipeline, with the tools founders asked for added on.">
         <ul className="m-0 grid list-none gap-14 p-0 sm:grid-cols-2 xl:grid-cols-3">
           {FEATURES.map((f) => (
-            <li key={f.name} className="rounded-md border border-line bg-surface p-16">
+            <li key={f.name} className="rounded-md border border-line border-t-3 border-t-brand-sky bg-surface p-16">
               <h3 className="t-display-xs m-0">{f.name}</h3>
               <p className="m-0 mt-8 text-muted">{f.text}</p>
             </li>
@@ -110,7 +110,7 @@ export default function HomePage() {
       <Section id="markets" index="02" note="Markets" title="US, UK and Saudi rounds" lede="Each round knows where it is raised: the currency, the instruments, the tax relief and the documents investors there expect.">
         <div className="grid gap-14 md:grid-cols-3">
           {MARKETS.map((m) => (
-            <div key={m.name} className="rounded-md border border-line bg-surface p-16">
+            <div key={m.name} className="rounded-md border border-line border-t-3 border-t-brand-gold bg-surface p-16">
               <h3 className="t-display-xs m-0">{m.name}</h3>
               <ul className="m-0 mt-10 flex list-disc flex-col gap-6 ps-18 text-muted">
                 {m.points.map((p) => (

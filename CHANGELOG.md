@@ -12,7 +12,9 @@ First Wasila release, built on the upstream investor CRM (see NOTICE).
   `wsl-`, calendar tokens `wslcal_`. **Breaking** for any earlier deployment: re-issue API keys
   and calendar feed URLs, rename environment variables.
 - Wasila palette (`#0000FF`, `#B9D9EB`, `#00A1EB`, `#E5C100`) in light and dark mode, the
-  Wasila logo, favicon and app icons.
+  Wasila logo, favicon and app icons. The app bar is a solid Wasila blue band with a gold rule
+  (the logo's arch); tables, tags and empty states use the light-blue tint; cards and KPI tiles
+  carry sky and gold rules; the version badge is gold.
 - Fonts are bundled (no build-time download), including IBM Plex Sans Arabic.
 - `Wasila v1.0.0.0` and a light/dark switch on every page (app, sign-in, public site, error
   pages); the API's `/healthz` and the MCP server report `1.0.0.0`.
@@ -20,6 +22,14 @@ First Wasila release, built on the upstream investor CRM (see NOTICE).
   dictionary with English fallback, RTL font and CSS hooks. No translation yet.
 - Upstream pricing, comparison and donation pages removed; terms and privacy name Applied
   Biosciences Limited (to be reviewed by your lawyer).
+
+### Running locally
+- `deploy/local/start.sh` runs Wasila on your computer production style (web production build
+  on :3600, API on :8000, migrations, logs), with email sends in test mode by default;
+  `deploy/local/stop.sh` stops it.
+- Fix: Excel/Word imports and Funding Room uploads from the browser were blocked by CORS
+  (`X-Filename` was not an allowed header).
+- Investor profiles show and edit phone and country; the master list shows email and phone.
 
 ### US, UK and Saudi raising
 - Rounds gain `jurisdiction` (us, uk, ksa, other), `tax_relief` (none, seis, eis, seis_eis; UK

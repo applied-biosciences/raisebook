@@ -15,7 +15,7 @@ const VARIANT: Record<ButtonVariant, string> = {
     "bg-accent text-accent-ink border border-accent hover:brightness-110 " +
     "disabled:[&:not([aria-busy=true])]:bg-sunk disabled:[&:not([aria-busy=true])]:text-muted " +
     "disabled:[&:not([aria-busy=true])]:border-line disabled:[&:not([aria-busy=true])]:opacity-100",
-  secondary: "bg-surface text-fg border border-line hover:border-muted",
+  secondary: "bg-surface text-fg border border-line hover:border-accent hover:text-accent",
   ghost: "bg-transparent text-muted border border-transparent hover:bg-sunk hover:text-fg",
   // Only inside confirm dialogs (at most one solid red element per view).
   danger: "bg-bad text-accent-ink border border-bad hover:brightness-110",

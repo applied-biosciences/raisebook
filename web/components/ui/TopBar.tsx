@@ -177,7 +177,7 @@ export function TopBar(p: TopBarProps) {
 
   return (
     <>
-      <header data-app-bar className={cn("sticky top-0 z-30 border-b border-line bg-canvas phone:hidden", p.className)}>
+      <header data-app-bar className={cn("sticky top-0 z-30 border-b-3 border-brand-gold bg-canvas phone:hidden", p.className)}>
         <div className="gutter mx-auto flex h-56 max-w-app items-center gap-10 sm:gap-14">
           <Wordmark href={p.homeHref} className="shrink-0" />
           <span
@@ -303,7 +303,7 @@ export function TopBar(p: TopBarProps) {
       {/* Phones and tablets: the round picker is a second row that scrolls away, so only one
           chrome row stays on top of a long list (critique 3). */}
       {pickerProps || modeChips ? (
-        <div className="gutter flex items-center gap-8 border-b border-line bg-canvas py-8 lg:hidden phone:hidden">
+        <div className="gutter flex items-center gap-8 border-b border-line bg-accent-soft py-8 lg:hidden phone:hidden">
           {modeChips ? <span className="flex shrink-0 gap-6 sm:hidden">{modeChips}</span> : null}
           {pickerProps ? (
             <div className="min-w-0 overflow-x-auto scrollbar-none">
@@ -445,7 +445,7 @@ function PhoneBar(
 
   return (
     <>
-      <header data-app-bar className="sticky top-0 z-30 hidden border-b border-line bg-canvas pt-[env(safe-area-inset-top)] phone:block">
+      <header data-app-bar className="sticky top-0 z-30 hidden border-b-3 border-brand-gold bg-canvas pt-[env(safe-area-inset-top)] phone:block">
         <div className="flex h-48 items-center gap-2 pr-[max(6px,env(safe-area-inset-right))] pl-[max(8px,env(safe-area-inset-left))]">
           <Menu
             label="Workspaces"
@@ -580,10 +580,11 @@ function PhoneBar(
                     href={n.href}
                     aria-current={on ? "page" : undefined}
                     className={cn(
-                      "flex h-56 flex-col items-center justify-center gap-2 text-[11px] font-medium",
+                      "relative flex h-56 flex-col items-center justify-center gap-2 text-[11px] font-medium",
                       on ? "text-accent" : "text-muted",
                     )}
                   >
+                    {on ? <span aria-hidden className="absolute inset-x-[22%] top-0 h-3 rounded-b-xs bg-brand-gold" /> : null}
                     <Icon d={TAB_ICONS[n.key]} />
                     <span className="max-w-full truncate px-2">{n.label}</span>
                   </Link>

@@ -34,8 +34,8 @@ export function ThemeIconButton({ className }: { className?: string }) {
         setMode(next);
       }}
       className={cn(
-        "inline-flex h-32 w-32 items-center justify-center rounded-pill border border-line bg-surface text-fg",
-        "shadow-pill hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-accent",
+        "inline-flex h-32 w-32 items-center justify-center rounded-pill border border-brand bg-brand text-on-brand",
+        "shadow-pill hover:brightness-125 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
         className,
       )}
     >

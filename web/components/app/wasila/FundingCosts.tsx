@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { cn } from "@/lib/cn";
 
 import {
   Button,
@@ -190,12 +191,20 @@ export function FundingCosts() {
               summary.kpis.runway_beyond_48m ? "Beyond 48 months" : summary.kpis.runway_months != null ? `${summary.kpis.runway_months} months` : "—",
             ],
             ["Funding gap (48 months)", summary.kpis.funding_gap_48m ? fmt(summary.kpis.funding_gap_48m, cur) : "None"],
-          ].map(([k, v]) => (
-            <div key={k} className="rounded-md border border-line bg-surface p-12">
-              <dt className="t-micro text-muted">{k}</dt>
-              <dd className="m-0 mt-4 font-display text-2xl font-bold">{v}</dd>
-            </div>
-          ))}
+          ].map(([k, v], i) =>
+            // The headline figure is a solid Wasila blue tile; the others carry a brand rule.
+            i === 0 ? (
+              <div key={k} className="rounded-md border border-brand bg-brand p-12 text-on-brand">
+                <dt className="t-micro text-on-brand">{k}</dt>
+                <dd className="m-0 mt-4 font-display text-2xl font-bold">{v}</dd>
+              </div>
+            ) : (
+              <div key={k} className={cn("rounded-md border border-line border-t-3 bg-surface p-12", ["", "border-t-brand-sky", "border-t-brand-gold", "border-t-brand-light"][i])}>
+                <dt className="t-micro text-muted">{k}</dt>
+                <dd className="m-0 mt-4 font-display text-2xl font-bold">{v}</dd>
+              </div>
+            ),
+          )}
         </dl>
       ) : null}
 

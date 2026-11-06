@@ -35,3 +35,7 @@ deploy/.env
 .coverage
 htmlcov/
 coverage/
+
+# Local production-style run (deploy/local/start.sh)
+deploy/local/logs/
+deploy/local/run/

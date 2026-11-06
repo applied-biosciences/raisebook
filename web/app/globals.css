@@ -12,17 +12,17 @@
 
 :root,
 [data-theme="light"] {
-  --canvas: #f4f8fb;
+  --canvas: #eef5fa;
   --surface: #ffffff;
-  --sunk: #e7f0f6;
-  --line: #cfdfea;
+  --sunk: #e0edf6;
+  --line: #c6dbea;
   --fg: #0d1a33;
   --muted: #5b6778;
   /* faint is ~3:1. Placeholders, disabled, decorative dots only; never meaningful text. */
   --faint: #8994a5;
   --accent: #0000ff;
   --accent-ink: #ffffff;
-  --accent-soft: #e1eef6;
+  --accent-soft: #dcebf5;
 
   --hot: #c2410c;
   --hot-soft: #fde7db;
@@ -63,6 +63,15 @@
   --brand-sky: #00a1eb;
   --brand-gold: #e5c100;
   --brand-gold-ink: #6b5a00;
+  /* Sky as text (section labels, links on tints): #00a1eb darkened to clear 4.5:1. */
+  --sky-ink: #00679a;
+  /* The app bar: a solid Wasila blue band with a gold rule under it (the logo's arch). */
+  --bar: #0000ff;
+  --bar-raise: rgb(255 255 255 / 0.14);
+  --bar-track: #0000c4;
+  --bar-line: rgb(255 255 255 / 0.28);
+  --bar-fg: #ffffff;
+  --bar-muted: #dcebf5;
 
   --scrim: rgb(10 15 25 / 0.35);
   color-scheme: light;
@@ -115,6 +124,13 @@
     --brand-sky: #00a1eb;
     --brand-gold: #e5c100;
     --brand-gold-ink: #e5c100;
+    --sky-ink: #4cc3f5;
+    --bar: #0a1766;
+    --bar-raise: rgb(255 255 255 / 0.1);
+    --bar-track: #06104a;
+    --bar-line: rgb(255 255 255 / 0.18);
+    --bar-fg: #ffffff;
+    --bar-muted: #b9d9eb;
 
     --scrim: rgb(0 0 0 / 0.55);
     color-scheme: dark;
@@ -170,6 +186,13 @@
     --brand-sky: #00a1eb;
     --brand-gold: #e5c100;
     --brand-gold-ink: #e5c100;
+    --sky-ink: #4cc3f5;
+    --bar: #0a1766;
+    --bar-raise: rgb(255 255 255 / 0.1);
+    --bar-track: #06104a;
+    --bar-line: rgb(255 255 255 / 0.18);
+    --bar-fg: #ffffff;
+    --bar-muted: #b9d9eb;
 
     --scrim: rgb(0 0 0 / 0.55);
   color-scheme: dark;
@@ -197,6 +220,10 @@
   /* Height of the phone's bottom tab bar (0 where there is none). Fixed things that sit at
      the bottom (the + button, toasts, the name banner) stand on it. */
   --wsl-tabbar: 0px;
+
+  /* Text on the brand fills, the same in both themes. */
+  --on-brand: #ffffff;
+  --on-gold: #0d1a33;
 }
 @media (max-width: 639px) and (min-height: 500px) {
   :root {
@@ -327,6 +354,10 @@
   --color-brand-sky: var(--brand-sky);
   --color-brand-gold: var(--brand-gold);
   --color-brand-gold-ink: var(--brand-gold-ink);
+  --color-sky-ink: var(--sky-ink);
+  --color-on-brand: var(--on-brand);
+  --color-on-gold: var(--on-gold);
+  --color-bar: var(--bar);
   --color-scrim: var(--scrim);
   --color-code-bg: var(--code-bg);
   --color-code-fg: var(--code-fg);
@@ -494,7 +525,7 @@
   line-height: 1.3;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--muted);
+  color: var(--sky-ink);
 }
 @utility t-th {
   font-family: var(--font-mono);
@@ -791,4 +822,49 @@ dialog::backdrop {
 }
 :root[dir="rtl"] .rtl-flip {
   transform: scaleX(-1);
+}
+
+
+/* ---------------------------------------------------------------------
+   Wasila brand bar. Inside [data-app-bar] the neutral tokens are swapped
+   for the bar's, so every control in it (switchers, round picker, search,
+   avatar) reads white on blue without its own classes. Menus and dialogs
+   opened from the bar get the page tokens back (--page-* are resolved on
+   the theme element, so they carry the page values down).
+   --------------------------------------------------------------------- */
+:root,
+[data-theme] {
+  --page-canvas: var(--canvas);
+  --page-surface: var(--surface);
+  --page-sunk: var(--sunk);
+  --page-line: var(--line);
+  --page-fg: var(--fg);
+  --page-muted: var(--muted);
+  --page-faint: var(--faint);
+  --page-accent: var(--accent);
+}
+[data-app-bar] {
+  --canvas: var(--bar);
+  --surface: var(--bar-raise);
+  --sunk: var(--bar-track);
+  --line: var(--bar-line);
+  --fg: var(--bar-fg);
+  --muted: var(--bar-muted);
+  --faint: var(--bar-muted);
+  --accent: var(--brand-gold);
+  color: var(--bar-fg);
+}
+[data-app-bar] [role="menu"],
+[data-app-bar] [role="listbox"],
+[data-app-bar] [role="dialog"],
+[data-app-bar] dialog {
+  --canvas: var(--page-canvas);
+  --surface: var(--page-surface);
+  --sunk: var(--page-sunk);
+  --line: var(--page-line);
+  --fg: var(--page-fg);
+  --muted: var(--page-muted);
+  --faint: var(--page-faint);
+  --accent: var(--page-accent);
+  color: var(--page-fg);
 }

@@ -33,8 +33,8 @@ const TONE: Record<ChipTone, string> = {
   low: "bg-sunk text-muted",
   // A static label: neutral and outlined (cobalt means "you can act"; critique 2).
   type: "border-line! bg-transparent text-muted",
-  tag: "bg-sunk text-muted",
-  industry: "bg-sunk text-muted",
+  tag: "bg-accent-soft text-sky-ink",
+  industry: "bg-accent-soft text-sky-ink",
   due: "bg-bad-soft text-bad",
   soon: "bg-warm-soft text-warm-ink",
   money: "bg-good-soft text-good-ink font-mono",
