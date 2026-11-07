@@ -33,6 +33,15 @@ First Wasila release, built on the upstream investor CRM (see NOTICE).
 - Every app panel carries a sky-blue top rule; selected filters and tabs are Wasila blue; secondary
   buttons are blue outlines.
 - The Dossier section, tab and R key are hidden while research is switched off (no error).
+- Investor updates quote your funding figures: `{raise_total}`, `{seis}`, `{eis}`,
+  `{use_of_funds}`, `{monthly_burn}`, `{runway}` and `{funding_gap}` are filled in from Costs
+  for every draft (`GET /v1/funding-costs/merge-fields`). The campaign dialog starts updates
+  from a template, inserts figures at the cursor and warns about figures not entered yet.
+- Claude accepts a user API key that is not scoped to one Anthropic workspace: save it with the
+  Anthropic workspace id (`wrkspc_…`, migration 0011); a missing id now says what to add.
+- `wasilactl claude set-key --key-file …` checks and seals a key from a file (never printed,
+  file deleted); `deploy/local/start.sh` runs it when `deploy/local/claude-key.txt` exists.
+- Deck PDF export finds LibreOffice installed as a macOS app.
 
 ### US, UK and Saudi raising
 - Rounds gain `jurisdiction` (us, uk, ksa, other), `tax_relief` (none, seis, eis, seis_eis; UK

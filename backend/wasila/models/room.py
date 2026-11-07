@@ -154,6 +154,8 @@ class ClaudeSettings(Base):
     model: Mapped[str] = mapped_column(
         Text, nullable=False, server_default=text("'claude-sonnet-5-5'")
     )
+    # Needed when the key is a user key not scoped to one Anthropic workspace (not a secret).
+    anthropic_workspace_id: Mapped[str | None] = mapped_column(Text, nullable=True)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=text("now()")
     )

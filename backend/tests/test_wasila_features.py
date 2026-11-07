@@ -701,3 +701,113 @@ async def test_phone_and_country_edit_and_show(db: AsyncSession, key_client: Any
     assert (r.json()["phone"], r.json()["country"]) == ("+44 7700 900123", "United Kingdom")
     r = await c.patch(f"/v1/investors/{inv_id}", json={"phone": None})
     assert r.json()["phone"] is None
+
+
+async def test_investor_update_quotes_funding_figures(db: AsyncSession, key_client: Any) -> None:
+    w = await world(db)
+    c = key_client(w.key)
+    inv = await make_investor(
+        db, w.ws, name="Cara Sample", firm="East Fund", email="cara@east.example.com"
+    )
+    r = await c.get("/v1/funding-costs/merge-fields")
+    assert {f["key"]: f["value"] for f in r.json()["data"]}["raise_total"] == ""
+    lines = [
+        {
+            "kind": "funding",
+            "grp": "Raise",
+            "name": "SEIS",
+            "currency": "GBP",
+            "amount": 250000,
+            "tranche": "seis",
+        },
+        {
+            "kind": "funding",
+            "grp": "Raise",
+            "name": "EIS",
+            "currency": "GBP",
+            "amount": 1750000,
+            "tranche": "eis",
+        },
+        {"kind": "use_of_funds", "grp": "Use", "name": "R&D", "currency": "GBP", "amount": 1200000},
+        {
+            "kind": "use_of_funds",
+            "grp": "Use",
+            "name": "Hiring",
+            "currency": "GBP",
+            "amount": 800000,
+        },
+        {
+            "kind": "cost",
+            "grp": "Staff",
+            "name": "Team",
+            "currency": "GBP",
+            "y1": 600000,
+            "y2": 600000,
+            "y3": 600000,
+            "y4": 600000,
+        },
+    ]
+    for line in lines:
+        assert (await c.post("/v1/funding-costs", json=line)).status_code == 201
+    fields = {
+        f["key"]: f["value"] for f in (await c.get("/v1/funding-costs/merge-fields")).json()["data"]
+    }
+    assert fields["raise_total"] == "£2,000,000"
+    assert (fields["seis"], fields["eis"]) == ("£250,000", "£1,750,000")
+    assert fields["use_of_funds"] == "R&D 60%, Hiring 40%"
+    assert fields["monthly_burn"] == "£50,000"
+    assert fields["runway"] == "40 months"
+    assert fields["funding_gap"] == "£400,000"
+    camp = (
+        await c.post(
+            "/v1/outreach/campaigns",
+            json={
+                "name": "December update",
+                "kind": "update",
+                "subject": "Update for {firm}: {runway} runway",
+                "body": (
+                    "Hi {first_name}, we are raising {raise_total} ({seis} SEIS). "
+                    "Burn {monthly_burn}."
+                ),
+            },
+        )
+    ).json()
+    out = (
+        await c.post(
+            f"/v1/outreach/campaigns/{camp['id']}/drafts", json={"investor_ids": [str(inv.id)]}
+        )
+    ).json()
+    msg = out["created"][0]
+    assert msg["subject"] == "Update for East Fund: 40 months runway"
+    assert msg["body"] == "Hi Cara, we are raising £2,000,000 (£250,000 SEIS). Burn £50,000."
+
+
+async def test_user_key_needs_and_keeps_its_anthropic_workspace(
+    db: AsyncSession, key_client: Any, session_client: Any, claude_mock: Any
+) -> None:
+    """A user key not scoped to a workspace: saving without the id says what to add; with it,
+    every call carries ``anthropic-workspace-id``."""
+    w = await world(db)
+    owner = await session_client(w.owner, w.ws)
+    claude_mock.require_workspace = True
+    key = "sk-ant-fictional-userkey-0000000000-test"
+    r = await owner.put("/v1/claude/key", json={"api_key": key})
+    assert r.status_code == 422 and r.json()["error"]["code"] == "claude_workspace_required"
+    assert (await owner.get("/v1/claude")).json()["ready"] is False
+    r = await owner.put(
+        "/v1/claude/key", json={"api_key": key, "anthropic_workspace_id": "not-a-workspace"}
+    )
+    assert r.status_code == 422 and r.json()["error"]["code"] == "validation_error"
+    r = await owner.put(
+        "/v1/claude/key", json={"api_key": key, "anthropic_workspace_id": "wrkspc_01FictionalAbc"}
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["ready"] is True
+    assert r.json()["anthropic_workspace_id"] == "wrkspc_01FictionalAbc"
+    assert "userkey" not in r.text
+    # Later calls (Ask Wasila) use the saved workspace too.
+    claude_mock.replies = [json.dumps({"q": "health", "explanation": "health"})]
+    c = key_client(w.key)
+    r = await c.post("/v1/master-list/ask", json={"question": "health investors"})
+    assert r.status_code == 200, r.text
+    assert claude_mock.headers[-1]["anthropic-workspace-id"] == "wrkspc_01FictionalAbc"

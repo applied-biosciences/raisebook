@@ -38,10 +38,13 @@ class ClaudeOut(BaseModel):
     key_set_at: Timestamp | None = None
     model: str
     models: list[str]
+    anthropic_workspace_id: str | None = None
 
 
 class KeyIn(StrictInput):
     api_key: str = Field(..., min_length=20, max_length=300)
+    # Only for a user key that is not scoped to one Anthropic workspace (starts wrkspc_).
+    anthropic_workspace_id: str | None = Field(None, max_length=80)
 
 
 class ModelIn(StrictInput):
@@ -56,6 +59,7 @@ async def _out(db: AsyncSession, ws: WorkspaceContext) -> ClaudeOut:
         key_set_at=row.set_at if row else None,
         model=await svc.model_for(db, ws),
         models=list(svc.MODELS),
+        anthropic_workspace_id=await svc.anthropic_workspace_for(db, ws) if row else None,
     )
 
 
@@ -73,8 +77,9 @@ async def put_key(
     db: AsyncSession = Depends(get_session),
     now: datetime = Depends(get_now),
 ) -> ClaudeOut:
-    await svc.verify_key(db, ws, body.api_key)
-    await secrets_svc.put(db, ws, "anthropic", body.api_key, now=now)
+    await svc.save_key(
+        db, ws, body.api_key, anthropic_workspace_id=body.anthropic_workspace_id, now=now
+    )
     await db.commit()
     return await _out(db, ws)
 

@@ -361,3 +361,8 @@ spends the token on load. Use a throwaway database (for example `wasila_shots`) 
   server, API :8000, `wasila_dev`), outreach in `memory` mode unless `REAL_EMAIL=1`. Logs, pid
   files and `.env.local` are git-ignored.
 - CORS allows `X-Filename` and `X-Note` (raw-body uploads); `tests/test_core.py` pins it.
+- Investor-update merge fields come only from `funding_costs.merge_values` (`MERGE_FIELDS`);
+  campaign drafts render them; a figure not entered is an empty string, never a raw `{key}`.
+- `claude_settings.anthropic_workspace_id` (0011) is sent as `anthropic-workspace-id` on every
+  Claude call; `claude.save_key` is the only key writer (REST and `wasilactl claude set-key`).
+  The key file for `start.sh` (`deploy/local/claude-key.txt`) is git-ignored and deleted after use.

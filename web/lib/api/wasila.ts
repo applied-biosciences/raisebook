@@ -271,9 +271,15 @@ export interface ClaudeSettings {
   key_set_at: Timestamp | null;
   model: string;
   models: string[];
+  /** Set when the key is a user key that bills to this Anthropic workspace. */
+  anthropic_workspace_id: string | null;
 }
 export const getClaude = (c: ApiClient) => c.get<ClaudeSettings>("/v1/claude");
-export const putClaudeKey = (c: ApiClient, apiKey: string) => c.put<ClaudeSettings>("/v1/claude/key", { api_key: apiKey });
+export const putClaudeKey = (c: ApiClient, apiKey: string, anthropicWorkspaceId?: string) =>
+  c.put<ClaudeSettings>("/v1/claude/key", {
+    api_key: apiKey,
+    ...(anthropicWorkspaceId ? { anthropic_workspace_id: anthropicWorkspaceId } : {}),
+  });
 export const deleteClaudeKey = (c: ApiClient) => c.del("/v1/claude/key");
 export const setClaudeModel = (c: ApiClient, model: string) => c.patch<ClaudeSettings>("/v1/claude", { model });
 
@@ -447,7 +453,36 @@ export function fileSize(bytes: number): string {
 /** "{first_name}" placeholders the campaign composer supports (mirrors services/outreach.render). */
 export const MERGE_FIELDS = ["first_name", "name", "firm", "title", "country", "intro_by"] as const;
 
-export function renderMerge(template: string, inv: { name: string; firm?: string | null; title?: string | null; country?: string | null; warm_intro_by?: string | null }): string {
+/** A funding figure an investor update can quote as `{key}` (from Funding costs). */
+export interface MergeFigure {
+  key: string;
+  label: string;
+  /** Today's value as text; "" when the figure is not entered yet. */
+  value: string;
+}
+
+export const listMergeFigures = (c: ApiClient) => c.get<{ data: MergeFigure[] }>("/v1/funding-costs/merge-fields");
+
+/** A starting point for an investor update that quotes the funding figures. */
+export const UPDATE_TEMPLATE =
+  "Dear {first_name},\n\n" +
+  "A short update from Applied Biosciences.\n\n" +
+  "The round: we are raising {raise_total} ({seis} SEIS, {eis} EIS).\n" +
+  "Use of funds: {use_of_funds}.\n" +
+  "Monthly burn in year 1 is {monthly_burn}, giving {runway} of runway.\n\n" +
+  "Highlights this month:\n- \n- \n\n" +
+  "Kind regards,";
+
+/** The figure keys used in a template that have no value yet (so the update would read badly). */
+export function missingFigures(template: string, figures: MergeFigure[]): MergeFigure[] {
+  return figures.filter((f) => !f.value && template.includes(`{${f.key}}`));
+}
+
+export function renderMerge(
+  template: string,
+  inv: { name: string; firm?: string | null; title?: string | null; country?: string | null; warm_intro_by?: string | null },
+  figures: MergeFigure[] = [],
+): string {
   const first = inv.name.split(/\s+/)[0] ?? inv.name;
   const values: Record<string, string> = {
     first_name: first,
@@ -457,7 +492,8 @@ export function renderMerge(template: string, inv: { name: string; firm?: string
     country: inv.country ?? "",
     intro_by: inv.warm_intro_by ?? "",
   };
-  return template.replace(/\{(first_name|name|firm|title|country|intro_by)\}/g, (_, k: string) => values[k] ?? "");
+  for (const f of figures) values[f.key] = f.value;
+  return template.replace(/\{([a-z_]+)\}/g, (whole, k: string) => (k in values ? values[k] : whole));
 }
 
 /** Fetch a file with the session and save it in the browser. Returns the file name. */

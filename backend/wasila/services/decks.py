@@ -156,8 +156,22 @@ def apply(
     return out.getvalue()
 
 
+def _mac_soffice() -> str | None:
+    """LibreOffice installed as a macOS app (``brew install --cask libreoffice``) is not on PATH."""
+    import os
+
+    for app in (
+        "/Applications/LibreOffice.app",
+        os.path.expanduser("~/Applications/LibreOffice.app"),
+    ):
+        exe = os.path.join(app, "Contents", "MacOS", "soffice")
+        if os.access(exe, os.X_OK):
+            return exe
+    return None
+
+
 def to_pdf(data: bytes) -> bytes:
-    soffice = shutil.which("soffice") or shutil.which("libreoffice")
+    soffice = shutil.which("soffice") or shutil.which("libreoffice") or _mac_soffice()
     if soffice is None:
         raise PdfUnavailable()
     with tempfile.TemporaryDirectory() as tmp:

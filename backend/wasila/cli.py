@@ -2,7 +2,7 @@
 
 Commands: ``user create``, ``workspace create|list``, ``apikey create|list|revoke``,
 ``seed-demo``, ``housekeeping``, ``worker [--once]``, ``secrets gen-kek|rotate``,
-``research removals list|apply|reject`` and ``research usage``. Output is
+``research removals list|apply|reject``, ``research usage`` and ``claude set-key``. Output is
 JSON on stdout (one object per line) so scripts can parse it. API key secrets are printed
 once, on creation only.
 """
@@ -43,6 +43,8 @@ research_app = typer.Typer(help="Investor research (operator actions)", no_args_
 removals_app = typer.Typer(help="Research removal requests (R13)", no_args_is_help=True)
 research_app.add_typer(removals_app, name="removals")
 app.add_typer(research_app, name="research")
+claude_app = typer.Typer(help="Claude (the workspace's Anthropic key)", no_args_is_help=True)
+app.add_typer(claude_app, name="claude")
 
 
 def _run[T](fn: Callable[[AsyncSession], Awaitable[T]]) -> T:
@@ -278,7 +280,7 @@ def members(workspace: Annotated[str, typer.Option(help="Workspace slug or id")]
             select(User.email, Membership.role)
             .join(Membership, Membership.user_id == User.id)
             .where(Membership.workspace_id == ws.id)
-            .order_by(Membership.created_at)
+            .order_by(Membership.user_id)
         )
         return [(str(e), r) for e, r in rows.tuples()]
 
@@ -436,3 +438,89 @@ def research_usage(
 
     for row in _run(go):
         _emit(row)
+
+
+@claude_app.command("set-key")
+def claude_set_key(
+    key_file: Annotated[
+        str, typer.Option(help="File holding only the Anthropic key (read, then deleted)")
+    ],
+    workspace: Annotated[
+        str | None,
+        typer.Option(help="Workspace slug or id (default: the only non-sample workspace)"),
+    ] = None,
+    anthropic_workspace: Annotated[
+        str | None,
+        typer.Option(help="Anthropic workspace id (wrkspc_...) for a user key"),
+    ] = None,
+    keep_file: Annotated[bool, typer.Option(help="Do not delete the key file")] = False,
+) -> None:
+    """Check an Anthropic key with Anthropic, then seal it into a workspace as its owner.
+
+    The key is read from a file (never an argument, so it stays out of shell history) and is
+    never printed; only its last four characters are reported.
+    """
+    import os
+    from pathlib import Path
+
+    from wasila.auth.principal import worker_context
+    from wasila.services import claude as claude_svc
+
+    path = Path(key_file).expanduser()
+    try:
+        key = path.read_text().strip()
+    except OSError as exc:
+        typer.secho(f"error: cannot read {path}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(2) from exc
+    if len(key) < 20:
+        typer.secho(
+            "error: the key file does not hold an Anthropic key", fg=typer.colors.RED, err=True
+        )
+        raise typer.Exit(2)
+
+    async def go(s: AsyncSession) -> dict[str, Any]:
+        if workspace:
+            ws_row = await _workspace(s, workspace)
+        else:
+            rows = list(
+                (await s.scalars(select(Workspace).where(Workspace.is_sandbox.is_(False)))).all()
+            )
+            if len(rows) != 1:
+                names = ", ".join(r.slug for r in rows) or "none"
+                typer.secho(
+                    f"error: pass --workspace (workspaces: {names})", fg=typer.colors.RED, err=True
+                )
+                raise typer.Exit(2)
+            ws_row = rows[0]
+        owner_id = await s.scalar(
+            select(Membership.user_id)
+            .where(Membership.workspace_id == ws_row.id, Membership.role == "owner")
+            .order_by(Membership.created_at)
+            .limit(1)
+        )
+        now = get_now()
+        ctx = await worker_context(
+            s,
+            workspace_id=ws_row.id,
+            actor_type="user",
+            via="cli",
+            actor_user_id=owner_id,
+            api_key_id=None,
+            actor_label=None,
+            agent_model=None,
+            now=now,
+        )
+        if ctx is None:
+            typer.secho("error: the workspace has no owner", fg=typer.colors.RED, err=True)
+            raise typer.Exit(2)
+        await claude_svc.save_key(s, ctx, key, anthropic_workspace_id=anthropic_workspace, now=now)
+        await s.commit()
+        return {"workspace": ws_row.slug, "ready": True, "key_last4": key[-4:]}
+
+    out = _run(go)
+    if not keep_file:
+        try:
+            os.remove(path)
+        except OSError:
+            typer.secho(f"warning: delete {path} yourself", fg=typer.colors.YELLOW, err=True)
+    _emit(out)

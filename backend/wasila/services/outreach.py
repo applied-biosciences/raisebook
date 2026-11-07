@@ -44,6 +44,7 @@ from wasila.models.room import (
     RoomVersion,
 )
 from wasila.services import activities as act_svc
+from wasila.services import funding_costs
 from wasila.services import workspace_secrets as secrets_svc
 
 log = structlog.get_logger(__name__)
@@ -184,7 +185,8 @@ async def attachment_refs(
 
 
 def render(template: str, inv: Investor, extra: dict[str, str] | None = None) -> str:
-    """Mail-merge placeholders: {first_name} {name} {firm} {title} {country} {intro_by}."""
+    """Mail-merge placeholders: {first_name} {name} {firm} {title} {country} {intro_by}, plus
+    any ``extra`` values (the funding figures from ``funding_costs.merge_values``)."""
     first = inv.name.split()[0] if inv.name.split() else inv.name
     values = {
         "first_name": first,
@@ -566,6 +568,8 @@ async def draft_campaign(
             )
         ).all()
     )
+    # Investor updates quote the workspace's funding figures ({raise_total}, {runway} ...).
+    figures = funding_costs.merge_values(await funding_costs.list_lines(db, ws))
     created, skipped = [], []
     for i in ids:
         inv = invs[i]
@@ -582,8 +586,8 @@ async def draft_campaign(
                 db,
                 ws,
                 investor_id=inv.id,
-                subject=render(camp.subject, inv),
-                body=render(camp.body, inv),
+                subject=render(camp.subject, inv, figures),
+                body=render(camp.body, inv, figures),
                 attachment_ids=list(camp.attachment_ids),
                 kind=camp.kind,
                 campaign_id=camp.id,

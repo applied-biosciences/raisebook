@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   Button,
@@ -20,6 +20,10 @@ import {
 import { errorMessage } from "@/lib/api/client";
 import {
   MERGE_FIELDS,
+  listMergeFigures,
+  missingFigures,
+  UPDATE_TEMPLATE,
+  type MergeFigure,
   claudeDraft,
   createCampaign,
   createMessage,
@@ -57,6 +61,8 @@ function when(ts: string | null): string {
  * draft a warm letter or an investor update; nothing is ever sent without your click.
  * Campaigns merge one template into reviewed drafts; follow-ups list sent mail with no reply.
  */
+const OUTREACH_START = "Dear {first_name},\n\n\n\nKind regards,";
+
 export function Outreach() {
   const { client, role, workspace } = useWorkspace();
   const toast = useToast();
@@ -509,12 +515,38 @@ function CampaignDialog({
   presetIds: string[];
   onDone: () => void;
 }) {
-  const { client } = useWorkspace();
+  const { client, workspace } = useWorkspace();
   const toast = useToast();
   const [name, setName] = useState("");
   const [kind, setKind] = useState<"outreach" | "update">("outreach");
   const [subject, setSubject] = useState("");
-  const [body, setBody] = useState("Dear {first_name},\n\n\n\nKind regards,");
+  const [body, setBody] = useState(OUTREACH_START);
+  const [figures, setFigures] = useState<MergeFigure[]>([]);
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    let live = true;
+    listMergeFigures(client).then(
+      (r) => live && setFigures(r.data),
+      () => live && setFigures([]),
+    );
+    return () => {
+      live = false;
+    };
+  }, [open, client]);
+  const missing = useMemo(() => missingFigures(`${subject}\n${body}`, figures), [subject, body, figures]);
+  /** Put {key} where the cursor is in the message (or at the end). */
+  const insertFigure = (key: string) => {
+    const el = bodyRef.current;
+    const token = `{${key}}`;
+    const at = el ? el.selectionStart : body.length;
+    const end = el ? el.selectionEnd : body.length;
+    setBody(body.slice(0, at) + token + body.slice(end));
+    requestAnimationFrame(() => {
+      el?.focus();
+      el?.setSelectionRange(at + token.length, at + token.length);
+    });
+  };
   const [attach, setAttach] = useState<string[]>([]);
   const [listId, setListId] = useState("");
   const [followUp, setFollowUp] = useState("7");
@@ -574,7 +606,16 @@ function CampaignDialog({
             <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="November investor update" />
           </Field>
           <Field label="Kind">
-            <Select value={kind} onChange={(e) => setKind(e.target.value as "outreach" | "update")}>
+            <Select
+              value={kind}
+              onChange={(e) => {
+                const next = e.target.value as "outreach" | "update";
+                setKind(next);
+                // Swap the starting text only while it is untouched.
+                if (next === "update" && body === OUTREACH_START) setBody(UPDATE_TEMPLATE);
+                if (next === "outreach" && body === UPDATE_TEMPLATE) setBody(OUTREACH_START);
+              }}
+            >
               <option value="outreach">Warm outreach</option>
               <option value="update">Investor update</option>
             </Select>
@@ -608,8 +649,35 @@ function CampaignDialog({
           <Input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Applied Biosciences x {firm}" />
         </Field>
         <Field label="Message" hint={`Placeholders: ${MERGE_FIELDS.map((f) => `{${f}}`).join(" ")}`}>
-          <Textarea rows={10} value={body} onChange={(e) => setBody(e.target.value)} />
+          <Textarea ref={bodyRef} rows={10} value={body} onChange={(e) => setBody(e.target.value)} />
         </Field>
+        {kind === "update" && figures.length ? (
+          <div className="flex flex-col gap-6 rounded-md border border-line bg-accent-soft p-10">
+            <span className="text-[12px] font-medium text-sky-ink">Insert a funding figure (filled in from Costs for every investor)</span>
+            <div className="flex flex-wrap gap-6">
+              {figures.map((f) => (
+                <button
+                  key={f.key}
+                  type="button"
+                  onClick={() => insertFigure(f.key)}
+                  title={`{${f.key}}`}
+                  className="rounded-sm border border-brand-sky/45 bg-surface px-8 py-3 text-[12px] text-accent hover:border-accent"
+                >
+                  {f.label}
+                  <span className="ml-6 text-muted">{f.value || "not set"}</span>
+                </button>
+              ))}
+            </div>
+            {missing.length ? (
+              <span className="text-[12px] text-warm-ink">
+                {missing.map((f) => f.label).join(", ")} {missing.length === 1 ? "is" : "are"} not in Costs yet, so {missing.length === 1 ? "it" : "they"} would be left blank.{" "}
+                <Link href={`/w/${workspace.slug}/funding-costs`} className="underline">
+                  Open Costs
+                </Link>
+              </span>
+            ) : null}
+          </div>
+        ) : null}
         <fieldset className="m-0 flex flex-col gap-6 border-0 p-0">
           <legend className="mb-4 text-[12px] text-muted">Attachments (approved Funding Room documents)</legend>
           {docs.map((d) => (

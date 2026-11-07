@@ -24,6 +24,7 @@ export function ClaudeSettings() {
   const isOwner = role === "owner";
   const [state, setState] = useState<ClaudeState | null>(null);
   const [key, setKey] = useState("");
+  const [wrkspc, setWrkspc] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -45,7 +46,8 @@ export function ClaudeSettings() {
             {state.ready ? (
               <>
                 <span className="font-medium text-good-ink">Ready.</span> Key ending <span className="font-mono">{state.key_last4}</span>
-                {state.key_set_at ? <span className="text-muted">, saved {new Date(state.key_set_at).toLocaleDateString()}</span> : null}.
+                {state.key_set_at ? <span className="text-muted">, saved {new Date(state.key_set_at).toLocaleDateString()}</span> : null}
+                {state.anthropic_workspace_id ? <span className="text-muted">, Anthropic workspace <span className="font-mono">{state.anthropic_workspace_id}</span></span> : null}.
               </>
             ) : (
               <span className="text-muted">No key yet.</span>
@@ -59,8 +61,9 @@ export function ClaudeSettings() {
                 setBusy(true);
                 setError(null);
                 try {
-                  setState(await putClaudeKey(client, key.trim()));
+                  setState(await putClaudeKey(client, key.trim(), wrkspc.trim() || undefined));
                   setKey("");
+                  setWrkspc("");
                   toast.show("Key checked and saved. It will not be shown again.");
                 } catch (err) {
                   setError(errorMessage(err));
@@ -71,6 +74,9 @@ export function ClaudeSettings() {
             >
               <Field label={state.ready ? "Replace the key" : "Anthropic API key"} error={error} className="flex-1" hint="From console.anthropic.com → API keys. Sealed on the server; only the last four characters are ever shown.">
                 <Input type="password" autoComplete="off" value={key} onChange={(e) => setKey(e.target.value)} placeholder="sk-ant-…" />
+              </Field>
+              <Field label="Anthropic workspace ID (only if asked)" className="sm:w-[240px]" hint="For a user key not tied to one workspace: Settings → Workspaces in the Anthropic console.">
+                <Input autoComplete="off" spellCheck={false} value={wrkspc} onChange={(e) => setWrkspc(e.target.value)} placeholder="wrkspc_…" />
               </Field>
               <Button type="submit" variant="primary" disabled={key.trim().length < 20} busy={busy ? "Checking…" : false}>
                 Save key

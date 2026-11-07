@@ -517,6 +517,15 @@ async def _costs(c: Any, t: Two, who: str) -> None:
     no_b(r.text, t)
 
 
+@case("GET", "/v1/funding-costs/merge-fields")
+async def _cost_merge_fields(c: Any, t: Two, who: str) -> None:
+    # A has no lines; B's figures never show through.
+    r = await c.get("/v1/funding-costs/merge-fields")
+    assert r.status_code == 200
+    assert all(f["value"] == "" for f in r.json()["data"])
+    no_b(r.text, t)
+
+
 @case("POST", "/v1/funding-costs")
 async def _cost_create(c: Any, t: Two, who: str) -> None:
     r = await c.post("/v1/funding-costs", json={"kind": "cost", "grp": "A", "name": "A cost"})

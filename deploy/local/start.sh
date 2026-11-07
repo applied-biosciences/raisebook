@@ -31,6 +31,7 @@ API_URL="http://localhost:$API_PORT"
 WEB_URL="http://localhost:$WEB_PORT"
 
 say() { printf '\033[1;34m▸ %s\033[0m\n' "$*"; }
+warn() { printf '\033[1;33m! %s\033[0m\n' "$*"; }
 fail() { printf '\033[1;31m✗ %s\033[0m\n' "$*" >&2; exit 1; }
 
 need() { command -v "$1" >/dev/null 2>&1 || fail "$1 is not installed. $2"; }
@@ -91,6 +92,21 @@ say "Preparing the API (uv sync, migrations)"
 cd "$ROOT/backend"
 uv sync -q
 uv run -q alembic upgrade head >"$LOGS/migrate.log" 2>&1 || { tail -20 "$LOGS/migrate.log"; fail "Migrations failed (log above)"; }
+# 5b. A Claude key left in deploy/local/claude-key.txt (git-ignored) is checked with Anthropic,
+#     sealed into your workspace and the file deleted. Optional: deploy/local/claude-workspace.txt
+#     holds the Anthropic workspace id (wrkspc_...) for a user key.
+if [ -f "$HERE/claude-key.txt" ]; then
+  say "Adding your Claude key to the workspace"
+  WRK_ARGS=()
+  if [ -f "$HERE/claude-workspace.txt" ]; then
+    WRK_ARGS=(--anthropic-workspace "$(tr -d '[:space:]' <"$HERE/claude-workspace.txt")")
+  fi
+  if uv run -q wasilactl claude set-key --key-file "$HERE/claude-key.txt" ${WRK_ARGS[@]+"${WRK_ARGS[@]}"}; then
+    rm -f "$HERE/claude-workspace.txt"
+  else
+    warn "Claude key not added (message above). Fix it and run start.sh again, or add it in Settings → Claude."
+  fi
+fi
 say "Starting the API on :$API_PORT"
 nohup uv run uvicorn --factory wasila.main:create_app --host 127.0.0.1 --port "$API_PORT" \
   </dev/null >"$LOGS/api.log" 2>&1 &

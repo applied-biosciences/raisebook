@@ -213,10 +213,26 @@ def claude_mock() -> Any:
         def __init__(self) -> None:
             self.replies: list[str] = ["OK"]
             self.requests: list[dict[str, Any]] = []
+            self.headers: list[dict[str, str]] = []
             self.status = 200
+            # Like a user key not scoped to a workspace: refuse calls without the header.
+            self.require_workspace = False
 
         def handler(self, request: httpx.Request) -> httpx.Response:
             self.requests.append(_json.loads(request.content))
+            self.headers.append(dict(request.headers))
+            if self.require_workspace and "anthropic-workspace-id" not in request.headers:
+                return httpx.Response(
+                    400,
+                    json={
+                        "type": "error",
+                        "error": {
+                            "type": "invalid_request_error",
+                            "message": "This API key is not scoped to a workspace, so this "
+                            "request must include the anthropic-workspace-id header.",
+                        },
+                    },
+                )
             if self.status != 200:
                 return httpx.Response(self.status, json={"error": {"type": "authentication_error"}})
             text = self.replies.pop(0) if len(self.replies) > 1 else self.replies[0]

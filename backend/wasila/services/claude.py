@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Any, Final
 
 import httpx
@@ -29,7 +30,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from wasila import __version__
 from wasila.auth.principal import WorkspaceContext
 from wasila.config import get_settings
-from wasila.core.errors import APIError, Unprocessable
+from wasila.core.errors import APIError, Unprocessable, ValidationFailed
 from wasila.models.ai import CompanyProfile
 from wasila.models.investor import Investor
 from wasila.models.room import ClaudeSettings
@@ -68,6 +69,18 @@ class ClaudeUnavailable(APIError):
     default_message = "Claude did not answer. Try again in a moment."
 
 
+class ClaudeWorkspaceRequired(Unprocessable):
+    code = "claude_workspace_required"
+    default_message = (
+        "This Anthropic key is not tied to one Anthropic workspace. Add the workspace ID "
+        "(it starts wrkspc_; console.anthropic.com → Settings → Workspaces) with the key, or "
+        "create a key inside a workspace and save that instead."
+    )
+
+
+WORKSPACE_ID_RE: Final = re.compile(r"^wrkspc_[A-Za-z0-9]{8,64}$")
+
+
 class InvalidClaudeKey(Unprocessable):
     code = "invalid_claude_key"
     default_message = "Anthropic rejected the API key. Check it and save it again."
@@ -85,6 +98,11 @@ async def model_for(db: AsyncSession, ws: WorkspaceContext) -> str:
     return row.model if row is not None else get_settings().anthropic_default_model
 
 
+async def anthropic_workspace_for(db: AsyncSession, ws: WorkspaceContext) -> str | None:
+    row = await get_settings_row(db, ws)
+    return row.anthropic_workspace_id if row is not None else None
+
+
 async def call(
     db: AsyncSession,
     ws: WorkspaceContext,
@@ -93,11 +111,17 @@ async def call(
     user: str,
     max_tokens: int = 1200,
     key: str | None = None,
+    anthropic_workspace_id: str | None = None,
 ) -> str:
-    """One Messages API call. Returns the text of the reply."""
+    """One Messages API call. Returns the text of the reply.
+
+    ``key`` / ``anthropic_workspace_id`` override the saved ones (used to verify a key
+    before it is saved).
+    """
     api_key = key or await secrets_svc.reveal(db, ws, "anthropic")
     if not api_key:
         raise NoClaudeKey()
+    wrkspc = anthropic_workspace_id if key else await anthropic_workspace_for(db, ws)
     s = get_settings()
     body = {
         "model": await model_for(db, ws),
@@ -111,6 +135,8 @@ async def call(
         "content-type": "application/json",
         "user-agent": f"wasila/{__version__}",
     }
+    if wrkspc:
+        headers["anthropic-workspace-id"] = wrkspc
     try:
         async with httpx.AsyncClient(
             base_url=s.anthropic_base_url,
@@ -124,6 +150,8 @@ async def call(
         raise ClaudeUnavailable() from exc
     if r.status_code in (401, 403):
         raise InvalidClaudeKey()
+    if r.status_code == 400 and "anthropic-workspace-id" in r.text:
+        raise ClaudeWorkspaceRequired()
     if r.status_code >= 400:
         log.warning("claude.error_status", status=r.status_code)
         raise ClaudeUnavailable(f"Claude returned an error ({r.status_code}). Try again.")
@@ -136,9 +164,52 @@ async def call(
         raise ClaudeUnavailable() from exc
 
 
-async def verify_key(db: AsyncSession, ws: WorkspaceContext, key: str) -> None:
+async def verify_key(
+    db: AsyncSession, ws: WorkspaceContext, key: str, anthropic_workspace_id: str | None = None
+) -> None:
     """A tiny call that proves the key works before it is saved."""
-    await call(db, ws, system="Reply with OK.", user="OK?", max_tokens=5, key=key)
+    await call(
+        db,
+        ws,
+        system="Reply with OK.",
+        user="OK?",
+        max_tokens=5,
+        key=key,
+        anthropic_workspace_id=anthropic_workspace_id,
+    )
+
+
+async def save_key(
+    db: AsyncSession,
+    ws: WorkspaceContext,
+    key: str,
+    *,
+    anthropic_workspace_id: str | None,
+    now: datetime,
+) -> None:
+    """Verify, then seal the key and record its Anthropic workspace (the only key writer)."""
+    key = key.strip()
+    wrkspc = (anthropic_workspace_id or "").strip() or None
+    if wrkspc and not WORKSPACE_ID_RE.match(wrkspc):
+        raise ValidationFailed(
+            "anthropic_workspace_id",
+            "An Anthropic workspace ID starts wrkspc_ (letters and digits).",
+        )
+    await verify_key(db, ws, key, wrkspc)
+    await secrets_svc.put(db, ws, "anthropic", key, now=now)
+    row = await get_settings_row(db, ws)
+    if row is None:
+        row = ClaudeSettings(
+            workspace_id=ws.workspace_id,
+            model=get_settings().anthropic_default_model,
+            anthropic_workspace_id=wrkspc,
+            updated_at=now,
+        )
+        db.add(row)
+    else:
+        row.anthropic_workspace_id = wrkspc
+        row.updated_at = now
+    await db.flush()
 
 
 def parse_json(text: str) -> Any:

@@ -100,6 +100,31 @@ async def list_costs(
     return await _out(db, ws, kind)
 
 
+class MergeField(APIModel):
+    key: str
+    label: str
+    value: str
+
+
+class MergeFieldsOut(APIModel):
+    data: list[MergeField]
+
+
+@router.get("/merge-fields", response_model=MergeFieldsOut)
+async def merge_fields(
+    ws: WorkspaceContext = Depends(get_workspace_ctx),
+    db: AsyncSession = Depends(get_session),
+) -> MergeFieldsOut:
+    """The funding figures an investor update can quote as ``{key}``, with today's values.
+
+    Campaign drafts fill them in; an empty value means the figure is not entered yet.
+    """
+    values = svc.merge_values(await svc.list_lines(db, ws))
+    return MergeFieldsOut(
+        data=[MergeField(key=k, label=label, value=values[k]) for k, label in svc.MERGE_FIELDS]
+    )
+
+
 @router.post("", status_code=201, response_model=LineOut)
 async def create_line(
     body: LineIn,

@@ -210,6 +210,60 @@ def summarize(lines: list[FundingCostLine]) -> dict[str, Any]:
     }
 
 
+# --- merge fields for investor updates --------------------------------------------------------
+
+MERGE_FIELDS: Final[tuple[tuple[str, str], ...]] = (
+    ("raise_total", "Total raise"),
+    ("seis", "SEIS tranche"),
+    ("eis", "EIS tranche"),
+    ("use_of_funds", "Use of funds (top three)"),
+    ("monthly_burn", "Monthly burn, year 1"),
+    ("runway", "Runway"),
+    ("funding_gap", "Funding gap over 48 months"),
+)
+
+_SYMBOL: Final[dict[str, str]] = {"GBP": "\u00a3", "USD": "$", "EUR": "\u20ac"}
+
+
+def money_text(amount: int, currency: str | None) -> str:
+    """Whole units with thousands separators: \u00a32,000,000, $1,500, SAR 750,000."""
+    cur = (currency or "").upper()
+    sym = _SYMBOL.get(cur)
+    sign = "-" if amount < 0 else ""
+    if sym:
+        return f"{sign}{sym}{abs(amount):,}"
+    return f"{sign}{cur} {abs(amount):,}".strip() if cur else f"{amount:,}"
+
+
+def merge_values(lines: list[FundingCostLine]) -> dict[str, str]:
+    """The funding figures an investor update can quote, as text ({raise_total}, {runway} ...).
+
+    Every field is present; a figure the workspace has not entered is an empty string, so a
+    template never shows a raw ``{placeholder}``.
+    """
+    out = dict.fromkeys((k for k, _ in MERGE_FIELDS), "")
+    if not lines:
+        return out
+    sm = summarize(lines)
+    cur = sm["currency"]
+    if sm["funding_total"]:
+        out["raise_total"] = money_text(sm["funding_total"], cur)
+    for key in ("seis", "eis"):
+        if sm["tranches"].get(key):
+            out[key] = money_text(sm["tranches"][key], cur)
+    top = sorted(sm["use_of_funds"], key=lambda x: -x["amount"])[:3]
+    out["use_of_funds"] = ", ".join(f"{x['name']} {x['pct']:g}%" for x in top)
+    if sm["costs"]["y1"] or sm["income"]["y1"]:
+        out["monthly_burn"] = money_text(sm["kpis"]["monthly_burn_y1"], cur)
+        if sm["kpis"]["runway_beyond_48m"]:
+            out["runway"] = "more than 48 months"
+        elif sm["kpis"]["runway_months"] is not None:
+            m = sm["kpis"]["runway_months"]
+            out["runway"] = f"{m} month" + ("" if m == 1 else "s")
+        out["funding_gap"] = money_text(sm["kpis"]["funding_gap_48m"], cur)
+    return out
+
+
 # --- workbook import ----------------------------------------------------------------------------
 
 _SKIP_PREFIXES: Final[tuple[str, ...]] = (
